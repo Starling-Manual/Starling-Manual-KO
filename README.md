@@ -1,4 +1,4 @@
-# The Starling Manual
+# The Starling Manual - Korean
 
 The goal of this manual is to provide an extensive introduction to the [Starling Framework][1].
 Starling is a cross-platform engine for _ActionScript 3_ that can be used for all kinds of applications, with a special focus on 2D games.

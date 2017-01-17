@@ -90,13 +90,13 @@ image::powerflasher-fdt.png["Powerflasher FDT"]
 
 === Adobe Animate
 
-오랜 기간 동안 Flash를 사용해온 디자이너 또는 개발자라면 _Adobe Flash Professional_이 언제 나올지 궁금해 했을 것입니다.
+오랜 기간 동안 _Flash_를 사용해온 디자이너 또는 개발자라면 _Adobe Flash Professional_이 언제 나올지 궁금해 했을 것입니다.
 으흠..여기 있습니다!
 만약 인식하지 못했다면 어도비가 최근에 그것을 어도비 애니메이트로 이름을 변경했기 때문입니다.
 새로운 이름은 초점의 주요 변화를 반영하기 때문에 실제로 의미가 있습니다.
 _Animate_는 이제 Flash뿐 아니라 _HTML5_, _WebGL_ 및 _SVG_ 형식의 출력을 지원하는 범용 애니메이션 도구입니다.
 
-Starling을 Animate에서 사용할 수는 있지만 추천하지는 않습니다.
+_Starling_을 _Animate_에서 사용할 수는 있지만 추천하지는 않습니다.
 디자이너에게는 환상적인 툴이지만 코드를 작성하기 위해 제작된 것이 아닙니다.
 당신은 그래픽을 위해서 그것을 사용하는 것이 훨씬 낫고 다른 언급 된 IDE 중 하나에 코드를 작성하는 것이 훨씬 낫습니다.
 

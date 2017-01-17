@@ -1,18 +1,19 @@
-== Resources
+== 리소스(Resources)
 
-We almost have all the building blocks in place now. Let's see how to set everything up so that we can finally get started with our first project, right?
+우리는 지금 거의 모든 빌딩을 위한 블록들을 갖추고 있습니다.
+우리가 마침내 첫 번째 프로젝트를 시작할 수 있도록 모든 것을 설정하는 방법을 살펴 보겠습니다.
 
 === AIR SDK
 
-If you have picked and installed your IDE, the next step is to download the latest version of the _AIR SDK_.
-Adobe releases a new stable version once every three months, so be sure to keep up to date!
-Each new release typically contains several important bug-fixes, which is especially important to maintain compatibility with the latest mobile operating systems.
-You will also constantly see the team experimenting with new features, and I'm trying hard to keep up with that pace in Starling.
+IDE를 선택하여 설치한 경우 다음 단계는 최신 버전의 _AIR SDK_를 다운로드하는 것입니다.
+Adobe는 3개월마다 한 번씩 새로운 안정 버전을 출시하므로 최신 버전을 유지하십시오!
+새로운 각 릴리스에는 일반적으로 최신 모바일 운영 체제와의 호환성을 유지하는 데 중요한 몇 가지 중요한 버그 수정이 포함되어 있습니다.
+또한 새로운 기능을 실험하는 팀을 지속적으로 보게 될 것이며 Starling에서 그 페이스를 따라 잡기 위해 열심히 노력하고 있습니다.
 
-The latest release can always be found here:
+최신 릴리스는 항상 여기에서 찾을 수 있습니다:
 https://www.adobe.com/devnet/air/air-sdk-download.html[Download Adobe AIR SDK]
 
-NOTE: Starling 2 requires at least AIR 19.
+노트: Starling 2는 최소한 AIR 19를 필요로 합니다.
 
 === Flash Player Projector
 

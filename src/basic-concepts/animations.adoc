@@ -1,28 +1,28 @@
-== Animations
+== 애니메이션
 
-Animations are not only a fundamental part of any game; even modern business apps are expected to provide smooth and dynamic transitions.
-Some well placed animations go a long way towards providing a responsive and intuitive interface.
-To help with that, Starling offers a very flexible animation engine.
+애니메이션은 모든 게임에서 기본적인 부분일 뿐만 아니라 현대 비즈니스 애플리케이션에서도 부드럽고 역동적인 전환을 제공할 것으로 기대됩니다.
+잘 배치된 애니메이션 중 일부는 반응적이고 직관적인 인터페이스를 제공하기 위해 먼 길을 갑니다.
+이를 돕기 위해 Starling은 매우 유연한 애니메이션 엔진을 제공합니다.
 
-If you think about it, there are two types of animations.
+생각해 보면 두 가지 유형의 애니메이션이 있습니다.
 
-* On the one hand, you've got animations that are so dynamic that you don't know beforehand what exactly will happen. Think of an enemy that's moving toward the player: it's direction and speed need to be updated each frame, depending on the environment. Or physics: each additional force or collision changes everything.
+* 한편으로는 어떻게 움직일지 미리 알 수 없는 매우 역동적인 애니메이션이 있을 것입니다. 플레이어를 향해 움직이는 적을 생각해보십시오. 환경에 따라 방향과 속도가 각 프레임마다 업데이트되어야 합니다. 또는 물리학: 각각 추가되는 힘 또는 충돌에 의해 모든 것이 바뀝니다.
 
-* Then there are animations that follow a meticulous plan; you know from the beginning exactly what will happen. Think of fading in a message box or transitioning from one screen to another.
+* 그런 다음 세심한 계획을 따르는 애니메이션이 있습니다. 처음부터 정확히 무슨 일이 일어날지 알 것입니다. 메시지 상자에서 사라지거나 한 화면에서 다른 화면으로 전환하는 것을 생각해보십시오.
 
-We will look at both of these types in the following sections.
+다음 섹션에서 두 가지 유형을 모두 살펴 보겠습니다.
 
 === EnterFrameEvent
 
-In some game engines, you have what is called a _run-loop_.
-That's an endless loop which constantly updates all elements of the scene.
+일부 게임 엔진에서는 실행 루프(_run-loop_)라고 하는 것이 있습니다.
+이것은 장면의 모든 요소를 지속적으로 업데이트하는 무한 루프입니다.
 
-In Starling, due to the display list architecture, such a run loop would not make much sense.
-You separated your game into numerous different custom display objects, and each should know for itself what to do when some time has passed.
+Starling에서는 디스플레이 목록 아키텍처로 인해 그러한 실행 루프가 별로 의미가 없습니다.
+게임을 여러 가지 다른 사용자 정의 표시 객체로 분리했으며 시간이 지났을 때 수행할 작업을 각각 알아야 합니다.
 
-That's exactly the point of the _EnterFrameEvent_: allowing a display object to update itself over time.
-Every frame, that event is dispatched to all display objects that are part of the display list.
-Here is how you use it:
+이것이 바로 _EnterFrameEvent_의 요점입니다.
+시간이 지남에 따라 표시 객체가 자동으로 업데이트되도록 허용합니다.
+모든 프레임에서 이 이벤트는 표시 목록의 일부인 모든 표시 객체에 전달됩니다. 사용 방법은 다음과 같습니다:
 
 [source, as3]
 ----
@@ -37,31 +37,31 @@ private function onEnterFrame(event:Event, passedTime:Number):void // <2>
     bird.advanceTime(passedTime);
 }
 ----
-<1> You can add a listener to this event anywhere, but the constructor is a good candidate.
-<2> That's how the corresponding event listener looks like.
+<1> 어디서나 이 이벤트에 리스너를 추가할 수 있지만 생성자는 좋은 후보입니다.
+<2> 해당 이벤트 리스너가 어떻게 생겼는지 확인하세요.
 
-The method `onEnterFrame` is called once per frame, and it's passed along the exact time that has elapsed since the previous frame.
-With that information, you can move your enemies, update the height of the sun, or do whatever else is needed.
+onEnterFrame 메서드는 프레임 당 한 번 호출되며 이전 프레임 이후로 경과된 정확한 시간에 따라 전달됩니다.
+그 정보로 적을 움직이거나 태양 고도를 업데이트하거나 필요한 다른 일을 할 수 있습니다.
 
-The power behind this event is that you can do completely different things each time it occurs.
-You can dynamically react to the current state of the game.
+이 이벤트 뒤에 숨은 힘은 그것이 발생할 때마다 완전히 다른 일을 할 수 있다는 것입니다.
+게임의 현재 상태에 동적으로 대응할 수 있습니다.
 
-For example, you could let an enemy take one step towards the player; a simple form of enemy AI, if you will!
+예를 들어 적을 플레이어쪽으로 한 걸음 내딛게 할 수 있습니다. 원한다면 적 AI의 간단한 형태도!
 
-=== Tweens
+=== 트윈(Tweens)
 
-Now to predefined animations.
-They are very common and have names such as _movement_, _scale_, _fade_, etc.
-Starling's approach on these kinds of animations is simple -- but at the same time very flexible.
-Basically, you can animate any property of any object, as long as it is numeric (`Number`, `int`, `uint`).
-Those animations are described in an object called _Tween_.
+이제 사전 정의된 애니메이션으로 이동하십시오.
+그것들은 매우 일반적이며 움직임(_movement_), 스케일(_scale_), 페이드(_fade_) 등과 같은 이름을 가지고 있습니다.
+이러한 종류의 애니메이션에 대한 Starling의 접근 방식은 간단하지만 동시에 매우 유연합니다.
+기본적으로 숫자 (Number, int, uint)인 경우 모든 객체의 속성에 애니메이션을 적용할 수 있습니다.
+이러한 애니메이션은 _Tween_이라는 객체에 설명되어 있습니다.
 
-NOTE: The term "Tween" comes from hand drawn animations, where a lead illustrator would draw important key frames, while the rest of the team drew the frames in-be**tween** those frames.
+노트: "Tween"이라는 용어는 손으로 그려진 애니메이션에서 나옵니다. 여기에서 리드 일러스트레이터가 중요한 키 프레임을 그리는 반면 나머지 팀은 프레임 사이에 프레임을 그렸습니다.
 
-.The different frames of a tween.
+.트윈의 다른 프레임.
 image::soccer-tween.png[Soccer Tween]
 
-Enough theory, let's go for an example:
+이론은 충분하고, 예를 들어 보죠:
 
 [source, as3]
 ----
@@ -72,17 +72,17 @@ tween.animate("scale", 2.0);
 tween.animate("alpha", 0.0);
 ----
 
-This tween describes an animation that moves the `ball` object to `x = 20`, scales it to twice its size and reduces its opacity until it is invisible.
-All those changes will be carried out simultaneously over the course of half a second.
-The start values are simply the current values of the specified properties.
+이 트윈은 볼 오브젝트를 x = 20으로 이동하고 크기를 두 배로 늘리고 보이지 않을 때까지 불투명도를 줄이는 애니메이션을 설명합니다.
+모든 변경 사항은 0.5 초 동안 동시에 수행됩니다.
+시작 값은 단순히 지정된 특성의 현재 값입니다.
 
-This sample showed us that
+이 샘플은...
 
-* you can animate arbitrary properties of an object, and that
-* you can combine multiple animations in one tween object.
+* 당신은 객체의 임의의 속성을 애니메이트 할 수 있습니다.
+* 하나의 트윈 객체에 여러 애니메이션을 결합 할 수 있습니다.
 
-Apropos: since scaling, fading and movement are done so frequently, the _Tween_ class provides specific methods for that, too.
-So you can write the following instead:
+때마침: 스케일링 페이딩 및 이동이 자주 이루어지기 때문에 Tween 클래스는 그에 대한 구체적인 방법을 제공합니다.
+그래서 다음과 같이 작성할 수 있습니다:
 
 [source, as3]
 ----
@@ -91,13 +91,14 @@ tween.scaleTo(2);    // animate "scale"
 tween.fadeTo(0);     // animate "alpha"
 ----
 
-An interesting aspect of tweens is that that you can change the way the animation is executed, e.g. letting it start slow and get faster over time.
-That's done by specifying a transition type.
+트윈의 흥미로운 점은 애니메이션이 실행되는 방식을 변경할 수 있다는 것입니다.
+속도가 느려지고 시간이 지나면서 빨라집니다.
+전환 유형을 지정하면 됩니다.
 
-.The available transition types. The default, `linear`, was omitted.
+.사용 가능한 변환 유형. 기본값인 'linear'는 생략되었습니다.
 image::transitions.png[Transitions]
 
-The following example shows how to specify such a transition and introduces a few more tricks the class is capable of.
+다음 예제에서는 이러한 전환을 지정하는 방법과 클래스가 수행할 수 있는 몇 가지 트릭을 소개합니다.
 
 [source, as3]
 ----
@@ -110,16 +111,16 @@ tween.repeatCount = 3; // <4>
 tween.reverse = true;
 tween.nextTween = explode; // <5>
 ----
-<1> Specify the transition via the third constructor argument.
-<2> These callbacks are executed when the tween has started, each frame, or when it has finished, respectively.
-<3> Wait two seconds before starting the animation.
-<4> Repeat the tween three times, optionally in yoyo-style (`reverse`). If you set `repeatCount` to zero, the tween will be repeated indefinitely.
-<5> Specify another tween to start right after this one is complete.
+<1> 세 번째 생성자 인수를 통해 전환(transition)을 지정합니다.
+<2> 이러한 콜백은 트윈이 시작될 때 각 프레임이 끝날 때 또는 완료될 때마다 실행됩니다.
+<3> 애니메이션을 시작하기 전에 2초간 기다립니다.
+<4> 트윈을 세 번 반복합니다 (요요 스타일 (역방향)). repeatCount를 0으로 설정하면 트윈이 무기한 반복됩니다.
+<5> 다른 트윈이 완료되면 바로 시작하도록 지정합니다.
 
-We just created and configured a tween -- but nothing is happening yet.
-A tween object _describes_ the animation, but it does not _execute_ it.
+방금 트윈을 만들고 구성했지만 아직 아무 일도 일어나지 않았습니다.
+Tween 객체는 애니메이션을 설명하지만 실행하지 않습니다.
 
-You could do that manually via the tweens `advanceTime` method:
+tweens의 advanceTime 메서드를 사용하여 수동으로 수행할 수 있습니다:
 
 [source, as3]
 ----
@@ -133,41 +134,43 @@ tween.advanceTime(0.25); // -> ball.x =  75
 tween.advanceTime(0.25); // -> ball.x = 100
 ----
 
-Hm, that works, but it's a little cumbersome, isn't it?
-Granted, one could call `advanceTime` in an `ENTER_FRAME` event handler, but still: as soon as you've got more than one animation, it's bound to become tedious.
+흠, 그건 효과가 있지만 조금 성가십니다. 그쵸?
+물론 ENTER_FRAME 이벤트 핸들러에서 advanceTime을 호출할 수는 있지만 계속해서 하나 이상의 애니메이션을 얻자마자 지루해집니다.
 
-Don't worry: I know just the guy for you.
-He's really good at handling such things.
+걱정 마세요. 나는 당신을 위한 녀석을 알고 있습니다.
+그는 그런 것들을 다루는 것에 정말로 능숙합니다.
 
-=== Juggler
+=== 저글러(Juggler)
 
-The juggler accepts and executes any number of animatable objects.
-Like any true artist, it will tenaciously pursue its true passion, which is: continuously calling `advanceTime` on everything you throw at it.
+juggler는 여러 개의 애니메이션 가능 객체를 받아들이고 실행합니다.
+어떤 진정한 예술가와 마찬가지로 그것은 당신이 그것에 던지는 모든 것에 계속해서 advanceTime을 부르는 그것의 진정한 열정을 끈질기게 추구할 것입니다.
 
-There is always a default juggler available on the active Starling instance.
-The easiest way to execute an animation is through the line below -- just add the animation (tween) to the default juggler and you are done.
+활성 Starling 인스턴스에는 항상 기본 juggler가 있습니다.
+애니메이션을 실행하는 가장 쉬운 방법은 아래 줄을 보는 것입니다.
+기본 juggler에 애니메이션 (트윈)을 추가하기만 하면 됩니다.
 
 [source, as3]
 ----
 Starling.juggler.add(tween);
 ----
 
-When the tween has finished, it will be thrown away automatically.
-In many cases, that simple approach will be all you need!
+트윈이 끝나면 자동으로 버려집니다.
+많은 경우 그 간단한 접근 방식만 있으면 됩니다.
 
-In other cases, though, you need a little more control.
-Let's say your stage contains a game area where the main action takes place.
-When the user clicks on the pause button, you want to pause the game and show an animated message box, maybe providing an option to return to the menu.
+그러나 다른 경우에는 좀 더 제어해야 합니다.
+무대에 메인 액션이 이루어지는 게임 영역이 있다고 가정해 봅시다.
+사용자가 일시 중지 버튼을 클릭하면 게임을 일시 중지하고 애니메이션 메시지 상자를 표시하여 메뉴로 돌아갈 수있는 옵션을 제공할 수 있습니다.
 
-When that happens, the game should freeze completely: none of its animations should be advanced any longer.
-The problem: the message box itself use some animations, too, so we can't just stop the default juggler.
+이런 일이 생기면 게임은 완전히 멈춰야 합니다.
+더 이상 애니메이션을 재생할 수 없습니다.
+문제 메시지 상자 자체는 일부 애니메이션을 사용하기 때문에 기본 juggler를 중지할 수 없습니다.
 
-In such a case, it makes sense to give the game area its own juggler.
-As soon as the exit button is pressed, this juggler should just stop animating anything.
-The game will freeze in its current state, while the message box (which uses the default juggler, or maybe another one) animates just fine.
+이 경우 게임 영역에 자체 juggler를 부여하는 것이 좋습니다.
+exit 버튼을 누르면 juggler는 아무 것도 움직이지 않게 해야 합니다.
+게임은 현재 상태로 고정되고 메시지 상자 (기본 juggler 또는 다른 게임을 사용하는 경우)가 올바르게 움직입니다.
 
-When you create a custom juggler, all you have to do is call its `advanceTime` method in every frame.
-I recommend using jugglers the following way:
+커스텀 juggler를 만들 때는 모든 프레임에서 advanceTime 메서드를 호출하면 됩니다.
+juggler를 다음과 같은 방법으로 사용하는 것이 좋습니다:
 
 [source, as3]
 ----
@@ -194,34 +197,34 @@ public class GameArea
     }
 }
 ----
-<1> In your Game's root class, listen to `Event.ENTER_FRAME`.
-<2> Advance the `gameArea` only when there is no active message box.
-<3> The _GameArea_ contains its own juggler. It will manage all in-game animations.
-<4> The juggler is advanced in its `advanceTime` method (called by _Game_).
+<1> 게임의 루트 클래스에서 Event.ENTER_FRAME을 수신합니다.
+<2> 활성 메시지 상자가 없을 때만 gameArea를 진행시킵니다.
+<3> _GameArea_에는 자체 juggler가 있습니다. 게임 내 모든 애니메이션을 관리합니다.
+<4> juggler는 advanceTime 메서드 (_Game_에 의해 호출 됨)로 진행됩니다.
 
-That way, you have neatly separated the animations of the game and the message box.
+그렇게하면 게임과 메시지 상자의 애니메이션을 깔끔하게 구분할 수 있습니다.
 
-By the way: the juggler is not restricted to Tweens.
-As soon as a class implements the `IAnimatable` interface, you can add it to the juggler.
-That interface has only one method:
+그런데: juggler는 _Tweens_에만 국한되지 않습니다.
+클래스가 IAnimatable 인터페이스를 구현하자마자 juggler에게 추가할 수 있습니다.
+해당 인터페이스에는 하나의 메소드만 있습니다.
 
 [source, as3]
 ----
 function advanceTime(time:Number):void;
 ----
 
-By implementing this method, you could e.g. create a simple MovieClip-class yourself.
-In its `advanceTime` method, it would constantly change the texture that is displayed.
-To start the movie clip, you'd simply add it to a juggler.
+이 방법을 구현하면 직접 간단한 MovieClip 클래스를 만듭니다.
+advanceTime 메서드에서는 항상 표시되는 텍스처를 변경합니다.
+무비 클립을 시작하려면 juggler에 추가하기만 하면 됩니다.
 
-This leaves one question, though: when and how is an object removed from the juggler?
+이것은 한 가지 질문을 남깁니다: 언제 juggler에서 오브젝트를 제거해야 하죠?
 
-==== Stopping Animations
+==== 애니메이션 멈추기
 
-When a tween finishes, it is removed from the juggler automatically.
-If you want to abort the animation before it is finished, you simply remove it from the juggler.
+트윈이 완료되면 자동으로 juggler에서 제거됩니다.
+애니메이션이 끝나기 전에 중단하려는 경우 juggler에서 애니메이션을 제거하기만 하면 됩니다.
 
-Let's say you just created a tween that animates a ball and added it to the default juggler:
+공을 움직여서 기본 juggler에 추가한 트윈을 만들었다고 가정해 봅시다:
 
 [source, as3]
 ----
@@ -230,8 +233,8 @@ tween.moveTo(x, y);
 Starling.juggler.add(tween);
 ----
 
-There are several ways you can abort that animation.
-Depending on the circumstances, simply pick the one that suits your game logic best.
+애니메이션을 중단할 수있는 몇 가지 방법이 있습니다.
+상황에 따라 게임 로직에 가장 적합한 것을 선택하십시오.
 
 [source, as3]
 ----
@@ -242,20 +245,21 @@ Starling.juggler.removeTweens(ball); // <2>
 Starling.juggler.removeByID(animID); // <3>
 Starling.juggler.purge(); // <4>
 ----
-<1> Remove the tween directly. This works with any `IAnimatable` object.
-<2> Remove all tweens that affect the ball. Only works for tweens!
-<3> Remove the tween by its ID. Useful when you don't have access to the _Tween_ instance.
-<4> If you want to abort everything, purge the juggler.
+<1> 트윈을 직접 제거하기. 이것은 모든 IAnimatable 객체와 함께 작동합니다.
+<2> 공에 영향을 미치는 모든 트윈을 제거하기. 트윈을 위해서만 작동합니다!
+<3> ID로 트윈을 제거하기. _Tween_ 인스턴스에 액세스 할 수 없을 때 유용합니다.
+<4> 모든 것을 중단하려면 juggler를 제거하십시오.
 
-Be a little careful with the `purge` method, though: if you call it on the default juggler, another part of your code might suddenly be faced with an aborted animation, bringing the game to a halt.
-I recommend you use `purge` only on your custom jugglers.
+퍼지(purge) 메서드에 약간 주의를 기울이십시오: 기본 juggler에서 호출하면 코드의 다른 부분이 갑자기 중단된 애니메이션에 직면하여 게임이 중단될 수 있습니다.
+커스텀 juggler에게만 퍼지를 사용하는 것이 좋습니다.
 
-==== Automatic Removal
+==== 자동 제거
 
-You might have asked yourself how the _Tween_ class manages to have tweens removed from the juggler automatically once they are completed.
-That's done with the `REMOVE_FROM_JUGGLER` event.
+Tween 클래스가 완료되면 트위닝이 자동으로 juggler에서 제거되도록 관리하는 방법을 스스로 물어볼 수도 있습니다.
+REMOVE_FROM_JUGGLER 이벤트로 완료됩니다.
 
-Any object that implements `IAnimatable` can dispatch such an event; the juggler listens to those events and will remove the object accordingly.
+IAnimatable을 구현하는 모든 객체는 이러한 이벤트를 전달할 수 있습니다.
+juggler는 그 이벤트를 수신하고 그에 따라 대상을 제거합니다.
 
 [source, as3]
 ----
@@ -268,11 +272,11 @@ public class MyAnimation extends EventDispatcher implements IAnimatable
 }
 ----
 
-==== Single-Command Tweens
+==== 단일 명령 트윈(Single-Command Tweens)
 
-While the separation between tween and juggler is very powerful, it sometimes just stands in the way, forcing you to write a lot of code for simple tasks.
-That's why there is a convenience method on the juggler that allows you to create and execute a tween with a single command.
-Here's a sample:
+트윈과 juggler 사이의 분리는 매우 강력하지만 때로는 방해가 되므로 간단한 작업을 위한 많은 코드를 작성해야 합니다.
+그래서 juggler에 단일 명령으로 트윈을 만들고 실행할 수 있는 편리한 방법이 있습니다.
+다음은 샘플입니다:
 
 [source, as3]
 ----
@@ -284,57 +288,59 @@ juggler.tween(msgBox, 0.5, {
 });
 ----
 
-This will create a tween for the `msgBox` object with a duration of 0.5 seconds, animating both the `x` and `rotation` properties.
-As you can see, the `{}`-parameter is used to list all the properties you want to animate, as well as the properties of the Tween itself.
-A huge time-saver!
+이렇게하면 msgBox 객체의 트윈이 0.5초 동안 생성되어 x 및 rotation 속성에 애니메이션이 적용됩니다.
+보시다시피 매개 변수는 애니메이션하려는 모든 속성과 Tween 자체의 속성을 나열하는 데 사용됩니다.
+거대한 시간이 절약되었습니다!
 
-=== Delayed Calls
+=== 딜레이 콜(Delayed Calls)
 
-Technically, we have now covered all the animation types Starling supports.
-However, there's actually another concept that's deeply connected to this topic.
+기술적으로 Starling이 지원하는 모든 애니메이션 유형을 다루었습니다.
+그러나 실제로 이 주제와 깊은 관련이 있는 또 다른 개념이 있습니다.
 
-Remember _Einstein_, our dog-hero who introduced us to the event system?
-The last time we saw him, he had just lost all his health points and was about to call `gameOver`.
-But wait: don't call that method immediately -- that would end the game too abruptly.
-Instead, call it with a delay of, say, two seconds (time enough for the player to realize the drama that is unfolding).
+이벤트 시스템에 우리를 소개한 우리의 개 영웅 아인슈타인(_Einstein_)을 기억하나요? 우리가 마지막으로 그를 보았을 때 그는 그의 모든 건강 상태를 잃어 버렸고 gameOver를 막 불렀습니다.
+그러나 기다려보세요.
+즉시 그 메소드를 호출하지 마세요.
+그러면 게임이 너무 갑자기 끝날 것입니다.
+대신 2초(플레이어가 펼치는 드라마를 깨닫기에 충분한 시간)의 지연으로 이를 호출하십시오.
 
-To implement that delay, you could use a native _Timer_ or the `setTimeout`-method.
-However, you can also use the juggler, and that has a huge advantage: you remain in full control.
+지연을 구현하려면 네이티브 _Timer_ 또는 _setTimeout_ 메소드를 사용할 수 있습니다.
+그러나 당신은 또한 juggler를 사용할 수 있으며 그것은 큰 장점이 있습니다.
+당신이 완전히 통제할 수 있다는 것입니다.
 
-It becomes obvious when you imagine that the player hits the "Pause" button right now, before those two seconds have passed.
-In that case, you not only want to stop the game area from animating; you want this delayed `gameOver` call to be delayed even more.
+이 2초가 지나기 전에 플레이어가 "일시 중지"버튼을 누르는 것을 상상해 보면 분명해집니다.
+이 경우 게임 영역에 애니메이션을 적용하는 것을 중지 할 뿐만 아니라 당신은 게임이 지연되기를(delayed) 원할 것입니다.
 
-To do that, make a call like the following:
+그렇게 하려면 다음과 같이 호출하십시오:
 
 [source, as3]
 ----
 juggler.delayCall(gameOver, 2);
 ----
 
-The `gameOver` function will be called two seconds from now (or longer if the juggler is disrupted).
-It's also possible to pass some arguments to that method.
-Want to dispatch an event instead?
+gameOver 함수는 지금부터 2초 후에 호출됩니다 (juggler가 중단되면 더 길어집니다).
+또한 메소드에 몇 가지 인수를 전달할 수도 있습니다.
+대신 이벤트를 발신하기 원하십니까?
 
 [source, as3]
 ----
 juggler.delayCall(dispatchEventWith, 2, "gameOver");
 ----
 
-Another handy way to use delayed calls is to perform periodic actions.
-Imagine you want to spawn a new enemy once every three seconds.
+딜레이 콜을 사용하는 또 다른 편리한 방법은 정기적인 작업을 수행하는 것입니다.
+3초에 한 번 새로운 적을 생성하려고 한다고 상상해보십시오.
 
 [source, as3]
 ----
 juggler.repeatCall(spawnEnemy, 3);
 ----
 
-[NOTE]
+[노트]
 ====
-Behind the scenes, both `delayCall` and `repeatCall` create an object of type _DelayedCall_.
-Just like the `juggler.tween` method is a shortcut for using tweens, those methods are shortcuts for creating delayed calls.
+뒤에서는 delayCall 및 repeatCall이 모두 _DelayedCall_ 유형의 객체를 만듭니다.
+juggler.tween 메소드가 트윈을 사용하기 위한 단축키인 것과 마찬가지로 이러한 메소드는 지연 호출을 작성하기위한 단축키입니다.
 ====
 
-To abort a delayed call, use one of the following methods:
+딜레이 콜을 중단하려면 다음 방법 중 하나를 사용하십시오:
 
 [source, as3]
 ----
@@ -344,20 +350,22 @@ juggler.removeByID(animID);
 juggler.removeDelayedCalls(gameOver);
 ----
 
-=== Movie Clips
+=== 무비클립(Movie Clips)
 
-You might have noticed the _MovieClip_ class already when we looked at the class diagram surrounding _Mesh_.
-That's right: a _MovieClip_ is actually just a subclass of _Image_ that changes its texture over time.
-Think of it as Starling's equivalent of an animated GIF!
+Mesh를 둘러싼 클래스 다이어그램을 보았을 때 이미 MovieClip 클래스를 보았을 것입니다.
+그거 맞습니다.
+MovieClip은 실제로 Image의 서브 클래스로 시간이 지남에 따라 텍스처가 변경됩니다.
+Starling이 애니메이션 GIF와 동일하다고 생각하십시오!
 
-==== Acquiring Textures
+==== 텍스처 획득하기
 
-It is recommended that all frames of your movie clip are from one texture atlas, and that all of them have the same size (if they have not, they will be stretched to the size of the first frame).
-You can use tools like _Adobe Animate_ to create such an animation; it can export directly to Starling's texture atlas format.
+무비 클립의 모든 프레임은 하나의 텍스처 맵에서 가져온 것이고 모든 프레임은 동일한 크기를 갖는 것이 좋습니다 (그렇지 않은 경우 첫 번째 프레임의 크기로 늘어납니다).
+_Adobe Animate_와 같은 도구를 사용하여 그러한 애니메이션을 만들 수 있습니다.
+Starling의 텍스처 아틀라스 형식으로 직접 내보낼 수 있습니다.
 
-This is a sample of a texture atlas that contains the frames of a movie clip.
-First, look at the XML with the frame coordinates.
-Note that each frame starts with the prefix `flight_`.
+이것은 무비 클립의 프레임을 포함하는 텍스처 아틀라스의 샘플입니다.
+먼저 프레임 좌표로 XML을 보십시오.
+각 프레임은 접두사 'flight_'로 시작됩니다.
 
 [source, xml]
 ----
@@ -370,15 +378,15 @@ Note that each frame starts with the prefix `flight_`.
 </TextureAtlas>
 ----
 
-Here is the corresponding texture:
+여기에 해당 텍스처가 있습니다:
 
-.The frames of our MovieClip.
+.MovieClip의 프레임.
 image::flight-animation.png[Flight Animation]
 
-==== Creating the MovieClip
+==== MovieClip 만들기
 
-Now let's create the MovieClip.
-Supposing that the `atlas` variable points to a _TextureAtlas_ containing all our frames, that's really easy.
+이제 MovieClip을 만듭니다.
+아틀라스 변수가 모든 프레임을 포함하는 _TextureAtlas_를 가리키고 있다고 가정하면 매우 쉽습니다:
 
 [source, as3]
 ----
@@ -392,29 +400,31 @@ movie.stop();
 
 Starling.juggler.add(movie); // <4>
 ----
-<1> The `getTextures` method returns all textures starting with a given prefix, sorted alphabetically.
-<2> That's ideal for our _MovieClip_, because we can pass those textures right to its constructor. The second parameter depicts how many frames will be played back per second.
-<3> Those are the methods controlling playback of the clip. It will be in "play" mode per default.
-<4> Important: just like any other animation in Starling, the movie clip needs to be added to the juggler!
+<1> getTextures 메소드는 주어진 접두사로 시작하여 알파벳순으로 정렬된 모든 텍스처를 반환합니다.
+<2> _MovieClip_에 이상적입니다. 왜냐하면 우리는 그 텍스처를 생성자에게 전달할 수 있기 때문입니다. 두 번째 매개 변수는 초당 재생되는 프레임의 수를 나타냅니다.
+<3> 클립의 재생을 제어하는 ​​메소드입니다. 기본적으로 "play" 모드로 전환됩니다.
+<4> 중요: Starling의 다른 애니메이션과 마찬가지로 무비 클립을 저글러(juggler)에 추가해야 합니다!
 
-Did you notice how we referenced the textures from the atlas by their prefix `flight_`?
-That allows you to create a mixed atlas that contains other movie clips and textures, as well.
-To group the frames of one clip together, you simply use the same prefix for all of them.
+접두어(flight_)로 텍스처를 참조하는 방법에 주목 했습니까?
+따라서 다른 무비 클립과 텍스처가 포함된 혼합된 아틀라스를 만들 수 있었습니다.
+한 클립의 프레임을 함께 그룹화하려면 모든 클립에 동일한 접두어를 사용하면 됩니다.
 
-The class also supports executing a sound or an arbitrary callback whenever a certain frame is reached.
-Be sure to check out its API reference to see what's possible!
+클래스는 특정 프레임에 도달할 때마다 사운드 또는 임의 콜백을 실행하는 기능도 지원합니다.
+가능한지 확인하려면 API 참조를 확인하십시오!
 
-==== More Complex Movies
+==== 더 복잡한 무비클립
 
-A downside of this animation technique has to be mentioned, though: you will run out of texture memory if your animations are either very long or if the individual frames are very big.
-If your animations take up several big texture atlases, they might not fit into memory.
+애니메이션 기법의 단점은 언급해야 할 것 같네요.
+애니메이션이 매우 길거나 개별 프레임이 매우 큰 경우 텍스처 메모리가 부족합니다.
+애니메이션이 여러 텍스처 애플릿을 사용하면 메모리에 적합하지 않을 수 있습니다.
 
-For these kinds of animations, you need to switch to a more elaborate solution: skeletal animation.
-This means that a character is split up into different parts (bones); those parts are then animated separately (according to the character's skeleton).
-This is extremely flexible.
+이러한 종류의 애니메이션의 경우 보다 정교한 솔루션인 골격(skeletal) 애니메이션으로 전환해야 합니다.
+이것은 캐릭터가 다른 부분 (뼈)으로 나뉘어 있음을 의미합니다.
+그 부분들은 캐릭터의 뼈대에 따라 개별적으로 움직입니다.
+이것은 매우 유연합니다.
 
-Support for such animations isn't part of Starling itself, but there are several other tools and libraries coming to the rescue.
-All of the following work really well with Starling:
+이러한 애니메이션에 대한 지원은 Starling 자체의 일부가 아니지만 도움을 주는 여러 가지 도구와 라이브러리가 있습니다.
+다음은 Starling과 함께 사용할 수 있는 툴들입니다:
 
 * http://esotericsoftware.com/[Spine]
 * https://github.com/threerings/flump[Flump]

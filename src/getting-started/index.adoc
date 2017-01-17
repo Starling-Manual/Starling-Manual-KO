@@ -1,9 +1,9 @@
-= Getting Started
+= 시작하기
 
-This chapter will provide you with an overview of Starling and technologies it builds upon.
-We will first take a brief look at the history of _Flash_ and _AIR_ and how Starling came into being.
-Then, we will evaluate the tools and resources that will help you when working with Starling.
-At the end of the chapter, you will have your first "Hello World" example up and running.
+이 장에서는 Starling 및 Starling에 대한 개요를 제공합니다.
+먼저 Flash와 AIR 및 Starling의 등장 시점에 대해 간략히 살펴 보겠습니다.
+그런 다음 Starling과 협력할 때 도움이 되는 도구와 리소스를 평가할 것입니다.
+이 장의 마지막 부분에서는 처음으로 "Hello World" 예제를 작성하여 실행하게 됩니다.
 
 include::introduction.adoc[]
 
@@ -17,7 +17,7 @@ include::resources.adoc[]
 
 include::hello-world.adoc[]
 
-== Summary
+== 요약
 
-You should now have a basic understanding of Starling and the tools and resources you will work with.
-It's time to jump into your first real game!
+이제 Starling과 함께 작업 할 도구와 리소스에 대해 기본적으로 이해해야 합니다.
+첫 번째 실제 게임에 뛰어 들어야 할 때입니다!

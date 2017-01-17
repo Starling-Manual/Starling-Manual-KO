@@ -1,68 +1,72 @@
-== What is Starling?
+== Starling이 뭐죠?
 ifndef::imagesdir[:imagesdir: ../../img]
 
-The _Starling Framework_ allows you to create hardware accelerated apps in _ActionScript 3_.
-The main target is the creation of 2D games, but Starling may be used for any graphical application.
-Thanks to _Adobe AIR_, Starling-based applications can be deployed to all major mobile and desktop platforms.
+_Starling Framework_를 사용하면 _ActionScript 3_에서 하드웨어 가속 응용 프로그램을 만들 수 있습니다.
+주요 목표는 2D 게임을 만드는 것이지만 Starling은 모든 그래픽 응용 프로그램에 사용될 수 있습니다.
+_Adobe AIR_ 덕분에 _Starling_ 기반 응용 프로그램은 모든 주요 모바일 및 데스크탑 플랫폼에 배포할 수 있습니다.
 
-.This red little fella represents the logo of the Starling Framework.
+.이 빨간 작은 친구는 Starling Framework의 로고입니다.
 image::starling-bird.png["The Starling logo.", 400]
 
-While Starling mimics the classic display list architecture of _Adobe AIR/Flash_, it provides a much better performance: all objects are rendered directly by the GPU (using the _Stage3D_ API).
-The complete architecture was designed for working well with the GPU; common game development tasks were built right into its core.
-Starling hides _Stage3D_ internals from developers, but makes it easy to access them for those who need full performance and flexibility.
+_Starling_은 _Adobe AIR / Flash_의 클래식 디스플레이 리스트 아키텍처를 모방하지만 훨씬 뛰어난 성능을 제공합니다.
+모든 객체는 GPU에서 직접 렌더링됩니다 (_Stage3D API_ 사용).
+전체 아키텍처는 GPU와 잘 작동하도록 설계되었는데요.
+이것은 일반적인 게임 개발 작업의 핵심 요소입니다.
+_Starling_은 _Stage3D_ 내부를 개발자에게 숨기지만 완전한 성능과 유연성이 필요한 사람들을 위해 _Stage3D_ 내부에 쉽게 액세스할 수 있게 해줍니다.
 
-=== Why another display API?
+=== 다른 디스플레이 API가 필요한 이유는 무엇입니까?
 
-As outlined above, Starling's API is very similar to the native Flash API, namely: the `flash.display` package.
-So you might ask: why go to all that effort to recreate Flash inside ... err, Flash?
+위에 요약된대로 Starling의 API는 기본 Flash API와 매우 유사합니다. 즉: 'flash.display' 패키지.
+그래서 여러분은 묻습니다: 왜 플래시 내부에서 플래시를 개선하려는 모든 노력을 기울이지 않지... 플래시가 잘못 되었습니까?
 
-The reason is that the original `flash.display` API, with its flexible display list, vector capabilities, text rendering, filters, and whatnot, was designed in an era of desktop computers.
-Those computers had powerful CPUs, but (by modern standards) primitive, fixed-logic graphics hardware.
-Today's mobile hardware, on the other hand, has an almost reversed setup: a weak (i.e. battery-conserving) CPU with a very advanced graphics chip.
+그 이유는 유연한 디스플레이 리스트, 벡터 기능, 텍스트 렌더링, 필터 및 기타가 포함된 원래의 flash.display API가 데스크톱 컴퓨터 시대에 설계 되었기 때문입니다.
+이 컴퓨터는 강력한 CPU를 갖추고 있었지만 (현대 표준에 따라) 원시적이고 고정 논리 그래픽 하드웨어를 사용했습니다.
+반면 오늘날의 모바일 하드웨어는 거의 반대의 설정을 가지고 있습니다: 매우 진보된 그래픽 칩을 가진 약한 (배터리 절약형) CPU.
 
-The problem: it's extremely difficult (if not impossible) to change an API that was designed for pure CPU rendering to suddenly use the GPU efficiently.
-footnote:[Here's an interesting article from one of Adobe's engineers about the reasons, via 'archive.org': http://tinyurl.com/hkbdgfn]
-Thus, such attempts failed spectacularly, and the Flash plug-in is nowadays completely gone from browsers on phones and tablets.
+문제점: 순수 CPU 렌더링을 위해 설계된 API를 갑자기 GPU를 효율적으로 사용하도록 변경하는 것은 (불가능하지는 않지만) 매우 어렵습니다.
+footnote:[Adobe의 엔지니어 중 한 사람이 그 이유에 대해 'archive.org'를 통해 얻은 흥미로운 기사가 있습니다: http://tinyurl.com/hkbdgfn]
+따라서 이러한 시도는 크게 실패했으며 플래시 플러그인은 요즘 휴대 전화와 태블릿의 브라우저에서 완전히 사라졌습니다.
 
-To its credit, Adobe was very aware of this issue.
-That's why, back in 2011, they introduced a low level graphics API called _Stage3D_.
-That API is decidedly low-level; it's basically a wrapper of _OpenGL_ and _DirectX_, allowing developers to access the raw power of the GPU.
+Adobe는 이 문제에 대해 매우 잘 알고 있었습니다.
+그래서 2011년에 Stage3D라는 저수준 그래픽 API를 도입했습니다.
+그 API는 확실히 로우 레벨입니다; 이것은 기본적으로 OpenGL과 DirectX의 래퍼입니다.
+개발자는 GPU의 순수 파워(raw power)에 액세스할 수 있습니다.
 
-The problem: such a low-level API didn't help users of the classic display list much, at least not right away.
-That's because the _Stage3D_ API is as low-level as it gets, so it's nothing a typical developer can (or should!) directly work with when creating an app or game.
-footnote:[Fancy writing some some pixel shaders in an assembly language? I guessed so.]
-Clearly, Adobe needed a more high-level API, built on top of _Stage3D_, but as easy to use as `flash.display`.
+문제점: 그러한 낮은 수준의 API는 고전적인 디스플레이 리스트의 사용자에게 당장은 도움이 되지 못했습니다.
+Stage3D API는 로우 레벨이기 때문에 일반 개발자가 앱이나 게임을 만들 때 직접 작업할 수있는 것은 아닙니다.
+footnote:[일부 픽셀 쉐이더를 어셈블리 언어로 작성하는 것이 좋습니다. 나는 그렇게 추측합니다.]
+분명히 Adobe는 Stage3D 위에 구축된 더 높은 수준의 flash.display 같은 API가 필요했습니다.
 
-Well ... this is were Starling enters the stage (pun intended)!
-It was designed from ground up for _Stage3D_, while mimicking the classic Flash API as much as possible.
-This makes it is possible to fully leverage today's powerful graphics hardware, while using concepts countless developers are already familiar with.
+흠 … 이것이 Starling이 무대(stage 객체를 비유함)에 들어선 이유죠 (말장난)!
+Starling은 가능한 한 많이 고전적인 Flash API를 모방하면서 Stage3D에 맞게 설계되었습니다.
+이를 이용하면 무수한 개발자가 익숙한 개념을 사용하면서 오늘날의 강력한 그래픽 하드웨어를 최대한 활용할 수 있습니다.
 
-Adobe could have made such an API themselves, of course.
-However, monolithic APIs built by big companies have the tendency to become big and inflexible.
-A small open source project, on the other hand, powered by a community of equal-minded developers, can act much more swiftly.
-That's the insight that lead _Thibault Imbert_, product manager of the _Flash_ and _AIR_ platforms in 2011, to initiate the Starling project.
+물론 Adobe는 그러한 API를 직접 만들 수 있었습니다.
+그러나 대기업이 만든 모놀리식 API는 크고 유연성이 없는 경향이 있습니다.
+반면에 동등한 개발자 커뮤니티가 제공하는 소규모 오픈 소스 프로젝트는 훨씬 신속하게 행동할 수 있습니다.
+이는 2011년 _Flash_ 및 _AIR_ 플랫폼의 제품 관리자인 _Thibault Imbert_가 _Starling_ 프로젝트를 시작해야겠다는 통찰력을 갖게 했습니다.
 
-To this day, it is funded and supported by Adobe.
+현재까지는 Adobe에서 후원과 지원을 받고 있습니다.
 
-=== Starling's philosophy
+=== Starling의 철학
 
-One of the core aims of Starling was to make it as lightweight and easy to use as possible.
-In my opinion, an open source library should not only be easy to use -- it should also encourage diving into the code.
-I want developers to be able to understand what's going on behind the scenes; only then will they be able to extend and modify it until it perfectly fits their needs.
+Starling의 핵심 목표 중 하나는 가능한 한 가볍고 사용하기 쉽도록 만드는 것이었습니다.
+필자가 생각하기에 오픈 소스 라이브러리는 사용하기 쉽고 — 또한 코드에 푹 빠지도록 용기를 북돋워야 합니다.
+나는 개발자들이 보여지는 씬 뒤에서 무슨 일이 벌어지고 있는지 이해할 수 있기를 바랍니다.
+그런 다음에는 자신의 필요에 완벽하게 맞을 때까지 확장하고 수정할 수 있어야 합니다.
 
-That's why Starling's source is well documented and surprisingly concise.
-With a size of just about 15k lines of code, it's probably smaller than most games that are written with it!
+이것이 바로 Starling의 소스가 잘 정리되어 있고 놀랍도록 간결한 이유입니다.
+약 15k 라인 크기로 작성된 코드는 대부분의 게임보다 작을 것입니다!
 
-[TIP]
+[팁]
 ====
-I really want to emphasize that: if you're one day stuck or confused why your code isn't working as expected, don't hesitate to step into the source code of Starling.
-Oftentimes, you'll quickly see what's going wrong, and you'll get a much better understanding of its internals.
+정말 강조하고 싶습니다. 언젠가 코드가 예상대로 작동하지 않는 이유나 언젠가 멈추거나 혼란스럽다면 Starling의 소스 코드를 뜯어보는 것을 주저하지 마십시오.
+종종 잘못된 점을 빠르게 파악하고 내부에 대해 더 잘 이해하게 될 것입니다.
 ====
 
-Another important goal of Starling is, of course, its close affinity to the display list architecture.
-That's not only because I really like the whole idea behind the display list, but also to make it easy for developers to transition to Starling.
+Starling의 또 다른 중요한 목표는 물론 디스플레이 리스트 아키텍처와의 친밀성입니다.
+디스플레이 리스트 뒤에 있는 전체 아이디어가 정말 마음에 든다는 것 뿐만 아니라 개발자가 Starling으로 쉽게 전환 할 수 있기 때문입니다.
 
-Nevertheless, I was never trying to create a perfect duplicate.
-Targeting the GPU requires specific concepts, and those should shine through!
-Concepts like _Textures_ and _Meshes_ aim to blend in seamlessly with the original API, just as if it had always been designed for the GPU.
+그럼에도 불구하고, 필자는 절대로 완벽한 복제본을 만들려고 시도하지 않았습니다.
+GPU를 타깃으로 하는 것은 특정한 개념을 필요로 하며 이를 통해 빛나야 합니다!
+Textures, Meshes와 같은 개념은 마치 GPU 용으로 항상 설계된 것처럼 원래 API와 완벽하게 조화를 이루고자 합니다.

@@ -1,18 +1,18 @@
 == Starling이 뭐죠?
 ifndef::imagesdir[:imagesdir: ../../img]
 
-_Starling Framework_를 사용하면 _ActionScript 3_에서 하드웨어 가속 응용 프로그램을 만들 수 있습니다.
+Starling Framework를 사용하면 ActionScript 3에서 하드웨어 가속 응용 프로그램을 만들 수 있습니다.
 주요 목표는 2D 게임을 만드는 것이지만 Starling은 모든 그래픽 응용 프로그램에 사용될 수 있습니다.
-_Adobe AIR_ 덕분에 _Starling_ 기반 응용 프로그램은 모든 주요 모바일 및 데스크탑 플랫폼에 배포할 수 있습니다.
+Adobe AIR 덕분에 Starling 기반 응용 프로그램은 모든 주요 모바일 및 데스크탑 플랫폼에 배포할 수 있습니다.
 
 .이 빨간 작은 친구는 Starling Framework의 로고입니다.
 image::starling-bird.png["The Starling logo.", 400]
 
-_Starling_은 _Adobe AIR / Flash_의 클래식 디스플레이 리스트 아키텍처를 모방하지만 훨씬 뛰어난 성능을 제공합니다.
-모든 객체는 GPU에서 직접 렌더링됩니다 (_Stage3D API_ 사용).
+Starling은 Adobe AIR / Flash의 클래식 디스플레이 리스트 아키텍처를 모방하지만 훨씬 뛰어난 성능을 제공합니다.
+모든 객체는 GPU에서 직접 렌더링됩니다 (Stage3D API 사용).
 전체 아키텍처는 GPU와 잘 작동하도록 설계되었는데요.
 이것은 일반적인 게임 개발 작업의 핵심 요소입니다.
-_Starling_은 _Stage3D_ 내부를 개발자에게 숨기지만 완전한 성능과 유연성이 필요한 사람들을 위해 _Stage3D_ 내부에 쉽게 액세스할 수 있게 해줍니다.
+Starling은 Stage3D 내부를 개발자에게 숨기지만 완전한 성능과 유연성이 필요한 사람들을 위해 Stage3D 내부에 쉽게 액세스할 수 있게 해줍니다.
 
 === 다른 디스플레이 API가 필요한 이유는 무엇입니까?
 
@@ -44,7 +44,7 @@ Starling은 가능한 한 많이 고전적인 Flash API를 모방하면서 Stage
 물론 Adobe는 그러한 API를 직접 만들 수 있었습니다.
 그러나 대기업이 만든 모놀리식 API는 크고 유연성이 없는 경향이 있습니다.
 반면에 동등한 개발자 커뮤니티가 제공하는 소규모 오픈 소스 프로젝트는 훨씬 신속하게 행동할 수 있습니다.
-이는 2011년 _Flash_ 및 _AIR_ 플랫폼의 제품 관리자인 _Thibault Imbert_가 _Starling_ 프로젝트를 시작해야겠다는 통찰력을 갖게 했습니다.
+이는 2011년 Flash 및 AIR 플랫폼의 제품 관리자인 Thibault Imbert가 Starling 프로젝트를 시작해야겠다는 통찰력을 갖게 했습니다.
 
 현재까지는 Adobe에서 후원과 지원을 받고 있습니다.
 

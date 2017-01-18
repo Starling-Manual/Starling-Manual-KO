@@ -1,19 +1,19 @@
-= Basic Concepts
+= 기본 개념
 
-Starling might be a compact framework, but it still boasts a significant number of packages and classes.
-It is built around several basic concepts that are designed to complement and extend each other.
-Together, they provide you with a set of tools that empower you to create any application you can imagine.
+Starling은 컴팩트한 프레임워크라고 볼 수도 있는 반면에 상당한 수의 패키지와 클래스를 자랑합니다.
+그것은 서로를 보완하고 확장하도록 설계된 몇 가지 기본 개념을 중심으로 구축되었습니다.
+그것들은 당신이 상상할 수있는 모든 응용 프로그램을 만들 수있는 능력을 제공하는 일련의 도구를 제공합니다.
 
-Display Programming:: Every object that is rendered on the screen is a _display object_, organized in the _display list_.
-Textures & Images:: To bring pixels, forms and colors to the screen, you will learn to use the _Texture_ and _Image_ classes.
-Dynamic Text:: Rendering of dynamic text is a basic task in almost every application.
-Event Handling:: Communication is key! Your display objects need to talk to each other, and they can do that via Starling's powerful event system.
-Animation:: Bring some motion into the picture! There are different strategies to animate your display objects.
-Asset Management:: Learn how to load and organize all kinds of assets, like textures and sounds.
-Special Effects:: Effects and filters that will make your graphics stand out.
-Utilities:: A number of helpers to make your life easier.
+디스플레이 프로그래밍:: 화면에 렌더링되는 모든 개체는 디스플레이 리스트에 구성된 디스플레이 객체입니다.
+텍스처 & 이미지:: 픽셀, 폼 및 색상을 화면에 가져오기위해 Texture 및 Image 클래스를 사용하는 방법을 배웁니다.
+다이나믹 텍스트:: 동적 텍스트의 렌더링은 거의 모든 애플리케이션에서의 기본 작업입니다.
+이벤트 처리:: 커뮤니케이션은 중요합니다! 디스플레이 객체는 서로 이야기해야 하며 Starling의 강력한 이벤트 시스템을 통해 이를 수행할 수 있습니다.
+애니메이션:: 사진에 모션을 가미해 보세요! 표시 객체를 애니메이션화 하는 데는 여러 전략이 있습니다.
+에셋 관리:: 텍스처 및 사운드와 같은 모든 종류의 에셋을 로드하고 구성하는 방법에 대해 알아보십시오.
+특별한 효과들:: 그래픽을 돋보이게 하는 효과 및 필터.
+유틸리티들:: 삶을 편하게 해주는 많은 조력자들.
 
-We've got a lot of ground to cover, so, in the words of Super Mario: "Lets-a-go!"
+우리가 다룰 수 있는 근거는 충분합니다, 그러니, 슈퍼 마리오의 말로 대신합시다: "Lets-a-go!"
 
 include::configuring-starling.adoc[]
 
@@ -39,10 +39,10 @@ include::sprite3d.adoc[]
 
 include::utilities.adoc[]
 
-== Summary
+== 요약
 
-You are now familiar with all the basic concepts of the Starling Framework.
-This is all the knowledge you need to get started with that game you have in your head, or with that app that's waiting to be created.
+이제 Starling Framework의 모든 기본 개념을 잘 알고 있을 것입니다.
+이것은 여러분이 머리 속에 가지고 있는 게임이나 창조되기를 기다리고 있는 그 앱으로 시작하는데 필요한 모든 지식입니다.
 
-On the other hand, there are still a few tricks up the sleeves of our little bird (birds have sleeves?).
-If you're ready to jump into those advanced topics, please follow my lead.
+다른 한편으로 우리의 작은 새 (새들은 소매자락을 가졌습니까?)의 소매자락을 돌리는 몇 가지 트릭이 있습니다.
+만약 당신이 그 고급 주제로 뛰어들 준비가 되면 제 리드를 따르십시오.

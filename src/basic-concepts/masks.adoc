@@ -1,12 +1,12 @@
-== Masks
+== 마스크(Masks)
 
-Masks can be used to cut away parts of a display object.
-Think of a mask as a "hole" through which you can look at the contents of another display object.
-That hole can have an arbitrary shape.
+마스크를 사용하여 표시 객체의 일부를 잘라낼 수 있습니다.
+마스크를 다른 표시 객체의 내용을 볼 수 있는 "구멍" 이라고 생각하십시오.
+그 구멍은 임의의 모양을 가질 수 있습니다.
 
-If you've used the "mask" property of the classic display list, you'll feel right at home with this feature.
-Just assign a display object to the new mask property, as shown below.
-Any display object can act as a mask, and it may or may not be part of the display list.
+고전적인 디스플레이 목록의 "마스크" 속성을 사용했다면 이 기능을 바로 알아차렸을 것입니다.
+아래와 같이 새 마스크 속성에 표시 객체를 할당하면 됩니다.
+모든 표시 객체는 마스크로 작동할 수 있으며 표시 목록에 포함되거나 포함되지 않을 수 있습니다.
 
 [source, as3]
 ----
@@ -16,40 +16,44 @@ mask.x = mask.y = 50;
 sprite.mask = mask; // ← use the quad as a mask
 ----
 
-This will yield the following result:
+그러면 다음과 같은 결과가 나타납니다:
 
-.Using a rectangular mask.
+.사각형 마스크 사용하기.
 image::mask-rectangular.png[Rectangular Mask]
 
-The logic behind masks is simple: a pixel of a masked object will only be drawn if it is within the mask's polygons.
-This is crucial: the shape of the mask is defined by its polygons -- not its texture!
-Thus, such a mask is purely binary: a pixel is either visible, or it is not.
+마스크 뒤에 있는 논리는 간단합니다.
+마스크된 객체의 픽셀은 마스크의 다각형 내에 있는 경우에만 그려집니다.
+이것은 중요합니다.
+마스크의 모양은 텍스처가 아닌 다각형으로 정의됩니다!
+따라서, 그러한 마스크는 순전히 바이너리입니다.
+픽셀은 가시적이거나 그렇지 않을 수 있습니다.
 
 [IMPORTANT]
-.Masks and AIR
+.마스크와 AIR
 ====
-For masks to work in an AIR application, you will need to activate the stencil buffer in the application descriptor.
-Add the following setting to the `initialWindow` element:
+AIR 응용 프로그램에서 마스크가 작동하려면 응용 프로그램 설명자에서 스텐실 버퍼를 활성화해야 합니다.
+initialWindow 요소에 다음 설정을 추가합니다:
 
 [source, xml]
 ----
 <depthAndStencil>true</depthAndStencil>
 ----
 
-But don't worry, Starling will print a warning to the console if you forget to do so.
+걱정하지 마십시오. Starling은 잊고 설정하지 않았을 경우, 콘솔에 경고를 출력합니다.
 ====
 
-=== Canvas and Polygon
+=== 캔버스 및 다각형(Canvas and Polygon)
 
-"This mask feature looks really nice", you might say, "but how the heck am I going to create those arbitrary shapes you were talking about?!"
-Well, I'm glad you ask!
+"이 마스크 피처는 정말 멋지게 보입니다" 라고 말할 수 있습니다.
+"하지만 내가 말하는 그 임의의 도형을 어떻게 만들지?!" 글쎄요.
+당신이 물어봐줘서 고맙군요!
 
-Indeed: since masks rely purely on geometry, not on any textures, you need a way to draw your mask-shapes.
-In a funny coincidence, there are actually two classes that can help you with exactly this task: _Canvas_ and _Polygon_.
-They go hand-in-hand with stencil masks.
+실제로 마스크는 텍스처가 아닌 지오메트리에만 의존하기 때문에 마스크 모양을 그릴 수 있는 방법이 필요합니다.
+우연의 일치에서 실제로 이 작업을 수행하는 데 도움이 되는 두 가지 클래스인 Canvas 및 Polygon이 있습니다.
+그들은 스텐실 마스크와 함께 사용합니다.
 
-The API of the Canvas class is similar to Flash's _Graphics_ object.
-This will e.g. draw a red circle:
+Canvas 클래스의 API는 Flash의 Graphics 객체와 비슷합니다.
+예제: 빨간 동그라미를 그립니다:
 
 [source, as3]
 ----
@@ -59,17 +63,16 @@ canvas.drawCircle(0, 0, 120);
 canvas.endFill();
 ----
 
-There are also methods to draw an ellipse, a rectangle or an arbitrary polygon.
+타원 직사각형 또는 임의의 다각형을 그리는 방법도 있습니다.
 
-NOTE: Other than those basic methods, the _Canvas_ class is rather limited; don't expect a full-blown alternative to the _Graphics_ class just yet.
-This might change in a future release, though!
+노트: 이러한 기본 메소드 이외에도 Canvas 클래스는 다소 제한적입니다. 아직 Graphics 클래스에 대한 완전한 대안을 기대하지 마십시오. 그러나 향후 릴리스에서 변경 될 수 있습니다!
 
-That brings us to the _Polygon_ class.
-A _Polygon_ (package `starling.geom`) describes a closed shape defined by a number of straight line segments.
-It's a spiritual successor of Flash's _Rectangle_ class, but supporting arbitrary shapes.footnote:[The only limitation: line segments must not intersect one another.]
+그러면 Polygon 클래스가 생깁니다.
+다각형 (패키지 starling.geom)은 여러 개의 직선 세그먼트로 정의된 닫힌 모양을 나타냅니다.
+Flash의 Rectangle 클래스의 후계이지만 임의의 모양을 지원합니다.
 
-Since _Canvas_ contains direct support for polygon objects, it's the ideal companion of _Polygon_.
-This pair of classes will solve all your mask-related needs.
+Canvas에는 폴리곤 객체에 대한 직접적인 지원이 포함되어 있으므로 Polygon의 이상적인 동반자입니다.
+이 한 쌍의 수업은 모든 마스크 관련 요구 사항을 해결할 것입니다.
 
 [source, as3]
 ----
@@ -81,27 +84,27 @@ canvas.beginFill(0xff0000);
 canvas.drawPolygon(polygon); // <2>
 canvas.endFill();
 ----
-<1> This polygon describes a triangle.
-<2> Draw the triangle to a canvas.
+<1> 이 다각형은 삼각형을 나타냅니다.
+<2> 삼각형을 캔버스에 그립니다.
 
-There are a few more things about masks I want to note:
+마스크에 대해 알려주고 싶은게 몇 가지 더 있습니다:
 
-Visibility::
-The mask itself is never visible.
-You always only see it indirectly via its effect on the masked display object.
+표시(Visibility)::
+마스크 자체는 결코 보이지 않습니다.
+마스크된 표시 객체에 미치는 영향을 통해 간접적으로만 표시됩니다.
 
-Positioning::
-If the mask is not part of the display list (i.e. it has no parent), it will be drawn in the local coordinate system of the masked object: if you move the object, the mask will follow.
-If the mask _is_ part of the display list, its location will be calculated just as usual.
+포지셔닝(Positioning)::
+마스크가 표시 목록에 포함되지 않은 경우 (즉 부모가 없는 경우) 마스크된 객체의 로컬 좌표계에 그려집니다.
+객체를 이동하면 마스크가 따라옵니다.
+마스크가 표시 목록의 일부인 경우 해당 위치는 평소대로 계산됩니다.
 
-Stencil Buffer::
-Behind the scenes, masks use the _stencil buffer_ of the GPU, making them very lightweight and fast.
-One mask requires two draw calls: one to draw the mask into the stencil buffer and one to remove it when all the masked content has been rendered.
+스텐실 버퍼(Stencil Buffer)::
+씬(Scenes) 뒤에서, 마스크는 GPU의 스텐실 버퍼를 사용하여 매우 가볍고 빠릅니다.
+하나의 마스크는 스텐실 버퍼에 마스크를 그리는 마스크와 마스크된 모든 컨텐츠가 렌더링되었을 때 마스크를 제거하는 마스크라는 두 가지 드로우 콜이 필요합니다.
 
-Scissor Rectangle::
-If the mask is an untextured _Quad_ parallel to the stage axes, Starling can optimize its rendering.
-Instead of the _stencil buffer_, it will then use the _scissor rectangle_ -- sparing you one draw call.
+가위 사각형(Scissor Rectangle)::
+마스크가 스테이지 축과 평행한 텍스쳐 없는(untextured) Quad인 경우 Starling은 렌더링을 최적화할 수 있습니다.
+스텐실 버퍼 대신에 가위 직사각형을 사용하여 하나의 드로우 콜로 절약할 수 있습니다.
 
-Texture Masks::
-If a simple vector shape just doesn't cut it, there is an extension that allows you to use the alpha channel of a texture as a stencil mask.
-It's called _Texture Mask_ and is found in the http://wiki.starling-framework.org/extensions/texture_mask[Starling Wiki].
+텍스쳐 마스크(Texture Masks)::
+단순한 벡터 모양으로 잘라내지 못하면 텍스쳐의 알파 채널을 스텐실 마스크로 사용할 수 있는 확장 기능이 있습니다. Texture Mask라고 불리며 http://wiki.starling-framework.org/extensions/texture_mask[Starling Wiki]에 있습니다.

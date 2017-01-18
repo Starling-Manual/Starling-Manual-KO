@@ -1,23 +1,23 @@
-== Device Rotation
+== 기기 회전(Device Rotation)
 
-A very cool feature of today's smartphones and tablets is that they recognize the orientation of the device in the physical world and may update the user interface accordingly.
+오늘날 스마트 폰 및 태블릿의 매우 멋진 기능은 물리적으로 기기의 방향을 인식하고 이에 따라 사용자 인터페이스를 업데이트할 수 있다는 것입니다.
 
-To detect orientation changes in Starling, you first need to update your application's AIR configuration file.
-Make sure that it includes the following settings:
+Starling의 방향 변경을 감지하려면 먼저 응용 프로그램의 AIR 구성 파일을 업데이트해야 합니다.
+다음 설정이 포함되어 있는지 확인하십시오.
 
 [source, xml]
 ----
 <aspectRatio>any</aspectRatio> <1>
 <autoOrients>true</autoOrients> <2>
 ----
-<1> The initial aspect ratio (`portrait`, `landscape` or `any`).
-<2> Indicates whether the app will begin auto-orienting on launch.
+<1> 초기 종횡비 (세로, 가로 또는 기타).
+<2> 시작할 때 앱이 자동 방향 지정을 시작할지 여부를 나타냅니다.
 
-When that's in place, you can listen for a `RESIZE` event on the Starling stage.
-It is dispatched whenever the orientation changes.
-After all, an orientation change always causes the stage size to change, as well (exchanging _width_ and _height_).
+회전기기가 하면 Starling 스테이지에서 RESIZE 이벤트를 수신할 수 있습니다.
+오리엔테이션이 변경될 때마다 전달됩니다.
+결국 오리엔테이션 변경은 스테이지 크기가 항상 변경되도록 합니다 (너비 및 높이 전환).
 
-Update the dimensions of the Starling viewPort and stage in the corresponding event handler.
+해당 이벤트 핸들러에서 Starling viewPort 및 stage의 크기를 업데이트하십시오.
 
 [source, as3]
 ----
@@ -46,16 +46,19 @@ private function updatePositions(width:int, height:int):void // <3>
     // Update the positions of the objects that make up your game.
 }
 ----
-<1> This event handler is called when the device rotates.
-<2> Updates the size of stage and viewPort depending on the current screen size in pixels.
-<3> Updates your user interface so that it fits the new orientation.
+<1> 이 이벤트 핸들러는 장치가 회전할 때 호출됩니다.
+<2> 현재 화면 크기 (픽셀 단위)에 따라 stage 및 viewPort의 크기를 업데이트합니다.
+<3> 사용자 인터페이스를 업데이트하여 새로운 방향에 맞춥니다.
 
-Note that we had to update _viewPort_ and _stage size_ manually in the event listener.
-Per default, they will remain unchanged, which means that your application will appear cropped.
-The code above fixes that; it works for every scale factor.
+이벤트 리스너에서 viewPort 및 스테이지 크기를 수동으로 업데이트해야 한다는 점에 유의하십시오.
+기본적으로 응용 프로그램은 변경되지 않고 그대로 유지되므로 응용 프로그램이 잘리게 나타납니다.
+위의 코드는 이를 수정합니다.
+그것은 모든 스케일 팩터에 대해 작동합니다.
 
-The last part is going to be much harder: updating your user interface so that it fits into the new stage dimensions.
-This does not make sense for all games -- but if it does, you should consider the additional effort.
-Your users will appreciate it!
+마지막 부분은 훨씬 더 어려워질 것입니다.
+사용자 인터페이스를 업데이트하여 새로운 스테이지 크기에 맞춥니다.
+이것은 모든 게임에서 의미가 있는 것은 아닙니다.
+그렇다면 추가적인 노력을 고려해야 합니다.
+여러분의 사용자가 그것을 고마워할 것입니다!
 
-TIP: The _Scaffold_ project coming with Starling contains a possible implementation of this feature.
+팁: Starling에 제공되는 Scaffold 프로젝트에는 이 기능을 구현할 수 있는 기능이 포함되어 있습니다.

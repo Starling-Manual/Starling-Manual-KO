@@ -1,13 +1,15 @@
-= Mobile Development
+= 모바일 개발
 
-_Adobe AIR_ is one of the most powerful solutions available today when it comes to cross-platform development.
-And when somebody says "cross-platform" nowadays, it typically means: _iOS_ and _Android_.
+Adobe AIR는 크로스 플랫폼 개발과 관련하여 현재 사용할 수 있는 가장 강력한 솔루션 중 하나입니다.
+누군가가 "크로스 플랫폼"이라고 말하면 일반적으로 iOS와 Android를 의미합니다.
 
-Developing for such mobile platforms can be extremely challenging: there's a plethora of different device types around, featuring screen resolutions that range from _insult to the eye_ to _insanely high_ and aspect ratios that defy any logic.
-To add insult to injury, some of them are equipped with CPUs that clearly were never meant to power anything else than a pocket calculator.
+이러한 모바일 플랫폼을 위한 개발은 매우 어려울 수 있습니다.
+다양한 종류의 다양한 장치 유형이 있습니다.
+다양한 화면 해상도와 논리적으로 불만족하는 종횡비가 있습니다.
+부상에 대한 모욕을 주기 위해 포켓 계산기 이외에 다른 것을 강화할 의도가 없었던 CPU가 장착되어 있는 경우도 있습니다.
 
-As a developer, you can only shrug your shoulders, roll up your sleeves, and jump right in.
-At least you know that fame and fortune lie on the other side of the journey!footnote:[Don't pin me down to that, though.]
+개발자라면 어깨를 으쓱하고 소매를 감고서 바로 뛰어들 수 있습니다.
+여행의 반대편에 명성과 운이 있다는 것을 적어도 알고 있습니다!footnote:[그래도 나를 괴롭히지는 마십시오.]
 
 include::multi-resolution-development.adoc[]
 
@@ -15,11 +17,11 @@ include::device-rotation.adoc[]
 
 // == Native Extensions
 
-== Summary
+== 요약
 
-Make no mistake: developing for mobile platforms is not easy.
-The variety of the hardware makes it necessary to plan ahead and structure your code smartly.
-Furthermore, the market is extremely competitive, so your design needs to stand out from the masses.
+실수하지 마십시오: 모바일 플랫폼을 위한 개발은 쉽지 않습니다.
+하드웨어가 다양하기 때문에 계획을 세우고 코드를 현명하게 구조화해야 합니다.
+또한 시장은 매우 경쟁적이어서 디자인은 대중으로부터 눈에 띄어야 합니다.
 
-Starling does what it can to help you with this process!
-With the tools you learned in this chapter, you will be able to master this challenge.
+Starling은 이 과정에서 당신을 도울 수있는 일을 합니다!
+이 장에서 배운 도구를 사용하면 이러한 어려움을 극복할 수 있습니다.

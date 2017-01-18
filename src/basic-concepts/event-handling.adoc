@@ -1,20 +1,20 @@
-== Event Handling
+== 이벤트 핸들링
 
-You can think of events as occurrences of any kind that are of interest to you as a programmer.
+이벤트는 프로그래머가 관심 있을만한 모든 종류의 사건으로 생각할 수 있습니다.
 
-* For example, a mobile app might notify you that the device orientation has changed, or that the user just touched the screen.
-* On a lower level, a button might indicate that it was triggered, or a knight that he has run out of health points.
+* 예를 들어 모바일 앱에서 기기 방향이 변경되었거나 사용자가 화면을 터치한 것을 알릴 수 있습니다.
+* 낮은 레벨에서, 버튼이 트리거되었다는 것을 나타낼 수도 있고, 기사(knight, 게임에서)가 에너지를 모두 소모했다는 것을 나타낼 수도 있습니다.
 
-That's what Starling's event mechanism is for.
+그것이 Starling의 이벤트 메커니즘입니다.
 
 === Motivation
 
-The event mechanism is a key feature of Starling's architecture.
-In a nutshell, events allow objects to communicate with each other.
+Starling의 이벤트 메커니즘 아키텍처의 핵심 기능입니다.
+간단히 말해서, 이벤트 개체가 서로 통신할 수 있습니다.
 
-You might think: we already have a mechanism for that -- methods!
-That's true, but methods only work in one direction.
-For example, look at a _MessageBox_ that contains a _Button_.
+당신은 생각할 수 있습니다: 우리는 이미 그에 대한 메커니즘을 가지고 있습니다 - 바로 메소드! 네, 그건 사실입니다.
+하지만 메소드는 한 방향으로만 작동합니다.
+예를 들어 버튼을 포함한 MessageBox를 보세요.
 
 [ditaa, messagebox-calls-button]
 ....
@@ -29,7 +29,7 @@ For example, look at a _MessageBox_ that contains a _Button_.
   \--------/
 ....
 
-The message box _owns_ the button, so it can use its methods and properties, e.g.
+메시지 박스는 버튼을 소유합니다. 그래서 버튼의 메소드와 속성을 사용할 수 있습니다:
 
 [source, as3]
 ----
@@ -43,14 +43,15 @@ public class MessageBox extends DisplayObjectContainer
     }
 }
 ----
-<1> Communicate with the _Button_ via a property.
+<1> 속성을 통해 버튼과 통신합니다.
 
-The _Button_ instance, on the other hand, does not own a reference to the message box.
-After all, a button can be used by any component -- it's totally independent of the _MessageBox_ class.
-That's a good thing, because otherwise, you could only use buttons inside message boxes, and nowhere else. Ugh!
+한편 Button 인스턴스는 메시지 상자에 대한 참조를 소유하지 않습니다.
+결국 버튼은 모든 구성 요소에서 사용할 수 있습니다.
+MessageBox 클래스와 완전히 독립적입니다.
+다른 점은 메시지 상자 안의 버튼만 사용할 수 있다는 것입니다. 이런!
 
-Still: the button is there for a reason -- if triggered, it needs to tell somebody about it!
-In other words: the button needs to be able to send messages to its owner, whoever that is.
+여전히: 버튼이 거기 있는 이유가 있습니다 - 버튼이 눌려지면, 누군가에게 그 사실을 알릴 필요가 있습니다!
+즉 버튼의 소유자인 주인이라면 누구나 메시지를 받을 수 있어야 합니다.
 
 [ditaa, button-dispatches-to-messagebox]
 ....
@@ -65,9 +66,9 @@ In other words: the button needs to be able to send messages to its owner, whoev
   \--------/
 ....
 
-=== Event & EventDispatcher
+=== 이벤트와 이벤트 디스패쳐(Event & EventDispatcher)
 
-I have something to confess: when I showed you the class hierarchy of Starling's display objects, I omitted the actual base class: _EventDispatcher_.
+고백할 부분이 있습니다. Starling의 표시 객체 클래스 계층을 표시할 때 실제 기본 클래스인 EventDispatcher가 생략되었습니다.
 
 [plantuml, class-hierarchy-with-eventdispatcher]
 ....
@@ -81,15 +82,17 @@ DisplayObject <|-- Mesh
 DisplayObject <|-- DisplayObjectContainer
 ....
 
-This class equips all display objects with the means to dispatch and handle events.
-It's not a coincidence that all display objects inherit from _EventDispatcher_; in Starling, the event system is tightly integrated with the display list.
-This has some advantages we will see later.
+이클래스는 모든 표시 객체에 이벤트를 전달하고 처리할 수 있는 수단을 제공합니다.
+모든 표시 객체가 EventDispatcher에서 상속받는 것은 우연이 아닙니다.
+Starling에서는 이벤트 시스템이 표시 목록과 긴밀하게 통합되어 있습니다.
+여기에는 나중에 우리가 보게될 몇 가지 장점이 있습니다.
 
-Events are best described by looking at an example.
+이벤트는 예제를 통해 가장 잘 설명됩니다.
 
-Imagine for a moment that you've got a dog; let's call him _Einstein_.
-Several times each day, _Einstein_ will indicate to you that he wants to go out for a walk.
-He does so by barking.
+개가 있다고 잠시 상상해보십시오.
+그를 아인슈타인이라고 부르죠.
+매일 몇 차례 아인슈타인은 당신에게 그가 산책하러 나가길 원한다는 것을 알려줄 것입니다.
+그는 짖는 소리로 그것을 알립니다.
 
 [source, as3]
 ----
@@ -113,32 +116,33 @@ function onBark(event:Event):void // <4>
     einstein.walk();
 }
 ----
-<1> The string `bark` will identify the event. It's encapsulated in an _Event_ instance.
-<2> Dispatching `event` will send it to everyone who subscribed to `bark` events.
-<3> Here, we _do_ subscribe by calling `addEventListener`. The first argument is the event `type`, the second the `listener` (a function).
-<4> When the dog barks, this method will be called with the event as parameter.
+<1> 문자열 "bark" 소리가 이벤트를 식별합니다. Event 인스턴스에 캡슐화되어 있습니다.
+<2> 이벤트 발신(Dispatching event)은 짖는 이벤트에 가입한 모든 사람들에게 이벤트를 전달합다.
+<3> addEventListener를 호출하여 구독합니다. 첫 번째 인수는 이벤트 유형이고 두 번째 인수는 리스너 (함수)입니다.
+<4> 개가 짖는 경우 이 메소드는 이벤트를 매개 변수로 호출됩니다.
 
-You just saw the three main components of the event mechanism:
+방금 이벤트 메커니즘의 세 가지 주요 구성 요소를 보았습니다:
 
-* Events are encapsulated in instances of the *Event* class (or subclasses thereof).
-* To dispatch an event, the sender calls *dispatchEvent*, passing the _Event_ instance along.
-* To listen to an event, the client calls *addEventListener*, indicating which type of event he is interested in and the function or method to be called.
+* 이벤트는 Event 클래스 (또는 그 하위 클래스)의 인스턴스에 캡슐화 됩니다.
+* 이벤트를 발신하려면 보낸 사람이 이벤트 인스턴스를 전달하여 dispatchEvent를 호출합니다.
+* 이벤트를 수신하기 위해 클라이언트는 관심있는 이벤트 유형과 호출할 함수 또는 메소드를 나타내는 addEventListener를 호출합니다.
 
-From time to time, your aunt takes care of the dog.
-When that happens, you don't mind if the dog barks -- your aunt knows what she signed up for!
-So you remove the event listener, which is a good practice not only for dog owners, but also for Starling developers.
+때때로 숙모도 개를 보살펴줍니다.
+그런 일이 생기면 개가 짖는 소리를 하지 않아도 됩니다.
+숙모는 그녀가 무엇을 신청했는지 알고 있습니다!
+그래서 개 주인만을 위한 좋은 연습뿐만 아니라 Starling 개발자를 위한 이벤트 리스너를 제거합니다.
 
 [source, as3]
 ----
 einstein.removeEventListener("bark", onBark); // <1>
 einstein.removeEventListeners("bark"); // <2>
 ----
-<1> This removes the specific `onBark` listener.
-<2> This removes all listeners of that type.
+<1> onBark 리스너를 제거합니다.
+<2> 해당 타입의 모든 리스너를 제거합니다.
 
-So much for the `bark` event.
-Of course, _Einstein_ could dispatch several different event types, for example `howl` or `growl` events.
-It's recommended to store such strings in static constants, e.g. right in the `Dog` class.
+bark 이벤트가 너무 많네요.
+물론 아인슈타인은 몇 가지 다른 이벤트 유형, 예를 들어 울부 짖거나(howl) 으르렁대는(growl) 이벤트를 디스패치할 수 있습니다.
+정적 정수에 이러한 문자열을 저장하는 것이 좋습니다. Dog 클래스에 곧바로.
 
 [source, as3]
 ----
@@ -153,25 +157,25 @@ einstein.addEventListener(Dog.GROWL, burglar.escape);
 einstein.addEventListener(Dog.HOWL, neighbor.complain);
 ----
 
-Starling predefines several very useful event types right in the _Event_ class.
-Here's a selection of the most popular ones:
+Starling은 Event 클래스에서 몇 가지 매우 유용한 이벤트 유형을 미리 정의합니다.
+다음은 가장 인기있는 것 중 하나입니다:
 
-* *Event.TRIGGERED:* a button was triggered
-* *Event.ADDED:* a display object was added to a container
-* *Event.ADDED_TO_STAGE:* a display object was added to a container that is connected to the stage
-* *Event.REMOVED:* a display object was removed from a container
-* *Event.REMOVED_FROM_STAGE:* a display object lost its connection to the stage
-* *Event.ENTER_FRAME:* some time has passed, a new frame is rendered (we'll get to that later)
-* *Event.COMPLETE:* something (like a _MovieClip_ instance) just finished
+* *Event.TRIGGERED:* 버튼이 트리거 된(탭) 경우
+* *Event.ADDED:* 디스플레이 오브젝트가 컨테이너에 추가된 경우
+* *Event.ADDED_TO_STAGE:* 스테이지에 연결된 컨테이너에 디스플레이 오브젝트가 추가된 경우
+* *Event.REMOVED:* 디스플레이 오브젝트가 컨테이너에서 제거된 경우
+* *Event.REMOVED_FROM_STAGE:* 디스플레이 오브젝트가 스테이지에 연결되지 않은 경우
+* *Event.ENTER_FRAME:* 새 프레임이 렌더링된 경우 (나중에 알아 보겠습니다).
+* *Event.COMPLETE:* 무언가 완료된 경우
 
-=== Custom Events
+=== 커스텀 이벤트(Custom Events)
 
-Dogs bark for different reasons, right?
-Einstein might indicate that he wants to pee, or that he is hungry.
-It might also be a way to tell a cat that it's high time to make an exit.
+개는 여러 이유들에 대해 짖습니다. 그렇죠?
+아인슈타인은 그가 소변을 보고 싶어하거나 그가 배고픈 것을 나타낼 수 있습니다.
+고양이에게 퇴장할 시간이 많다고 말하는 방법일 수도 있습니다.
 
-Dog people will probably hear the difference (I'm a cat person; I won't).
-That's because smart dogs set up a _BarkEvent_ that stores their intent.
+개 사람들(Dog people, 의인화)은 아마도 그 차이를 듣게 될 것입니다 (나는 고양이 인이고 그렇지 않습니다).
+똑똑한 개들이 그들의 의도를 저장하는 BarkEvent를 설정하기 때문입니다.
 
 [source, as3]
 ----
@@ -190,12 +194,12 @@ public class BarkEvent extends Event
     public function get reason():Boolean { return _reason; } // <4>
 }
 ----
-<1> It's a good practice to store the event type right at the custom event class.
-<2> The reason for creating a custom event: we want to store some information with it. Here, that's the `reason` String.
-<3> Call the super class in the constructor. (We will look at the meaning of `bubbles` shortly.)
-<4> Make `reason` accessible via a property.
+<1> 이벤트 유형을 사용자 정의 이벤트 클래스에 바로 저장하는 것이 좋습니다.
+<2> 커스텀 이벤트를 만드는 이유: 정보를 함께 저장하고 싶습니다. 여기에 그 이유가 있습니다.
+<3> 생성자에서 슈퍼 클래스를 호출합니다. (우리는 곧 버블링의 의미를 살펴볼 것입니다.)
+<4> 속성을 통해 reason을 접근 가능하게 만든다.
 
-The dog can now use this custom event when barking:
+개는 짖을 때 이 커스텀 이벤트를 사용할 수 있습니다:
 
 [source, as3]
 ----
@@ -220,120 +224,121 @@ function onBark(event:BarkEvent):void // <1>
         einstein.walk();
 }
 ----
-<1> Note that the parameter is of type `BarkEvent`.
-<2> That's why we can now access the `reason` property and act accordingly.
+<1> 매개 변수의 유형은 BarkEvent입니다.
+<2> 그래서 우리는 이제 reason 속성에 접근하여 이에 따라 행동할 수 있습니다.
 
-That way, any dog owners familiar with the _BarkEvent_ will finally be able to truly understand their dog.
-Quite an accomplishment!
+그렇게 하면 BarkEvent에 익숙한 개 소유자가 마침내 진정으로 개를 이해할 수 있게 됩니다.
+해냈습니다!
 
-=== Simplifying
+=== 단순화(Simplifying)
 
-Agreed: it's a little cumbersome to create that extra class just to be able to pass on that `reason` string.
-After all, it's very often just a single piece of information we are interested in.
-Having to create additional classes for such a simple mechanism feels somewhat inefficient.
+합의: 그 reason 문자열을 전달할 수 있도록 여분의 클래스를 만드는 것은 약간 성가신 일입니다.
+결국 우리가 관심을 갖는 정보의 단 하나의 부분일 뿐입니다.
+간단한 메커니즘을 위한 추가 클래스를 생성하는 것은 다소 비효율적입니다.
 
-That's why you won't actually need the subclass-approach very often.
-Instead, you can make use of the `data` property of the _Event_ class, which can store arbitrary references (its type: _Object_).
+그렇기 때문에 하위 클래스 방식을 자주 사용하지 않아도 됩니다.
+대신 임의의 참조 (유형 Object)를 저장할 수 있는 Event 클래스의 data 속성을 사용할 수 있습니다.
 
-Replace the _BarkEvent_ logic with this:
+BarkEvent 로직을 이것으로 대체하십시오:
 
 [source, as3]
 ----
-// create & dispatch event
+// 이벤트 생성 및 발신
 var event:Event = new Event(Dog.BARK);
 event.data = "hungry"; // <1>
 dispatchEvent(event);
 
-// listen to event
+// 이벤트 수신
 einstein.addEventListener(Dog.BARK, onBark);
 function onBark(event:Event):void
 {
     trace("reason: " + event.data as String); // <2>
 }
 ----
-<1> Store the _reason_ for barking inside the `data` property.
-<2> To get the reason back, cast `data` to _String_.
+<1> 데이터 속성 안에 짖는 이유(reason)를 저장하십시오.
+<2> 이유를 다시 얻으려면 데이터를 String으로 형변환 하십시오.
 
-The downside of this approach is that we lose some type-safety.
-But in my opinion, I'd rather have that cast to _String_ than implement a complete class.
+이방법의 단점은 형의 안정성을 잃는 것입니다.
+그러나 제 의견으로는 완전한 클래스를 구현하는 것보다 String에 캐스트하는 것이 좋을 것 같습니다.
 
-Furthermore, Starling has a few shortcuts that simplify this code further!
-Look at this:
+또한 Starling에는이 코드를 더 간단하게 만드는 몇 가지 단축키가 있습니다!
+이걸 보세요:
 
 [source, as3]
 ----
-// create & dispatch event
+// 이벤트 생성 및 발신
 dispatchEventWith(Dog.BARK, false, "hungry"); // <1>
 
-// listen to event
+// 이벤트 수신
 einstein.addEventListener(Dog.BARK, onBark);
 function onBark(event:Event, reason:String):void
 {
     trace("reason: " + reason); // <2>
 }
 ----
-<1> Creates an event of type `Dog.BARK`, populates the `data` property, and dispatches the event -- all in one line.
-<2> The `data` property is passed to the (optional) second argument of the event handler.
+<1> Dog.BARK 유형의 이벤트를 작성하고 data 속성을 채우고 이벤트를 한 행에 디스패치 합니다.
+<2> data 속성은 이벤트 처리기의 두 번째 인수 (선택적)로 전달됩니다.
 
-We got rid of quite an amount of boiler plate code that way!
-Of course, you can use the same mechanism even if you don't need any custom data.
-Let's look at the most simple event interaction possible:
+그렇게 보일러 플레이트 코드를 상당량 제거했습니다!
+물론 사용자 정의 데이터가 필요하지 않은 경우에도 동일한 메커니즘을 사용할 수 있습니다.
+가능한 가장 간단한 이벤트 상호 작용을 살펴 보겠습니다.
 
 [source, as3]
 ----
-// create & dispatch event
+// 이벤트 생성 및 발신
 dispatchEventWith(Dog.HOWL); // <1>
 
-// listen to event
+// 이벤트 수신
 dog.addEventListener(Dog.HOWL, onHowl);
 function onHowl():void // <2>
 {
     trace("hoooh!");
 }
 ----
-<1> Dispatch an event by only specifying its type.
-<2> Note that this function doesn't contain any parameters! If you don't need them, there's no need to specify them.
+<1> 이벤트 유형을 지정하여 이벤트를 전달하십시오.
+<2> 이 함수에는 매개 변수가 없습니다. 필요하지 않은 경우 지정할 필요가 없습니다.
 
-NOTE: The simplified `dispatchEventWith` call is actually even more memory efficient, since Starling will pool the _Event_ objects behind the scenes.
+노트: Starling이 이벤트 객체를 뒤에서 모으기 때문에 단순화 된 dispatchEventWith 호출은 실제로 훨씬 더 효율적입니다.
 
-=== Bubbling
+=== 버블링(Bubbling)
 
-In our previous examples, the event dispatcher and the event listener were directly connected via the `addEventListener`-method.
-But sometimes, that's not what you want.
+앞의 예제에서 이벤트 디스패처와 이벤트 리스너는 addEventListener 메소드를 통해 직접 연결되었습니다.
+그러나 때때로 그것은 당신이 원하는 것이 아닙니다.
 
-Let's say you created a complex game with a deep display list.
-Somewhere in the branches of this list, _Einstein_ (the protagonist-dog of this game) ran into a trap.
-He howls in pain, and in his final breaths, dispatches a `GAME_OVER` event.
+복잡한 디스플레이 리스트가 있는 복잡한 게임을 만들었다고 가정해 보겠습니다.
+아인슈타인 (이 게임의 주인공 - 개)이 이 목록의 일부 지점에서 함정에 빠졌습니다.
+그는 고통스럽고 마지막 숨을 쉬면서 GAME_OVER 이벤트를 발송합니다.
 
-Unfortunately, this information is needed far up the display list, in the game's root class.
-On such an event, it typically resets the level and returns the dog to its last save point.
-It would be really cumbersome to hand this event up from the dog over numerous display objects until it reaches the game root.
+안타깝게도 이 정보는 게임의 루트 클래스에서 디스플레이 리스트까지 멀리 있어야 합니다.
+이러한 이벤트에서는 일반적으로 레벨을 재설정하고 개를 마지막 저장점으로 반환합니다.
+게임 루트에 도달할 때까지 수 많은 표시 개체를 통해 개에서 이 이벤트를 넘겨주는 것은 정말 성가실 것입니다.
 
-That's a very common requirement -- and the reason why events support something that is called _bubbling_.
+이는 매우 일반적인 요구 사항이며 이벤트가 버블링 (bubbling)이라고 하는 것을 지원하는 이유입니다.
 
-Imagine a real tree (it's your display list) and turn it around by 180 degrees, so that the trunk points upwards.
-The trunk, that's your stage, and the leaves of the tree are your display objects.
-Now, if a leaf creates a bubbling event, that event will move upwards just like the bubbles in a glass of soda, traveling from branch to branch (from parent to parent) until it finally reaches the trunk.
+실제 나무 (디스플레이 목록)를 상상해보고 트렁크가 위쪽을 향하도록 180도 돌리십시오.
+트렁크 그게 너의 무대이고 나무의 나뭇잎이 너의 전시 물건이야.
+이제 나뭇잎이 버블링 이벤트를 만드는 경우 그 이벤트는 마침내 트렁크에 도달할 때까지 나뭇 가지에서 지점 (부모에서 부모까지)으로 이동하는 소다 잔에 있는 거품처럼 위로 이동합니다.
 
-.An event bubbles all the way up to the stage.
+.이벤트는 스테이지까지 계속 거품(bubbles)을 냅니다.
 image::bubbling.png[Bubbling, 200]
 
-Any display object along this route can listen to this event.
-It can even pop the bubble and stop it from traveling further. All that is required to do that is to set the `bubbles`-property of an event to true.
+이 라우트의 모든 디스플레이 오브젝트는 이 이벤트를 수신할 수 있습니다.
+거품을 터뜨려 더 멀리 여행하는 것을 멈출 수도 있습니다.
+그렇게 하기 위해 필요한 것은 이벤트의 bubbles 속성을 true로 설정하는 것입니다.
 
 [source, as3]
 ----
-// classic approach:
+// 고전적 접근법:
 var event:Event = new Event("gameOver", true); // <1>
 dispatchEvent(event);
 
-// one-line alternative:
+// 한 줄 대안:
 dispatchEventWith("gameOver", true); // <2>
 ----
-<1> Passing `true` as second parameter of the Event constructor activates bubbling.
-<2> Alternatively, `dispatchEventWith` takes the exact same parameters.
+<1> Event 생성자의 두 번째 매개 변수로 true를 전달하면 버블링이 활성화됩니다.
+<2> 또는 dispatchEventWith는 똑같은 매개 변수를 사용합니다.
 
-Anywhere along its path, you can listen to this event, e.g. on the dog, its parent, or the stage:
+경로를 따라 어디에서나 이 이벤트를 들을 수 있습니다 (예: 개 부모 또는 스테이지에서):
 
 [source, as3]
 ----
@@ -342,17 +347,17 @@ dog.parent.addEventListener("gameOver", onGameOver);
 stage.addEventListener("gameOver", onGameOver);
 ----
 
-This feature comes in handy in numerous situations; especially when it comes to user input via mouse or touch screen.
+이 기능은 여러 상황에서 유용합니다. 특히 마우스 또는 터치 스크린을 통한 사용자 입력과 관련이 있습니다.
 
-=== Touch Events
+=== 터치 이벤트(Touch Events)
 
-While typical desktop computers are controlled with a mouse, most mobile devices, like smartphones or tablets, are controlled with your fingers.
+일반적인 데스크톱 컴퓨터는 마우스로 제어되지만 스마트폰이나 태블릿과 같은 대부분의 모바일 장치는 손가락으로 제어됩니다.
 
-Starling unifies those input methods and treats all "pointing-device" input as `TouchEvent`.
-That way, you don't have to care about the actual input method your game is controlled with.
-Whether the input device is a mouse, a stylus, or a finger: Starling will always dispatch touch events.
+Starling은 이러한 입력 방법을 통합하고 모든 "포인팅 장치" 입력을 TouchEvent로 처리합니다.
+그렇게하면 게임을 제어하는 실제 입력 방법에 신경 쓸 필요가 없습니다.
+입력 장치가 마우스 스타일러스 또는 손가락인지 여부에 상관없이 Starling은 항상 터치 이벤트를 전달합니다.
 
-First things first: if you want to support multitouch, make sure to enable it before you create your Starling instance.
+우선 우선 멀티 터치를 지원하려면 Starling 인스턴스를 만들기 전에 활성화해야 합니다.
 
 [source, as3]
 ----
@@ -362,41 +367,43 @@ var starling:Starling = new Starling(Game, stage);
 starling.simulateMultitouch = true;
 ----
 
-Note the property `simulateMultitouch`.
-If you enable it, you can simulate multitouch input with your mouse on your development computer.
-Press and hold the kbd:[Ctrl] or kbd:[Cmd] keys (Windows or Mac) when you move the mouse cursor around to try it out.
-Add kbd:[Shift] to change the way the alternative cursor is moving.
+simulateMultitouch 속성에 주목하십시오.
+이 기능을 사용하면 개발 컴퓨터에서 마우스로 멀티 터치 입력을 시뮬레이션 할 수 있습니다.
+마우스 커서를 움직이면 Ctrl 또는 Cmd 키 (Windows 또는 Mac)를 길게 누르십시오.
+대체 커서가 움직이는 방식을 변경하려면 kbd:[Shift]를 추가하십시오.
 
-.Simulating Multitouch with mouse and keyboard.
+.마우스와 키보드로 멀티 터치 시뮬레이션.
 image::simulate-multitouch.png[Simulate Multitouch]
 
-To react to touch events (real or simulated), you need to listen for events of the type `TouchEvent.TOUCH`.
+터치 이벤트 (실제 또는 시뮬레이션)에 반응하려면 TouchEvent.TOUCH 유형의 이벤트를 수신해야 합니다.
 
 [source, as3]
 ----
 sprite.addEventListener(TouchEvent.TOUCH, onTouch);
 ----
 
-You might have noticed that I've just added the event listener to a _Sprite_ instance.
-_Sprite_, however, is a container class; it doesn't have any _tangible_ surface itself.
-Is it even possible to touch it, then?
+방금 Sprite 인스턴스에 이벤트 리스너를 추가했음을 눈치챘을 것입니다.
+그러나 Sprite는 컨테이너 클래스입니다.
+그것은 명백한 표면 자체를 가지고 있지 않습니다.
+그럼 어떻게 그걸 만질 수 있습니까?
 
-Yes, it is -- thanks to _bubbling_.
+그렇습니다.
+버블링 덕분입니다.
 
-To understand that, think back to the _MessageBox_ class we created a while ago.
-When the user clicks on its text field, anybody listening to touches on the text field must be notified -- so far, so obvious.
-But the same is true for somebody listening for touch events on the message box itself; the text field is part of the message box, after all.
-Even if somebody listens to touch events on the stage, he should be notified.
-Touching any object in the display list means touching the stage!
+이를 이해하기 위해 우리가 이전에 작성한 MessageBox 클래스를 생각해보십시오.
+사용자가 텍스트 필드를 클릭하면 텍스트 필드를 터치하는 모든 사람에게 알림을 보내야 합니다. — 지금까지 명백했습니다.
+그러나 메시지 상자 자체에서 터치 이벤트를 듣는 사람에게도 마찬가지입니다; 결국 텍스트 필드는 메시지 상자의 일부입니다.
+누군가 무대 위의 이벤트를 듣는 사람에게 통보해야 합니다.
+디스플레이 목록에 있는 어떤 오브젝트를 만지는 것은 스테이지를 만지는 것을 의미합니다.
 
-Thanks to bubbling events, Starling can easily represent this type of interaction.
-When it detects a touch on the screen, it figures out which _leaf object_ was touched.
-It creates a _TouchEvent_ and dispatches it on that object.
-From there, it will bubble up along the display list.
+버블링 이벤트 덕분에 Starling은 이러한 유형의 상호 작용을 쉽게 나타낼 수 있습니다.
+화면에서 터치를 감지하면 어떤 리프 객체가 터치되었는지 파악합니다.
+TouchEvent를 생성하고 이를 해당 객체에 전달합니다.
+여기에서 디스플레이 목록을 따라 버블이 생깁니다.
 
-==== Touch Phases
+==== 터치 단계(Touch Phases)
 
-Time to look at an actual event listener:
+실제 이벤트 리스너를 볼 시간:
 
 [source, as3]
 ----
@@ -411,29 +418,30 @@ private function onTouch(event:TouchEvent):void
 }
 ----
 
-That's the most basic case: Find out if somebody touched the screen and trace out the coordinates.
-The method `getTouch` is provided by the _TouchEvent_ class and helps you find the touches you are interested in.
+가장 기본적인 경우입니다: 누군가가 화면을 터치하고 좌표를 추적하는지 알아보십시오.
+getTouch 메소드는 TouchEvent 클래스에서 제공되며 관심있는 터치를 찾는 데 도움이 됩니다.
 
-NOTE: The _Touch_ class encapsulates all information of a single touch: where it occurred, where it was in the previous frame, etc.
+노트: Touch 클래스는 단일 터치의 모든 정보를 캡슐화합니다. 발생한 위치 이전 프레임의 위치 등입니다.
 
-As first parameter, we passed `this` to the `getTouch` method.
-Thus, we're asking the the event to return any touches that occurred on on `this` _or its children_.
+첫번째 매개 변수로 getTouch 메소드에 전달했습니다.
+따라서 우리는 이벤트에서 그 자식들에게 일어난 모든 터치를 되돌려 줄 것을 요청하고 있습니다.
 
-Touches go through a number of _phases_ within their life time:
+터치는 유효하게 살아 있는 동안 여러 단계를 거칩니다:
 
 [horizontal]
-`TouchPhase.HOVER`:: Only for mouse input; dispatched when the cursor moves over the object with the mouse button _up_.
-`TouchPhase.BEGAN`:: The finger just hit the screen, or the mouse button was pressed.
-`TouchPhase.MOVED`:: The finger moves around on the screen, or the mouse is moved while the button is pressed.
-`TouchPhase.STATIONARY`:: The finger or mouse (with pressed button) has not moved since the last frame.
-`TouchPhase.ENDED`:: The finger was lifted from the screen or from the mouse button.
+`TouchPhase.HOVER`:: 마우스 입력에만 해당. 커서가 마우스 버튼 업과 함께 객체 위로 움직일 때 전달됩니다.
+`TouchPhase.BEGAN`:: 손가락이 화면을 누르거나 마우스 버튼을 눌렀습니다.
+`TouchPhase.MOVED`:: 화면에서 손가락이 움직이거나 버튼을 누르고있는 동안 마우스가 움직입니다.
+`TouchPhase.STATIONARY`:: 마지막 프레임 이후 손가락이나 마우스 (누른 버튼 사용)가 움직이지 않았습니다.
+`TouchPhase.ENDED`:: 손가락이 화면이나 마우스 버튼에서 들었습니다.
 
-Thus, the sample above (which looked for phase `BEGAN`) will write trace output at the exact moment the finger touches the screen, but not while it moves around or leaves the screen.
+따라서, 위의 샘플 (BEGAN 단계를 찾음)은 손가락이 화면에 닿는 순간 추적 출력을 기록하지만 화면을 돌아 다니거나 화면을 벗어나는 동안에는 추적 출력을 작성하지 않습니다.
 
-==== Multitouch
+==== 멀티터치(Multitouch)
 
-In the sample above, we only listened to single touches (i.e. one finger only).
-Multitouch is handled very similarly; the only difference is that you call `touchEvent.getTouches` instead (note the plural).
+위의 샘플에서는 단 한 번의 터치 (예: 한 손가락만)를 만들었습니다.
+멀티 터치는 매우 유사하게 처리됩니다.
+유일한 차이점은 touchEvent.getTouches를 대신 호출한다는 것입니다 (복수형 참고).
 
 [source, as3]
 ----
@@ -454,23 +462,23 @@ else if (touches.length >= 2)
 }
 ----
 
-The `getTouches` method returns a vector of touches.
-We can base our logic on the length and contents of that vector.
+getTouches 메서드는 touches의 벡터를 반환합니다.
+우리는 그 벡터의 길이와 내용에 논리를 적용 할 수 있습니다.
 
-* In the first _if_-clause, only a single finger is on the screen. Via `getMovement`, we could e.g. implement a drag-gesture.
-* In the _else_-clause, two fingers are on the screen. By accessing both touch objects, we could e.g. implement a pinch-gesture.
+* 첫 번째 if 절에서 한 손가락만 화면에 나타납니다. getMovement를 통해 예를 들어 드래그 제스처를 구현하십시오.
+* else 절에서 손가락 두 개가 화면에 나타납니다. 두 터치 객체에 액세스함으로써 예를 들면, 꼬집는 제스처를 구현하십시오.
 
-NOTE: The demo application that's part of the Starling download contains the https://github.com/Gamua/Starling-Framework/blob/master/samples/demo/src/utils/TouchSheet.as[TouchSheet] class, which is used in the _Multitouch_ scene.
-It shows a sample implementation of a touch handler that allows dragging, rotation and scaling of a sprite.
+노트: Starling 다운로드의 일부인 데모 응용 프로그램에는 멀티 터치 장면에서 사용되는 TouchSheet 클래스가 포함되어 있습니다.
+스프라이트의 드래그 회전 및 스케일링을 허용하는 터치 핸들러의 샘플 구현을 보여줍니다.
 
-==== Mouse Out and End Hover
+==== 마우스 아웃 및 오버 종료(Mouse Out and End Hover)
 
-There's a special case to consider when you want to detect that a mouse was moved away from an object (with the mouse button in "up"-state).
-(This is only relevant for mouse input.)
+마우스가 객체에서 멀리 이동한 것을 감지하고자 할 때 고려해야 할 특별한 경우가 있습니다. (마우스 버튼은 "up" 상태 임)
+마우스 입력과 관련이 있습니다.
 
-If the target of a hovering touch changed, a _TouchEvent_ is dispatched to the previous target to notify it that it's no longer being hovered over.
-In this case, the `getTouch` method will return `null`.
-Use that knowledge to catch what could be called a _mouse out_ event.
+호버링 터치의 대상이 변경되면 TouchEvent가 이전 대상으로 보내져 더이상 마우스 오버되지 않는 것을 알립니다.
+이 경우 getTouch 메소드는 null을 리턴합니다.
+그 지식을 사용하여 마우스 아웃 이벤트라고 불리는 것을 잡으십시오.
 
 [source, as3]
 ----

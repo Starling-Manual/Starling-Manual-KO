@@ -1,121 +1,115 @@
-== Fragment Filters
+== 조각 필터(Fragment Filters)
 
-Up until now, everything we rendered were meshes with (or without) textures mapped onto them.
-You can move meshes around, scale them, rotate them, and maybe tint them in a different color.
-All in all, however, the possibilities are rather limited -- the look of the game is solely defined by its textures.
+지금까지 우리가 렌더링한 모든 것은 그 위에 맵핑된 텍스처와 결합된 텍스처 (또는 텍스처 없이)입니다.
+메쉬를 이동하고 크기를 조정하고 회전하고 다른 색상으로 색칠할 수 있습니다.
+그러나 게임의 외관은 텍스처에 의해서만 정의됩니다.
 
-At some point, you will run into the limits of this approach; perhaps you need a variant of an image in multiple colors, blurred, or with a drop shadow.
-If you add all of those variants into your texture atlas, you will soon run out of memory.
+어떤 점에서 당신은 이 접근법의 한계를 뛰어 넘을 것입니다; 어쩌면 여러 색상의 이미지 변형, 흐린(blurred) 이미지 또는 그림자가 필요할 수 있습니다.
+이러한 모든 변형을 텍스처 맵에 추가하면 곧 메모리가 부족해질 것입니다.
 
-_Fragment filters_ can help with that.
-A filter can be attached to any display object (including containers) and can completely change its appearance.
+이때, 조각 필터가 도움이 될 수 있습니다.
+필터는 모든 표시 객체 (컨테이너 포함)에 첨부할 수 있으며 모양을 완전히 변경할 수 있습니다.
 
-For example, let's say you want to add a Gaussian blur to an object:
+예를 들어 객체에 가우시안 블러를 추가하려고 한다고 가정해 봅시다.
 
 [source, as3]
 ----
 var filter:BlurFilter = new BlurFilter(); // <1>
 object.filter = filter; // <2>
 ----
-<1> Create and configure an instance of the desired filter class.
-<2> Assign the filter to the `filter` property of a display object.
+<1> 원하는 필터 클래스의 인스턴스를 작성하고 구성하십시오.
+<2> 표시 객체의 filter 속성에 필터를 지정합니다.
 
-With a filter assigned, rendering of a display object is modified like this:
+필터가 할당되면 표시 객체의 렌더링이 다음과 같이 수정됩니다:
 
-* Each frame, the target object is rendered into a texture.
-* That texture is processed by a fragment shader (directly on the GPU).
-* Some filters use multiple passes, i.e. the output of one shader is fed into the next.
-* Finally, the output of the last shader is drawn to the back buffer.
+* 각 프레임에서 대상 객체는 텍스처로 렌더링 됩니다.
+* 이 텍스쳐는 프래그먼트 쉐이더 (GPU 바로 위)에서 처리됩니다.
+* 일부 필터는 다중 패스를 사용합니다. 즉 하나의 셰이더 출력이 다음 패스로 전달됩니다.
+* 마지막으로 마지막 쉐이더의 출력이 백 버퍼로 그려집니다.
 
-.The render pipeline of fragment filters.
+.조각 필터의 렌더링 파이프 라인.
 image::filter-pipeline.png[Filter Pipeline, 700]
 
-This approach is extremely flexible, allowing to produce all kinds of different effects (as we will see shortly).
-Furthermore, it makes great use of the GPU's parallel processing abilities; all the expensive per-pixel logic is executed right on the graphics chip.
+이방법은 매우 유연하여 모든 종류의 다양한 효과를 생성할 수 있습니다 (곧 살펴 보겠지만).
+또한 GPU의 병렬 처리 기능을 잘 활용합니다.
+픽셀 당 비싼 모든 로직이 그래픽 칩에서 바로 실행됩니다.
 
-That said: filters break batching, and each filter step requires a separate draw call.
-They are not exactly cheap, both regarding memory usage and performance.
-So be careful and use them wisely.
+즉, 필터는 일괄 처리를 중단하고 각 필터 단계에는 별도의 그리기 호출이 필요합니다.
+메모리 사용과 성능면에서 모두 저렴하지는 않습니다.
+따라서 조심스럽게 사용하고 현명하게 사용하십시오.
 
-=== Showcase
+=== 쇼케이스(Showcase)
 
-Out of the box, Starling comes with a few very useful filters.
+Starling은 별도의 추가 구성없이 사용할 수 있는 몇 가지 매우 유용한 필터를 제공합니다.
 
 ==== BlurFilter
 
-Applies a Gaussian blur to an object. The strength of the blur can be set for x- and y-axis separately.
+객체에 가우시안 블러를 적용합니다. 흐림의 강도는 x 및 y 축에 대해 개별적으로 설정할 수 있습니다.
 
-* Per blur direction, the filter requires at least one render pass (draw call).
-* Per strength unit, the filter requires one render pass (a strength of `1` requires one pass, a strength of `2` two passes, etc).
-* Instead of raising the blur strength, it's often better to lower the filter resolution. That has a similar effect, but is much cheaper.
+* 흐림 방향 당 하나의 렌더 패스가 필요합니다 (draw call).
+* 유닛 단위당 필터는 한 번의 렌더 패스를 필요로 합니다 (강도 1은 one pass, 강도 2는 two pass).
+* 흐림 강도를 높이는 대신 필터 해상도를 낮추는 것이 좋습니다. 비슷한 효과가 있지만 훨씬 저렴합니다.
 
-.The _BlurFilter_ in action.
+.BlurFilter 적용 예시.
 image::filter-blur.png[BlurFilter, 600]
 
 ==== ColorMatrixFilter
 
-Dynamically alters the color of an object. Change an object's brightness, saturation, hue, or invert it altogether.
+객체의 색상을 동적으로 변경합니다. 객체의 밝기 채도 색조를 변경하거나 전체를 반전시킵니다.
 
-This filter multiplies the color and alpha values of each pixel with a 4 × 5 matrix.
-That's a very flexible concept, but it's also quite cumbersome to get to the right matrix setup.
-For this reason, the class contains several helper methods that will set up the matrix for the effects you want to achieve (e.g. changing hue or saturation).
+이 필터는 각 픽셀의 색상 값과 알파 값에 4x5 매트릭스를 곱합니다.
+이는 매우 유연한 개념이지만 올바른 매트릭스 설정을 얻는 것은 상당히 번거롭습니다.
+이러한 이유로 클래스에는 달성하려는 효과 (예: 색조 또는 채도 변경)에 대한 행렬을 설정하는 여러 가지 도우미 메서드가 포함되어 있습니다.
 
-* You can combine multiple color transformations in just one filter instance.
-  For example, to change both brightness and saturation, call both of the corresponding methods on the filter.
-* This filter always requires exactly one pass.
+* 하나의 필터 인스턴스에서 여러 색상 변환을 결합할 수 있습니다. 예를 들어 밝기와 채도를 모두 변경하려면 필터에서 해당하는 두 가지 방법을 호출하십시오.
+* 이 필터는 항상 단방향 패스를 필요로 합니다.
 
-.The _ColorMatrixFilter_ in action.
+.ColorMatrixFilter 적용 예시.
 image::filter-colormatrix.png[ColorMatrixFilter, 600]
 
-==== DropShadow- and GlowFilter
+==== DropShadow-와 GlowFilter
 
-These two filters draw the original object in the front and add a blurred and tinted variant behind it.
+이 두 필터는 원래의 객체를 앞에 그려 넣고 그 뒤에 희미하고 색다른 변형을 추가합니다.
 
-* That also makes them rather expensive, because they add an additional render pass to what's required by a pure _BlurFilter_.
+* 또한 순수 BlurFilter에 필요한 렌더링 패스를 추가하기 때문에 비용이 많이 듭니다.
 
-._DropShadow-_ and _GlowFilter_ in action.
+.DropShadow-와 GlowFilter 적용 예시.
 image::filter-dropshadow+glow.png[DropShadow and Glow filter, 300]
 
 ==== DisplacementMapFilter
 
-Displaces the pixels of the target object depending on the colors in a _map texture_.
+맵 텍스처의 색상에 따라 대상 객체의 픽셀을 배치합니다.
 
-* Not exactly easy to use, but very powerful!
-* Reflection on water, a magnifying glass, the shock wave of an explosion -- this filter can do it.
+* 정확하게 사용하기 쉽지는 않지만 매우 강력합니다!
+* 물 위 반사, 돋보기, 폭발의 충격파 - 이 필터로 그것들을 할 수 있습니다.
 ifdef::target-handbook[]
-* We will look at the details of this filter in a later chapter.
+* 이 필터의 세부 정보는 이후 장에서 살펴 보겠습니다.
 endif::[]
 
-.The _DisplacementMapFilter_ using a few different maps.
+.몇 가지 맵을 사용하는 DisplacementMapFilter 적용 예시.
 image::filter-displacementmap.png[Other filters, 450]
 
 ==== FilterChain
 
-To combine several filters on one display object, you can chain them together via the _FilterChain_ class.
-The filters will be processed in the given order; the number of draw calls per filter are simply adding up.
+하나의 표시 객체에서 여러 필터를 결합하려면 FilterChain 클래스를 통해 필터를 함께 연결할 수 있습니다.
+필터는 지정된 순서로 처리됩니다.
+필터 당 그리기 호출 수가 단순히 합산됩니다.
 
-._ColorMatrix-_ and _DropShadowFilter_ chained together.
+.ColorMatrix- 및 DropShadowFilter가 결합되었습니다.
 image::filter-chain.png[FilterChain, 150]
 
-=== Performance Tips
+=== 퍼포먼스 팁
 
-I mentioned it above: while the GPU processing part is very efficient, the additional draw calls make fragment filters rather expensive.
-However, Starling does its best to optimize filters.
+GPU 처리 부분은 매우 효율적이지만 추가 드로우 콜은 조각 필터를 다소 비용이 많이 들게 만듭니다.
+그러나 Starling은 필터를 최적화하기 위해 최선을 다합니다.
 
-* When an object does not change its position relative to the stage (or other properties like scale and color) for two successive frames, Starling recognizes this and will automatically cache the filter output.
-  This means that the filter won't need to be processed any more; instead, it behaves just like a single image.
-* On the other hand, when the object is constantly moving, the last filter pass is always rendered directly to the back buffer instead of a texture.
-  That spares one draw call.
-* If you want to keep using the filter output even though the object is moving, call `filter.cache()`.
-  Again, this will make the object act just like a static image.
-  However, for any changes of the target object to show up, you must call `cache` again (or `uncache`).
-* To save memory, experiment with the `resolution` and `textureFormat` properties.
-  This will reduce image quality, though.
+* 오브젝트가 두 개의 연속 프레임에 대해 스테이지 (또는 배율 및 색상과 같은 다른 속성)에 상대적인 위치를 변경하지 않으면 Starling은 이를 인식하고 자동으로 필터 출력을 캐시합니다. 즉, 필터를 더 이상 처리 할 필요가 없습니다. 대신 단일 이미지처럼 작동합니다.
+* 반면에 객체가 계속 움직이면 마지막 필터 패스는 항상 텍스처가 아닌 백 버퍼에 직접 렌더링됩니다. 그건 하나의 드로우 콜로 유지됩니다.
+* 객체가 움직이고 있어도 필터 출력을 계속 사용하려면 filter.cache()를 호출하십시오. 다시 말하지만, 이것은 객체가 정적인 이미지처럼 동작하도록 합니다. 그러나 표시될 대상 객체의 변경 사항에 대해서는 캐시를 다시 호출 (또는 캐시 취소)해야 합니다.
+* 메모리를 절약하려면 resolution 및 textureFormat 속성을 사용하여 실험해 보십시오. 단, 이미지 품질이 떨어지는건 감수해야 합니다.
 
-=== More Filters
+=== 더 많은 필터들
 
-Would you like to know how to create your own filters?
-Don't worry, we will investigate that topic a <<Custom Filters, little later>>.
+직접 필터를 만드는 방법을 알고 싶습니까? 걱정하지 마시고 우리는 잠시 후에 그 주제를 살펴볼 것입니다.
 
-In the meantime, you can try out filters created by other Starling developers.
-An excellent example is the https://github.com/devon-o/Starling-Filters[filter collection] by devon-o.
+그동안 다른 Starling 개발자가 만든 필터를 사용해 볼 수 있습니다. 훌륭한 샘플로는 devon-o의 https://github.com/devon-o/Starling-Filters[filter collection, 필터 모음] 이 있습니다.

@@ -1,23 +1,23 @@
-== Utilities
+== 유틸리티(Utilities)
 
-The `starling.utils` package contains several useful little helpers that shouldn't be overlooked.
+starling.utils 패키지에는 간과해서는 안되는 몇 가지 유용한 작은 도우미가 들어 있습니다.
 
-=== Colors
+=== 컬러(Colors)
 
-In both conventional Flash and Starling, colors are specified in hexadecimal format.
-Here are a few examples:
+기존의 Flash 및 Starling에서 색상은 16진수 형식으로 지정됩니다.
+몇 가지 예가 있습니다:
 
 [source, as3]
 ----
-// format:         0xRRGGBB
+// 형식:         0xRRGGBB
 var red:Number   = 0xff0000;
-var green:Number = 0x00ff00; // or 0xff00
-var blue:Number  = 0x0000ff; // or 0xff
+var green:Number = 0x00ff00; // 또는 0xff00
+var blue:Number  = 0x0000ff; // 또는 0xff
 var white:Number = 0xffffff;
-var black:Number = 0x000000; // or simply 0
+var black:Number = 0x000000; // 또는 simply 0
 ----
 
-The Color class contains a list of named color values; furthermore, you can use it to easily access the components of a color.
+Color 클래스는 명명된 색상 값 목록을 포함합니다. 또한 이 도구를 사용하여 색상의 구성 요소에 쉽게 액세스 할 수 있습니다:
 
 [source, as3]
 ----
@@ -31,14 +31,14 @@ var red:int   = Color.getRed(color);   // ->  64 <3>
 var green:int = Color.getGreen(color); // -> 128
 var blue:int  = Color.getBlue(color);  // -> 192
 ----
-<1> A few common colors are predefined.
-<2> Any other color can be created with this method. Just pass the RGB values to this method (range: 0 - 255).
-<3> You can also extract the integer value of each channel.
+<1> 몇 가지 공통 색상이 미리 정의되어 있습니다.
+<2> 이 방법으로 다른 색상을 만들 수 있습니다. 이 방법으로 RGB 값을 전달하면 됩니다 (범위 0 - 255).
+<3> 각 채널의 정수 값을 추출할 수도 있습니다.
 
-=== Angles
+=== 각도(Angles)
 
-Starling expects all angles in radians (different to Flash, which uses degrees in some places and radians in others).
-To convert between degrees and radians, you can use the following simple functions.
+Starling은 모든 각도를 라디안 단위로 계산합니다 (플래시의 경우 각도가 다른 곳에서는 각도를 사용하고 다른 각도에서는 라디안을 사용함).
+각도와 라디안을 변환하려면 다음과 같은 간단한 함수를 사용할 수 있습니다.
 
 [source, as3]
 ----
@@ -46,9 +46,9 @@ var degrees:Number = rad2deg(Math.PI); // -> 180
 var radians:Number = deg2rad(180);     // -> PI
 ----
 
-=== StringUtil
+=== 문자열 유틸(StringUtil)
 
-You can use the `format` method to format Strings in _.Net/C#_ style.
+format 메서드를 사용하여 .Net / C # 형식의 문자열 형식을 지정할 수 있습니다.
 
 [source, as3]
 ----
@@ -56,17 +56,18 @@ StringUtil.format("{0} plus {1} equals {2}", 4, 3, "seven");
   // -> "4 plus 3 equals seven"
 ----
 
-The same class also contains methods that trim whitespace from the start and end of a string -- a frequent operation whenever you need to process user input.
+같은 클래스에는 문자열의 시작과 끝에서 공백을 제거하는 메서드가 포함되어 있습니다.
+사용자 입력을 처리해야 할 때마다 빈번히 작업합니다.
 
 [source, as3]
 ----
 StringUtil.trim("  hello world\n"); // -> "hello world"
 ----
 
-=== SystemUtil
+=== 시스템 유틸(SystemUtil)
 
-It's often useful to find out information about the environment an app or game is currently executed in.
-The _SystemUtil_ contains some methods and properties helping with that task.
+앱이나 게임이 현재 실행되는 환경에 대한 정보를 찾기에 유용합니다.
+SystemUtil에는 해당 작업을 돕는 몇 가지 메소드와 속성이 있습니다.
 
 [source, as3]
 ----
@@ -76,9 +77,9 @@ SystemUtil.isApplicationActive; // in use or minimized?
 SystemUtil.platform; // WIN, MAC, LNX, IOS, AND
 ----
 
-=== MathUtil
+=== 수학 유틸(MathUtil)
 
-While that class is mainly designed to help with some geometric problems, it also contains the following very useful helper methods:
+이 클래스는 주로 몇 가지 기하학적 문제를 해결하도록 설계되었지만 다음과 같은 매우 유용한 도우미 메서드도 포함되어 있습니다:
 
 [source, as3]
 ----
@@ -86,29 +87,32 @@ var min:Number = MathUtil.min(1, 10); // <1>
 var max:Number = MathUtil.max(1, 10); // <2>
 var inside:Number = MathUtil.clamp(-5, 1, 10); // <3>
 ----
-<1> Get the smallest of two numbers. Result: `1`
-<2> Get the biggest of two numbers. Result: `10`
-<3> Move the number (first argument) into a specific range. Result: `1`
+<1> 두 숫자 중 가장 작은 숫자를 구하십시오. 결과: 1
+<2> 두 숫자 중 가장 큰 숫자를 구하십시오. 결과: 10
+<3> 번호 (첫 번째 인수)를 특정 범위로 이동합니다. 결과: 1
 
-If you have worked with _AS3_ in the past, you might wonder why I made the effort of writing those methods when similar ones are already provided in the native `Math` class.
+과거에 AS3을 사용해 본 경험이 있다면, 비슷한 수학 클래스가 이미 기본 수학 클래스에서 제공되는데 왜 이러한 메소드를 작성했는지 궁금할 것입니다.
 
-Unfortunately, those equivalent methods have a side effect: each time you call e.g. `Math.min`, it creates a temporary object (at least when you compile your app for _iOS_, that is).
-Those alternatives do not have this side effect, so you should always prefer them.
+불행히도 예전 메소드에는 부작용이 있습니다: 예를 들어 Math.min을 호출할 때마다 임시 객체를 만들게 됩니다 (적어도 iOS용 앱을 컴파일하면 그렇습니다).
+새로운 메소드는 그러한 부작용이 없으므로 항상 선호해야 합니다.
 
-=== Pooling
+=== 풀링(Pooling)
 
-Now that we touched the topic of temporary objects, it's the perfect time to introduce you to the _Pool_ class.
+이제 임시 객체에 대한 주제를 다루었으므로 Pool 클래스를 소개할 때가 되었습니다.
 
-Experienced AS3 developers know that any object allocation comes at a price: the object needs to be garbage collected later.
-This happens completely behind the scenes; you won't even notice it most of the time.
+숙련된 AS3 개발자는 모든 객체 할당이 가격으로 제공된다는 사실을 알고 있습니다.
+나중에 객체는 가비지 컬렉터에 의해 수집되어야 합니다.
+이것은 완전히 씬(Scenes) 뒤에서 발생합니다.
+당신은 이것을 알아 채지 못할 것입니다.
 
-However, when the cleanup process takes up too much time, your app will freeze for a short moment.
-If that happens often, it quickly becomes a nuisance to your users.
+그러나 정리 프로세스가 너무 많은 시간이 걸리면 앱이 잠시 멈춥니다.
+이러한 일이 자주 발생하면 사용자는 불편을 겪게됩니다.
 
-One tactic to avoid this problem is to recycle your objects and use them repeatedly.
-For example, classes like _Point_ and _Rectangle_ are often just needed for a short moment: you create them, fill them with some data, and then throw them away.
+이 문제를 피하기 위한 한 가지 방법은 개체를 재활용하고 반복적으로 사용하는 것입니다.
+예를 들어 Point 및 Rectangle과 같은 클래스는 잠시 동안만 필요한 경우가 많습니다.
+즉 만들고 데이터를 채우고 버립니다.
 
-From now on, let Starling's _Pool_ class handle those objects.
+이제부터 Starling의 Pool 클래스가 이러한 객체를 처리하도록 합니다.
 
 [source, as3]
 ----
@@ -120,16 +124,16 @@ var rect:Rectangle = Pool.getRectangle(); // <1>
 doSomethingWithRectangle(rect);
 Pool.putRectangle(rect); // <2>
 ----
-<1> Get an object from the pool. That replaces calling `new` on the class.
-<2> Put it back into the pool when you do not need it any longer.
+<1> 풀에서 객체를 가져옵니다. 그것은 클래스에서 new를 호출하는 것을 대체합니다.
+<2> 더 이상 필요가 없을 때 Pool에 다시 넣으십시오.
 
-The class also supports _Vector3D_, _Matrix_, and _Matrix3D_, in a similar style.
+이 클래스는 Vector3D, Matrix 및 Matrix3D도 비슷한 스타일로 지원합니다.
 
-IMPORTANT: Always make sure that the _get_ and _put_-calls are balanced.
-If you put too many objects into the pool and never retrieve them, it will fill up over time, using more and more memory.
+중요: 항상 get과 put 호출이 균형을 이루는지 확인하십시오.
+수영장에 너무 많은 물체를 집어 넣고 그것들을 꺼내지 않으면 시간이 지남에 따라 너무 많은 메모리를 사용하게 됩니다.
 
-=== Furthermore ...
+=== 더 나아가서 ...
 
-The `starling.utilities` package contains more helpers than I can possibly list here.
-For a complete list of methods and classes, refer to the http://doc.starling-framework.org/core/starling/utils/package-detail.html[API Reference].
-It will definitely pay off to take a look!
+starling.utilities 패키지에는 여기에 나열할 수 있는 것보다 더 많은 도우미가 들어 있습니다.
+메소드 및 클래스의 전체 목록은 API 레퍼런스를 참조하십시오.
+그것은 분명히 대가를 지불할 것입니다!

@@ -1,29 +1,30 @@
-== Multi-Resolution Development
+== 다중 해상도 개발
 
-Oh, where are the days we developed games for a single screen?
-Back then, we had a small rectangular area in an HTML page, and that's where we placed our sprites, texts and images.
-A single resolution to work for -- wasn't that nice?
+오, 우리가 하나의 화면을 위해 게임을 개발한 적이 있었나요?
+그때로 돌아가보면, HTML 페이지에 작은 직사각형 영역이 있었으며, 여기에서 스프라이트, 텍스트 및 이미지를 배치했습니다.
+그때는 하나의 해상도가 효과가 있었습니다.
 
-Alas ... the times they are a-changin'!
-Mobile phones come in all flavors and sizes, and even desktop computers and notebooks feature high density displays.
-This is great news for our consumer-selves, but it doesn't exactly make our lives as developers easier, that's for sure!
+아아...지금은 그들이 변화하는 시대입니다!
+휴대 전화는 모든 종류와 크기로 제공되며 데스크탑 컴퓨터와 노트북도 고밀도 디스플레이를 제공합니다.
+이것은 우리 소비자를 위한 좋은 소식이지만 개발자로서의 우리 삶을 좋게 만들어주는 것은 아닙니다.
 
-But don't give up hope: you can manage that.
-It's just a matter of thinking ahead and making use of a few simple mechanisms provided by Starling.
+그러나 희망을 포기하지 마십시오: 당신은 그것을 관리할 수 있습니다.
+Starling이 제공하는 몇 가지 간단한 메커니즘을 사용하여 미리 생각해 보는 것입니다.
 
-The problem is just that it's a little overwhelming at first.
-That's why we'll do this in small steps -- and we will begin in 2007.
+문제는 처음에는 다소 압도적인 것입니다.
+이것이 우리가 작은 단계에서 수행하는 이유입니다.
+우리는 2007년에 시작할 것입니다.
 
-Yes, you heard right: step into the DeLorean, start up the Flux Capacitor(TM) and hold tight while we hit those eighty miles per hour.
+네, 정확하게 들으셨습니다: DeLorean에 올라서 Flux Capacitor ™를 시동하고 시간 당 80마일을 달리는 동안 단단히 잡으십시오.
 
 === iPhone
 
-The iPhone is arguably the most popular platform for casual games.
-Back in 2007, it was also the _only_ one you could easily develop for.
-This was the time of the big App Store gold rush!
+아이폰은 틀림없이 캐주얼 게임을 위한 가장 인기있는 플랫폼입니다.
+2007년으로 돌아가서, 다시 개발할 수 있는 유일한 도구입니다.
+그때는 거대한 App Store 골드 러시의 시간이었습니다!
 
-With its fixed resolution of 320×480 pixels, the first iPhone was super easy to develop for.
-Granted, Starling wasn't around back then, but you would have started it up like this:
+해상도 320 x 480 픽셀로 첫 번째 iPhone은 매우 쉽게 개발할 수 있었습니다.
+허락된다면 Starling은 그 당시에는 없었지만 다음과 같이 시작했을 것입니다:
 
 [source, as3]
 ----
@@ -34,46 +35,46 @@ var viewPort:Rectangle = new Rectangle(0, 0, screenWidth, screenHeight);
 starling = new Starling(Game, stage, viewPort);
 ----
 
-We set the _viewPort_ to the full size of the screen: 320×480 pixels.
-Per default, the stage will have exactly the same dimensions.
+우리는 viewPort를 화면의 전체 크기 (320 × 480 픽셀)로 설정했습니다.
+기본적으로 스테이지의 크기는 정확히 동일합니다.
 
-.Our game on the original iPhone.
+.원래 iPhone에서의 게임.
 image::iphone-penguflip.png[PenguFlip on the iPhone, 120]
 
-So far, so easy: this works just like in, say, a game for the browser.
-(That would be Internet Explorer 6, then, right?)
+지금까지는 너무 쉽습니다.
+예를 들어 브라우저 용 게임처럼 작동합니다.
+(그러면 Internet Explorer 6이 될 것입니다.)
 
-Next stop: 2010.
+다음 정거장 : 2010년
 
 === iPhone Retina
 
-We park our DeLorean right around the corner of the old Apple campus and check out the App Store charts.
-Hurray! Apparently, our game was a huge success in 2007, and it's still in the top 10!
-There's no time to lose: we must make sure it looks well on the iPhone 4 that's going to come out in a few weeks.
+우리는 DeLorean을 오래된 Apple 캠퍼스 구석에 두고 App Store 차트를 확인합니다.
+만세! 분명히 우리 게임은 2007년에 큰 성공을 거두었으며 여전히 상위 10 위 안에 들었습니다!
+지체할 시간이 없습니다.
+아이폰 4가 몇 주 후에 나올 것으로 보입니다.
 
-Since we're coming from the future, we know about its major innovation, the high-resolution screen dubbed "Retina Display" by the Apple marketing team.
-We fire up our game from 2007 and start it up on this yet-to-be released device.
+우리가 미래에서 나올 때부터, 우리는 Apple 마케팅 팀의 "Retina Display"라는 고해상도 스크린의 주요 혁신에 대해 알고 있습니다.
+우리는 2007년부터 게임을 시작하고 출시 예정인 이 장치에서 게임을 시작합니다.
 
-.That's definitely not intended.
+.이것은 의도한 것이 아닙니다.
 image::iphone4-wrong.png[PenguFlip with a wrong scale on the iPhone4, 160]
 
-Damn, the game is now only taking up a quarter of the screen!
-Why is that?
+젠장, 게임은 이제 화면의 4 분의 1을 차지하고 있습니다! 왜 그런가요?
 
-If you look back at the code we wrote in 2007, you'll see that we made the _viewPort_ just as big as the screen.
-With the iPhone 4, these values have doubled: its screen has 640×960 pixels.
-The code that placed display objects on the stage expected a coordinate system of just 320×480, though.
-So things that were placed on the very right (`x=320`) are now suddenly at the center instead.
+2007년에 작성한 코드를 살펴보면 viewPort를 화면만큼 크게 만들었음을 알 수 있습니다.
+iPhone 4의 경우 이 값은 두 배가 됩니다.
+화면의 크기는 640 × 960 픽셀입니다.
+스테이지에 표시 객체를 배치한 코드는 단지 320 × 480의 좌표 시스템을 예상했습니다.
+오른쪽에 배치된 것들 (x = 320)은 갑자기 가운데에 나타납니다.
 
-That's easily solved, though.
-Remember: Starling's `viewPort` and `stageWidth/Height` properties can be set independently.
+그래도 쉽게 해결할 수 있습니다.
+주의 : Starling의 viewPort 및 stageWidth / Height 속성은 독립적으로 설정할 수 있습니다.
 
-* The viewPort decides into which area of the screen Starling renders into.
-  It is always specified in pixels.
-* The stage size decides the size of the coordinate system that is displayed in that viewPort.
-  When your stage width is 320, any object with an x-coordinate between 0 and 320 will be within the stage, no matter the size of the viewPort.
+* viewPort는 Starling이 렌더링하는 화면의 영역을 결정합니다. 항상 픽셀 단위로 지정됩니다.
+* 스테이지 크기는 해당 viewPort에 표시되는 좌표계의 크기를 결정합니다. 스테이지 너비가 320 인 경우 0에서 320 사이의 x 좌표를 갖는 모든 객체는 viewPort의 크기에 관계없이 스테이지 내에 있습니다.
 
-With that knowledge, upscaling is trivial:
+이 정도 지식이면, 업 스케일링은 간단합니다.
 
 [source, as3]
 ----
@@ -86,53 +87,53 @@ starling.stage.stageWidth  = 320;
 starling.stage.stageHeight = 480;
 ----
 
-The viewPort is still dynamic, depending on the device the game is started on; but we added two lines at the bottom that hard-code the stage size to fixed values.
+viewPort는 게임이 시작되는 장치에 따라 여전히 동적입니다. 바닥에 고정된 값으로 스테이지 크기를 하드 코딩하는 두 줄을 추가했습니다.
 
-NOTE: Since those values no longer indicate pixels, we are now calling them _points_: our stage size is now 320×480 points.
+노트: 이 값은 더 이상 픽셀을 나타내지 않으므로 포인트라고 부릅니다. 스테이지 크기는 이제 320 × 480 포인트입니다.
 
-On the iPhone 4, the game now looks like this:
+iPhone 4에서 게임은 다음과 같이 보입니다:
 
-.Better, but a little blurry.
+.좋아졌지만, 약간 흐릿하네요.
 image::iphone4-scale-blurry.png[PenguFlip scaled up blurry, 285]
 
-That's better: we are now using the full screen size.
-However, it's also a little blurry.
-We're not really making any use of the big screen.
-I can already see the bad reviews coming in ... we need to fix this!
+더 나은 방법입니다: 이제 전체 화면 크기를 사용하고 있습니다.
+그러나 조금 흐릿합니다.
+우리는 큰 화면을 실제로 사용하지 않습니다.
+나쁜 평가가 들어오는 것을 예상할 수 있겠죠 ... 우리는 이것을 고칠 필요가 있습니다!
 
-==== HD textures
+==== HD 텍스쳐
 
-The solution for that problem is to provide special textures for the high resolution.
-Depending on the pixel density, we will use either the low- or high-resolution texture set.
-The advantage: except for the logic that picks the textures, we don't need to change any of our code.
+이문제에 대한 해결책은 고해상도를 위한 특수 텍스처를 제공하는 것입니다.
+픽셀 밀도에 따라 저해상도 또는 고해상도 텍스처 집합을 사용합니다.
+장점: 텍스처를 선택하는 로직을 제외하고 코드를 변경할 필요가 없습니다.
 
-It's not enough to simply load a different set of files, though.
-After all, bigger textures will return bigger values for _width_ and _height_.
-With our fixed stage width of 320 points,
+단순히 다른 파일 세트를 로드하는 것만으로는 충분하지 않습니다.
+결국 텍스처가 커지면 너비와 높이가 더 큰 값을 반환합니다.
+320 포인트의 고정 스테이지 너비로,
 
-* an SD texture with a width of 160 pixels will fill half of the stage;
-* a corresponding HD texture (width: 320 pixels) would fill the complete stage.
+* 너비가 160 픽셀인 SD 텍스처가 스테이지의 절반을 채웁니다.
+* 해당 HD 텍스처 (폭: 320 픽셀)가 전체 스테이지를 채웁니다.
 
-What we want instead is for the HD texture to report the same size as the SD texture, but provide more detail.
+우리가 원하는 것은 HD 텍스처가 SD 텍스처와 동일한 크기를 보고하지만 더 자세한 내용을 제공하는 것입니다.
 
-That's where Starling's _contentScaleFactor_ comes in handy.
-We implicitly set it up when we configured Starling's _stage_ and _viewPort_ sizes.
-With the setup shown above, run the following code on an iPhone 4:
+그것이 바로 Starling의 contentScaleFactor가 유용할 때입니다.
+우리는 Starling의 stage와 viewPort 크기를 설정할 때 이를 암묵적으로 설정했습니다.
+위에 표시된 설정을 사용하여 iPhone 4에서 다음 코드를 실행합니다.
 
 [source, as3]
 ----
 trace(starling.contentScaleFactor); // → 2
 ----
 
-The _contentScaleFactor_ returns the _viewPort width_ divided by the _stage width_.
-On a retina device, it will be "2"; on a non-retina device, it will be "1".
-This tells us which textures to load at runtime.
+contentScaleFactor는 뷰포트 너비를 스테이지 폭으로 나눈 값을 반환합니다.
+레티나 장치에서는 "2"가 됩니다.
+비 레티나 장치에서는 "1"이 됩니다.
+이것은 런타임에 로드할 텍스처를 알려줍니다.
 
-NOTE: It's not a coincidence that the contentScaleFactor is a whole number.
-Apple exactly doubled the number of pixels per row / per column to avoid aliasing issues as much as possible.
+노트: contentScaleFactor가 정수라는 것은 우연이 아닙니다. 앨리어싱 문제를 가능한 한 피하기 위해 Apple은 열 / 행당 픽셀 수를 정확히 두 배로 늘렸습니다.
 
-The texture class has a similar property simply called `scale`.
-When set up correctly, the texture will work just like we want it to.
+텍스처 클래스에는 단순히 스케일(scale)이라고 하는 비슷한 속성이 있습니다.
+올바르게 설정하면 텍스처가 원하는대로 작동합니다.
 
 [source, as3]
 ----
@@ -147,18 +148,16 @@ assetManager.loadQueue(...);
 var texture:Texture = assetManager.getTexture("penguin"); // <4>
 trace(texture.scale); // → Either '1' or '2' <5>
 ----
-<1> Get the `contentScaleFactor` from the Starling instance.
-<2> Depending on the scale factor, the textures will be loaded from the directory `1x` or `2x`.
-<3> By assigning the same scale factor to the _AssetManager_, all textures will be initialized with that value.
-<4> When accessing the textures, you don't need to take care about the scale factor.
-<5> However, you can find out the scale of a texture anytime via the `scale` property.
+<1> Starling 인스턴스에서 contentScaleFactor를 가져옵니다.
+<2> 배율 인수에 따라 텍스처가 1x 또는 2x 디렉토리에서 로드됩니다.
+<3> AssetManager에 동일한 축척 비율을 지정하면 모든 텍스처가 해당 값으로 초기화됩니다.
+<4> 텍스처에 액세스 할 때 스케일 인수를 신경 쓸 필요가 없습니다.
+<5> 그러나 스케일 속성을 통해 언제든지 텍스처의 스케일을 찾을 수 있습니다.
 
-NOTE: Not using the _AssetManager_?
-Don't worry: all the `Texture.from...` methods contain an extra argument for the scale factor.
-It must be configured right when you create the texture; the value can't be changed later.
+노트: AssetManager를 사용하지 않습니까? 걱정하지 마세요: 모든 Texture.from... 메소드에는 스케일 인수에 대한 추가 인수가 포함되어 있습니다. 텍스처를 만들 때 바로 구성해야 합니다. 나중에 값을 변경할 수 없으니까요.
 
-The textures will now take the _scale factor_ into account when you query their width or height.
-For example, here's what will happen with the game's full-screen background texture.
+텍스처는 너비 또는 높이를 쿼리할 때 배율 인수를 고려합니다.
+예를 들어, 다음은 게임의 전체 화면 배경 텍스처에서 일어날 일입니다.
 
 |===
 |File |Size in Pixels |Scale Factor |Size in Points
@@ -175,30 +174,31 @@ For example, here's what will happen with the game's full-screen background text
 
 |===
 
-Now we have all the tools we need!
+이제 우리에게는 필요한 모든 도구가 있습니다!
 
-* Our graphic designer on the back seat (call him Biff) creates all textures in a high resolution (ideally, as vector graphics).
-* In a preprocessing step, the textures are converted into the actual resolutions we want to support (`1x`, `2x`).
-* At runtime, we check Starling's _contentScaleFactor_ and load the textures accordingly.
+* 뒷자리에 앉은 그래픽 디자이너 (Biff라고 부름)는 모든 텍스처를 고해상도 (이상적으로는 벡터 그래픽)로 만듭니다.
+* 뒷자리에 앉은 그래픽 디자이너 (Biff라고 부름)는 모든 텍스처를 고해상도 (이상적으로는 벡터 그래픽)로 만듭니다.
+* 런타임에 Starling의 contentScaleFactor를 확인하고 이에 따라 텍스처를 로드합니다.
 
-This is it: now we've got a crisp-looking retina game!
-Our player's will appreciate it, I'm sure of that.
+이것이 바로 그것입니다: 이제 우리는 레티나 게임을 가지고 있습니다!
+우리 게임의 플레이어가 그 점을 고맙게 생각할 거라고 나는 확신합니다.
 
-.Now we're making use of the retina screen!
+.이제 우리는 레티나 스크린을 사용합니다!
 image::iphone4-scale-hd.png[PenguFlip on the iPhone, 285]
 
-TIP: Tools like https://www.codeandweb.com/texturepacker/starling?source=gamua[TexturePacker] make this process really easy.
-Feed them with all your individual textures (in the highest resolution) and let them create multiple texture atlases, one for each scale factor.
+팁: https://www.codeandweb.com/texturepacker/starling?source=gamua[TexturePacker] 와 같은 도구를 사용하면 이 과정을 쉽게 처리할 수 있습니다. 개별 텍스처 (가장 높은 해상도)로 이미지를 제공하고 각각의 스케일 팩터에 대해 하나씩 여러 텍스처 아틀라스 작업물을 만들 수 있습니다.
 
-We celebrate our success at a http://gizmodo.com/5520438/how-apple-lost-the-next-iphone[bar] in Redwood, drink a beer or two, and move on.
+레드 우드 (Redwood)의 http://gizmodo.com/5520438/how-apple-lost-the-next-iphone[bar] 에서 성공을 축하하고 맥주 한 두 잔을 마시며 계속 나아갑시다.
 
 === iPhone 5
 
-In 2012, the iPhone has another surprise in store for us: Apple changed the screen's aspect ratio.
-Horizontally, it's still 640 pixels wide; but vertically, it's now a little bit longer (1136 pixels).
-It's still a retina display, of course, so our new logical resolution is 320×568 points.
+2012년에 출시된 아이폰은 우리를 위해 또 다른 놀라움을 선사합니다.
+애플은 화면의 화면 비율을 바꾸었습니다.
+가로로 보면 여전히 640 픽셀입니다.
+하지만 수직으로 보면, 이제 조금 더 길어졌습니다 (1136 픽셀).
+물론 레티나 디스플레이이기 때문에 우리의 새로운 논리적 해상도는 320 × 568입니다.
 
-As a quick fix, we simply center our stage on the _viewPort_ and live with the black bars at the top and bottom.
+빠른 수정으로 viewPort에 씬(Scenes)을 올려 놓고 상단과 하단의 검은색 막대를 사용하여 간단히 라이브를 진행합니다.
 
 [source, as3]
 ----
@@ -206,25 +206,26 @@ var offsetY:int = (1136 - 960) / 2;
 var viewPort:Rectangle = new Rectangle(0, offsetY, 640, 960);
 ----
 
-Mhm, that seems to work!
-It's even a fair strategy for all those Android smartphones that are beginning to pop up in this time line.
-Yes, our game might look a little blurry on some devices, but it's not too bad: the image quality is still surprisingly good.
-Most users won't notice.
+흠, 확실히 효과가 있는 것 같아요!
+이 시간대에 팝업을 시작하는 모든 Android 스마트 폰을 위한 공정한 전략입니다.
+네, 일부 게임에서는 게임이 약간 흐릿하게 보일 수 있지만 너무 좋지 않습니까.
+이미지 품질은 여전히 놀랍습니다.
+대부분의 사용자는 알 수 없죠.
 
-.Letterbox scaling.
+.레터 박스 크기 조정.
 image::iphone5-letterbox.png[PenguFlip with letterbox bars, 160]
 
-I call this the *Letterbox Strategy*.
+이것을 *레터 박스 전략*이라고 합니다.
 
-* Develop your game with a fixed stage size (like 320×480 points).
-* Add several sets of assets, depending on the scale factor (e.g. `1x`, `2x`, `3x`).
-* Then you scale up the application so that it fills the screen without any distortion.
+* 고정 스테이지 크기 (320x480 포인트)로 게임을 개발하십시오.
+* 축척 계수 (예 : 1x, 2x, 3x)에 따라 여러 애셋 세트를 추가합니다.
+* 그런 다음 왜곡없이 화면을 채울 수 있도록 응용 프로그램의 크기를 조정합니다.
 
-This is probably the most pragmatic solution.
-It allows your game to run in an acceptable quality on all available display resolutions, and you don't have to do any extra work other than setting the viewPort to the right size.
+이것은 아마도 가장 실용적인 해결책일 것입니다.
+사용 가능한 모든 디스플레이 해상도에서 허용되는 품질로 게임을 실행할 수 있으므로 viewPort를 올바른 크기로 설정하는 것 이외의 추가 작업을 수행할 필요가 없습니다.
 
-By the way, the latter is very easy when you use the _RectangleUtil_ that comes with Starling.
-To "zoom" your viewPort up, just create it with the following code:
+Starling과 함께 제공되는 RectangleUtil을 사용하면 후자가 매우 쉽습니다.
+viewPort를 "확대 / 축소"하려면 다음 코드를 사용하여 작성하십시오.
 
 [source, as3]
 ----
@@ -239,23 +240,22 @@ var viewPort:Rectangle = RectangleUtil.fit(
     ScaleMode.SHOW_ALL);
 ----
 
-Simple, yet effective!
-We definitely earned ourselves another trip with the time machine.
-Hop in!
+간단하면서도 효과적입니다!
+우리는 확실히 타임머신과 함께 또 다른 여행을 했습니다.
+올라 타세요!
 
-=== iPhone 6 and Android
+=== iPhone 6와 Android
 
-We're in 2014 now and ... Great Scott!
-Checking out the "App Store Almanac", we find out that our sales haven't been great after our last update.
-Apparently, Apple wasn't too happy with our letterbox-approach and didn't feature us this time.
-Damn.
+우리는 지금 2014년에... 그레이트 스캇!
+"App Store Almanac"을 확인해 보면 마지막 업데이트 이후에 판매가 좋지 않은 것으로 나타났습니다.
+분명히 애플은 우리의 레터 박스 접근법에 만족하지 않았으며 이번에는 우리를 특징 짓지 않았네요. 조금도.
 
-Well, I guess we have no other choice now: let's bite the bullet and make use of that additional screen space.
-So long, hard-coded coordinates!
-From now on, we need to use relative positions for all our display objects.
+우리는 이제 다른 선택의 여지가 없다고 생각합니다.
+총알을 물고 그 추가 스크린 공간을 사용합시다.
+오랫동안 하드 코딩 된 좌표! 이제부터는 모든 표시 객체에 대해 상대적 위치를 사용해야 합니다.
 
-I will call this strategy *Smart Object Placement*.
-The startup-code is still quite similar:
+나는 이 전략을 스마트 오브젝트 배치라고 부를 것입니다.
+시작 코드는 여전히 매우 유사합니다.
 
 [source, as3]
 ----
@@ -266,13 +266,15 @@ starling.stage.stageWidth  = 320;
 starling.stage.stageHeight = isIPhone5() ? 568 : 480;
 ----
 
-Yeah, I smell it too.
-Hard coding the stage height depending on the device we're running ... that's not a very smart idea.
-Promised, we're going to fix that soon.
+그래요, 나도 냄새가 납니다.
+우리가 실행중인 장치에 따라 스테이지 높이를 하드 코딩하는 것은 별로 좋은 생각이 아닙니다.
+약속하죠, 곧 고칠 것입니다.
 
-For now, it works, though: both _viewPort_ and _stage_ have the right size.
-But how do we make use of that?
-Let's look at the _Game_ class now, the class acting as our Starling root.
+현재까지는, 그것이 작동합니다.
+viewPort와 stage 모두 올바른 크기입니다.
+그러나 우리는 그것을 어떻게 활용합니까?
+이제 Game 클래스를 살펴보겠습니다.
+클래스는 Starling 루트로 사용됩니다.
 
 [source, as3]
 ----
@@ -300,31 +302,31 @@ public class Game extends Sprite
     }
 }
 ----
-<1> When the constructor of game is called, it's not yet connected to the stage. So we postpone initialization until we are.
-<2> We call our custom `setup` method and pass the stage size along.
-<3> Exemplary, we create a _LifeBar_ instance (a custom user interface class) at the bottom of the screen.
+<1> 게임 생성자가 호출되었지만 아직 스테이지에 연결되지 않았습니다. 그래서 우리는 완료될 때까지 초기화를 연기합니다.
+<2> 커스텀 셋업 메소드를 호출하고 스테이지 크기를 전달합니다.
+<3> 예를 들어, 화면 하단에 LifeBar 인스턴스 (사용자 정의 사용자 인터페이스 클래스)를 만듭니다.
 
-All in all, that wasn't too hard, right?
-The trick is to always take the stage size into account.
-Here, it pays off if you created your game in clean components, with separate classes responsible for different interface elements.
-For any element where it makes sense, you pass the size along (like in the _LifeBar_ constructor above) and let it act accordingly.
+모두들 너무 힘들지는 않았죠?
+트릭은 항상 스테이지 크기를 고려하는 것입니다.
+여기에서는 깨끗한 구성 요소로 게임을 만들었을 때 다른 인터페이스 요소를 담당하는 별도의 클래스로 비용을 지불합니다.
+그것이 의미가 있는 요소라면 위의 LifeBar 생성자와 같이 크기를 전달하고 그에 따라 적절하게 처리하십시오.
 
-.No more letterbox bars: the complete screen is put to use.
+.레터박스 바가 더 이상 없음 : 전체 화면이 사용됩니다.
 image::iphone5-smart-objects.png[PenguFlip without letterbox bars, 160]
 
-That works really well on the iPhone 5.
-We should have done that in 2012, dammit!
-Here, in 2014, things have become even more complicated.
+iPhone 5에서 정말 잘 작동합니다.
+우리는 2012년에 완료해야 합니다.
+2014년에는 상황이 더욱 복잡해졌습니다.
 
-* Android is quickly gaining market share, with phones in all different sizes and resolutions.
-* Even Apple introduced bigger screens with the _iPhone 6_ and _iPhone 6 Plus_.
-* Did I mention tablet computers?
+* 안드로이드는 다양한 크기와 해상도의 휴대폰으로 빠르게 시장 점유율을 확보하고 있습니다.
+* 심지어 애플은 아이폰 6과 아이폰 6 플러스로 더 큰 스크린을 소개했습니다.
+* 제가 태블릿 컴퓨터에 대해 언급 했나요?
 
-By organizing our display objects relative to the stage dimensions, we already laid the foundations to solve this.
-Our game will run with almost any stage size.
+스테이지 개체를 기준으로 표시 개체를 구성하여 이를 해결하기위한 기초를 이미 마련했습니다.
+우리 게임은 거의 모든 스테이지 크기로 실행됩니다.
 
-The remaining problem is which values to use for stage size and content scale factor.
-Looking at the range of screens we have to deal with, this seems like a daunting task!
+나머지 문제는 스테이지 크기 및 콘텐츠 배율 인수에 사용할 값입니다.
+우리가 다루어야하는 스크린의 범위를 살펴보면, 이것은 어려운 일처럼 보입니다!
 
 |===
 |Device |Screen Size |Screen Density |Resolution
@@ -376,16 +378,15 @@ Looking at the range of screens we have to deal with, this seems like a daunting
 
 |===
 
-The key to figuring out the scale factor is to take the screen's density into account.
+스케일 팩터를 알아내는 핵심은 화면의 밀도를 고려하는 것입니다.
 
-* The higher the density, the higher the scale factor.
-  In other words: we can infer the scale factor from the density.
-* From the scale factor, we can calculate the appropriate stage size.
-  Basically, we reverse our previous approach.
+* 밀도가 높을수록 스케일 팩터가 높아집니다. 즉, 밀도로부터 스케일 인자를 추론할 수 있습니다.
+* 스케일 팩터로부터 적절한 스테이지 크기를 계산할 수 있습니다. 기본적으로, 우리는 이전 접근법을 되돌립니다.
 
-The original iPhone had a screen density of about 160 dpi.
-We take that as the basis for our calculations: for any device, we divide the density by 160 and round the result to the next integer.
-Let's make a sanity check of that approach.
+원래 iPhone의 화면 밀도는 약 160 dpi였습니다.
+우리는 이것을 계산의 기초로 삼습니다.
+모든 장치에서 밀도를 160으로 나누고 그 결과를 다음 정수로 반올림합니다.
+그 접근 방식에 대한 온전한 확인을 해봅시다.
 
 |===
 |Device |Screen Size |Screen Density |Scale Factor |Stage Size
@@ -446,16 +447,17 @@ Let's make a sanity check of that approach.
 
 |===
 
-Look at the resulting stage sizes: they are now ranging from 320×480 to 414×736 points.
-That's a moderate range, and it also makes sense: a screen that's physically bigger is supposed to have a bigger stage.
-The important thing is that, by choosing appropriate scale factors, we ended up with reasonable coordinate systems.
-This is a range we can definitely work with!
+결과 스테이지 크기를 살펴보십시오.
+현재 320 × 480에서 414 × 736까지 다양합니다.
+그것은 적당한 범위이며 또한 의미가 있습니다.
+물리적으로 큰 화면은 더 큰 스테이지가 있어야 합니다.
+중요한 것은 적절한 축척 계수를 선택함으로써 합리적인 좌표계가 만들어졌습니다.
+이것은 우리가 확실히 작업할 수있는 범위입니다!
 
-NOTE: You might have noticed that the scale factor of the _Galaxy S1_ is not an integer value.
-This was necessary to end up with an acceptable stage size.
+노트: 당신은 갤럭시 S1의 스케일 인자가 정수 값이 아니라는 것에 주목했을 것입니다. 이것은 수용 가능한 무대 크기로 끝나기 위해 필요했습니다.
 
-Let's see how I came up with those scale values.
-Create a class called `ScreenSetup` and start with the following contents:
+제가 어떻게 그 저울 값을 생각해 냈는지 보도록 하겠습니다.
+ScreenSetup 클래스를 만들고 다음 내용으로 시작하십시오:
 
 [source, as3]
 ----
@@ -482,21 +484,20 @@ public class ScreenSetup
 }
 ----
 
-This class is going to figure out the _viewPort_ and _stage size_ Starling should be configured with.
-Most properties should be self-explanatory -- except for the `assetScale`, maybe.
+이클래스에서는 viewPort와 스테이지 크기 Starling을 구성해야 합니다.
+대부분의 속성은 assetScale을 제외하고는 자체적으로 설명해야 합니다.
 
-The table above shows that we're going to end up with scale factors ranging from "1" to "4".
-However, we probably don't want to create our textures in all those sizes.
-The pixels of the densest screens are so small that your eyes can't possibly differentiate them, anyway.
-Thus, you'll often get away with just providing assets for a subset of those scale factors (say, 1-2 or 1-3).
+위의 표는 "1"에서 "4"범위의 스케일 인수로 끝나는 것을 보여줍니다.
+그러나 우리는 아마도 모든 크기로 텍스쳐를 생성하고 싶지 않을 것입니다.
+가장 짙은 화면의 픽셀은 너무 작아서 눈이 어차피 구분할 수 없습니다.
+따라서 이러한 규모 요인 (예 : 1-2 또는 1-3)의 하위 집합에 대한 애셋만 제공하면 됩니다.
 
-* The `assetScales` argument in the constructor is supposed to be an array filled with the scale factors for which you created textures.
-* The `assetScale` property will tell you which of those asset-sets you need to load.
+* 생성자의 assetScales 인수는 텍스처를 만든 배율 팩터로 채워진 배열로 되어 있습니다.
+* assetScale 속성은 로드해야 하는 애셋 세트를 알려줍니다.
 
-TIP: Nowadays, it's even rare for an application to require scale factor "1".
-However, that size comes in handy during development, because you can preview your interface without requiring an extremely big computer screen.
+팁: 요즘에는 응용 프로그램이 스케일 인수 "1"을 필요로 하는 경우는 거의 없습니다. 그러나 매우 큰 컴퓨터 화면을 요구하지 않고 인터페이스를 미리 볼 수 있기 때문에 이 크기는 개발 중에 편리합니다.
 
-Let's get to the implementation of that constructor, then.
+그렇다면 그 생성자의 구현에 대해 살펴 보겠습니다.
 
 [source, as3]
 ----
@@ -527,16 +528,15 @@ public function ScreenSetup(
     _viewPort = new Rectangle(0, 0, _stageWidth * _scale, _stageHeight * _scale);
 }
 ----
-<1> We need to add a small workaround for the Apple iPad. We want it to use the same set of scale factors you get natively on iOS.
-<2> Our base density is 160 dpi (or 130 dpi on iPads). A device with such a density will use scale factor "1".
-<3> Our scale factors should be integer values or `1.5`. This code picks the closest one.
-<4> Here, we decide the set of assets that should be loaded.
+<1> Apple iPad에 대한 간단한 해결 방법을 추가해야 합니다. iOS에서 기본적으로 사용하는 것과 동일한 척도를 사용하고 싶습니다.
+<2> 기본 밀도는 160dpi (또는 iPads의 경우 130dpi)입니다. 이러한 밀도를 갖는 장치는 스케일 팩터 "1"을 사용합니다.
+<3> 스케일 인수는 정수 값 또는 1.5 여야 합니다. 이 코드는 가장 가까운 것을 선택합니다.
+<4> 여기서 로드해야 하는 애셋 세트를 결정합니다.
 
-TIP: If you want to see the results of this code if run on the devices I used in the tables above, please refer to this https://gist.github.com/PrimaryFeather/505fc4f120c06d09d2c56910476ab710[Gist].
-You can easily add some more devices to this list and check out if you are pleased with the results.
+팁: 위의 표에서 사용한 장치에서 이 코드의 결과를 보려면 이 https://gist.github.com/PrimaryFeather/505fc4f120c06d09d2c56910476ab710[Gist]를 참조하십시오. 이 목록에 장치를 쉽게 추가 할 수 있으며 결과에 만족하는지 확인할 수 있습니다.
 
-Now that everything is in place, we can adapt the startup-code of Starling.
-This code presumes that you are providing assets with the scale factors "1" and "2".
+모든 것이 준비되었으므로 Starling의 시작 코드를 적용할 수 있습니다.
+이 코드에서는 축척 비율 "1"및 "2"로 애셋을 제공한다고 가정합니다.
 
 [source, as3]
 ----
@@ -548,7 +548,7 @@ _starling.stage.stageWidth  = screen.stageWidth;
 _starling.stage.stageHeight = screen.stageHeight;
 ----
 
-When loading the assets, make use of the `assetScale` property.
+애셋을 로드할 때는 assetScale 속성을 사용하십시오.
 
 [source, as3]
 ----
@@ -561,38 +561,35 @@ assetManager.enqueue(appDir.resolvePath(texturePath));
 assetManager.loadQueue(...);
 ----
 
-That's it!
-You still have to make sure to set up your user interface with the stage size in mind, but that's definitely manageable.
+그게 다입니다!
+스테이지 크기를 염두에 두고 사용자 인터페이스를 설정해야 하는 반면에 확실히 관리할 수 있는 장점이 있습니다.
 
-TIP: The Starling repository contains a project called _Mobile Scaffold_ that contains all this code.
-It's the perfect starting point for any mobile application.
-(If you can't find the _ScreenSetup_ class in your download yet, please have a look at the head revision of the GitHub project.)
+팁: Starling 저장소에는 이 코드가 모두 포함된 Mobile Scaffold라는 프로젝트가 있습니다. 모든 모바일 애플리케이션을 위한 완벽한 출발점입니다. (아직 다운로드에서 ScreenSetup 클래스를 찾을 수 없다면 GitHub 프로젝트의 헤드 개정판을 보십시오.)
 
-TIP: If you are using _Feathers_, the class _ScreenDensityScaleFactorManager_ will do the job of the _ScreenSetup_ class we wrote above.
-In fact, the logic that's described here was heavily inspired by that class.
+팁: Feathers를 사용하고 있다면, ScreenDensityScaleFactorManager 클래스의 경우 위에서 쓴 ScreenSetup 클래스의 작업을 수행합니다. 사실 여기에 설명된 논리는 그 클래스에서 크게 영향을 받았습니다.
 
-=== iPad and other Tablets
+=== iPad와 기타 태블릿들
 
-Back in the present, we're starting to wonder if it would make sense to port our game to tablets.
-The code from above will work just fine on a tablet; however, we will be facing a much larger stage, with much more room for content.
-How to handle that depends on the application you are creating.
+지금까지 우리가 만든 게임이 태블릿으로 이식하는 것이 타당한지 궁금해지기 시작했습니다.
+위에서 나온 코드는 태블릿에서 정상적으로 작동합니다.
+그러나 우리는 훨씬 더 큰 스테이지에 직면하게 될 것이며, 콘텐츠를 위한 더 많은 공간이 생길 것입니다.
+처리하는 방법은 만들고 있는 응용 프로그램에 따라 다릅니다.
 
-==== Some games can simply be scaled up.
+==== 일부 게임은 단순히 크기를 조정할 수 있습니다.
 
-Games like _Super Mario Bros_ or _Bejeweled_ look great scaled to a big screen with detailed textures.
-In that case, you could ignore the screen density and calculate the scale factor based just on the amount of available pixels.
+슈퍼 마리오 브라더스 (Super Mario Bros) 또는 비주얼드 (Bejeweled)와 같은 게임은 세부적인 텍스쳐를 이용해 큰 화면을 축소한 것처럼 보입니다.
+이 경우 화면 밀도를 무시하고 사용 가능한 픽셀 양을 기준으로 축척 비율을 계산할 수 있습니다.
 
-* The first iPad (resolution: 768×1024) would simply become a device with a stage size of 384×512 and a scale factor of "2".
-* A retina iPad (resolution: 1536×2048) would also have a stage size of 384×512, but a scale factor of "4".
+* 첫 번째 iPad (해상도 : 768 × 1024)는 단순히 384 × 512 크기의 스테이지 크기와 2의 배율 계수를 갖는 장치가 됩니다.
+* 레티나 iPad (해상도 : 1536 × 2048)의 스테이지 크기는 384 × 512이지만 배율은 4입니다.
 
-==== Others can display more content.
+==== 다른 것들은 더 많은 콘텐츠를 표시할 수 있습니다.
 
-Think of _Sim City_ or _Command & Conquer_: such games could show the user much more of the landscape.
-The user interface elements would take up less space compared to the game's content.
+Sim City 또는 Command & Conquer를 생각해보십시오. 그러한 게임은 사용자에게 더 많은 배경을 보여줄 수 있습니다.
+사용자 인터페이스 요소는 게임 내용에 비해 공간을 덜 차지합니다.
 
-==== Some will need you to rethink the complete interface.
+==== 일부는 완전한 인터페이스를 재고해야 합니다.
 
-This is especially true for productivity-apps.
-On the small screen of a mobile phone, an email client will show either a single mail, the inbox, or your mailboxes.
-A tablet, on the other hand, can display all three of those elements at once.
-Don't underestimate the development effort this will cause.
+이는 특히 생산성이 높은 앱의 경우에 해당됩니다.
+휴대 전화의 작은 화면에서 전자 메일 클라이언트는 단일 메일, 받은 편지함 또는 사서함을 표시합니다.
+반면에 타블렛은 세 가지 요소를 모두 한꺼번에 표시할 수 있습니다. 이것이 야기할 개발 노력을 과소 평가하지 마십시오.

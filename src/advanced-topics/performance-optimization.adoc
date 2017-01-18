@@ -1,41 +1,41 @@
-== Performance Optimization
+== 퍼포먼스 최적화
 
-While Starling mimics the classic display list of Flash, what it does behind the scenes is quite different.
-To achieve the best possible performance, you have to understand some key concepts of its architecture.
-Here is a list of best practices you can follow to have your game run as fast as possible.
+Starling이 고전적인 Flash 디스플레이 리스트를 모방하는 동안 장면 뒤에서 하는 일은 전혀 다릅니다.
+최상의 성능을 얻으려면 아키텍처의 핵심 개념을 이해해야 합니다.
+다음은 가능한 한 빨리 게임을 실행하기 위해 따라할 수있는 모범 사례 목록입니다.
 
-=== General AS3 Tips
+=== AS3 일반 팁
 
-==== Always make a Release Build
+==== 항상 릴리스 빌드 만들기
 
-The most important rule right at the beginning: always create a _release build_ when you test performance.
-Unlike conventional Flash projects, a release build makes a huge difference when you use a Stage3D framework.
-The speed difference is immense; depending on the platform you're working on, you can easily get a multiple of the framerate of a debug build.
+처음부터 가장 중요한 규칙: 성능을 테스트할 때 항상 릴리스 빌드를 만들어야 합니다.
+기존의 Flash 프로젝트와 달리, 릴리스 빌드는 Stage3D 프레임워크를 사용할 때 큰 차이를 만듭니다.
+속도 차이는 엄청납니다.
+작업중인 플랫폼에 따라 디버그 빌드의 여러 프레임을 쉽게 얻을 수 있습니다.
 
-* In Flash Builder, release builds are created by clicking on _menu:Project[Export Release Build]_.
-* In Flash Develop, choose the "Release" configuration and build the project;
-  then choose "ipa-ad-hoc" or "ipa-app-store" option when you execute the "PackageApp.bat" script.
-* In IntelliJ IDEA, select _menu:Build[Package AIR Application]_; choose "release" for Android and "ad hoc distribution" for iOS.
-  For non-AIR projects, deselect "Generate debuggable SWF" in the module's compiler options.
-* If you build your Starling project from command line, make sure `-optimize` is true and `-debug` is false.
+* Flash Builder에서 프로젝트를 클릭하여 릴리스 빌드를 만듭니다. _menu:Project[Export Release Build]_.
+* Flash Develop에서 "Release" 구성을 선택하고 프로젝트를 빌드하십시오. "PackageApp.bat"스크립트를 실행할 때 "ipa-ad-hoc"또는 "ipa-app-store"옵션을 선택하십시오.
+* IntelliJ IDEA에서 패키지 만들기 _menu:Build[Package AIR Application]_; 을 선택합니다. Android의 경우 'release'를 선택하고 iOS의 경우 'ad hoc distribution'을 선택하십시오. AIR 이외의 프로젝트의 경우 모듈의 컴파일러 옵션에서 "Generate debuggable SWF"을 선택 취소합니다.
+* 명령 행에서 Starling 프로젝트를 빌드하는 경우 -optimize가 true이고 -debug가 false인지 확인하십시오.
 
-.Don't get confused by this Flash Builder dialog.
+.이 Flash Builder 대화 상자에서 혼동하지 마십시오.
 image::not-release-build.png[Flash Builder Dialog]
 
-==== Check your Hardware
+==== 하드웨어를 체크하세요.
 
-Be sure that Starling is indeed using the GPU for rendering.
-That's easy to check: if `Starling.current.context.driverInfo` contains the string `Software`, then Stage3D is in software fallback mode, otherwise it's using the GPU.
+Starling이 실제로 렌더링을 위해 GPU를 사용하는지 확인하십시오.
+확인하기 쉽습니다.
+Starling.current.context.driverInfo에 Software 문자열이 들어 있으면 Stage3D는 소프트웨어 폴백 모드이고, 그렇지 않으면 GPU를 사용하는 것입니다.
 
-Furthermore, some mobile devices can be run in a _Battery Saving Mode_.
-Be sure to turn that off when making performance tests.
+또한 일부 모바일 장치는 배터리 절약 모드로 실행될 수 있습니다.
+성능 테스트를 할 때는 반드시 끄십시오.
 
-==== Set the Framerate
+==== 프레임 속도(Framerate)을 설정하세요.
 
-Your framerate is somehow stuck at 24 frames per second, no matter how much you optimize?
-Then you probably never set your desired framerate, and you'll see the Flash Player's default setting.
+최적화를 했음에도 불구하고 프레임 속도가 초당 24 프레임에 머물러 있습니까?
+원하는 프레임 속도를 설정하지 않으면 Flash Player의 기본 설정으로 밖에 표시되지 않습니다.
 
-To change that, either use the appropriate _metadata_ on your startup class, or manually set the framerate at the Flash stage.
+이를 변경하려면 시작 클래스에서 적절한 메타 데이터를 사용하거나 Flash 스테이지에서 수동으로 프레임 속도를 설정하십시오.
 
 [source, as3]
 ----
@@ -43,29 +43,30 @@ To change that, either use the appropriate _metadata_ on your startup class, or 
 public class Startup extends Sprite
 { /* ... */ }
 
-// or anywhere else
+// 또는 다른 곳에서도
 Starling.current.nativeStage.frameRate = 60;
 ----
 
-==== Use Adobe Scout
+==== Adobe Scout를 사용하세요.
 
-_Adobe Scout_ is not only useful for <<memory_management_scout, memory analysis>>; it's just as powerful when it comes to performance profiling.
+Adobe Scout는 메모리 분석에만 유용하지 않습니다.
+퍼포먼스 프로파일링 분야에도 강력함을 발휘합니다.
 
-It allows you to actually see how much time is actually spent in each of your (and Starling's) _ActionScript_ methods.
-This is extremely useful, because it shows you where you can gain most from any optimizations.
-Without it, you might end up optimizing areas of your code that are actually not relevant to the framerate at all!
+그것은 실제로 각 ActionScript(및 Starling의) 메서드에서 얼마나 많은 시간이 실제로 소비되었는지 확인할 수 있게 해줍니다.
+최적화를 통해 얻을 수있는 부분을 보여주기 때문에 매우 유용합니다.
+이것은 실제로 프레임 속도와 관련이없는 코드 영역을 최적화할 수 있습니다!
 
-TIP: Remember, premature optimization is the root of all evil!
+팁: 기억하세요! 제때 최적화 하지 않는 것은 모든 악의 근원입니다!
 
-What's nice compared to classic profilers is that it also works in release mode, with all optimizations in place.
-That ensures that its output is extremely accurate.
+클래식 프로파일러와 비교할 때 좋은 점은 모든 최적화가 제대로 수행된 릴리스 모드에서도 작동한다는 것입니다.
+따라서 출력이 매우 정확합니다.
 
-==== Decode Loaded Images Asynchronously
+==== 로드한 이미지를 비동기적으로 디코딩하세요.
 
-By default, if you use a _Loader_ to load a PNG or JPEG image, the image data is not decoded right away, but when you first use it.
-This happens on the main thread and can cause your application to stutter on texture creation.
-To avoid that, set the image decoding policy flag to `ON_LOAD`.
-This will cause the image to be decoded directly in the Loader's background thread.
+기본적으로 로더를 사용하여 PNG 또는 JPEG 이미지를 로드하는 경우 이미지 데이터는 즉시 디코딩되지 않지만 처음 사용하면 디코딩됩니다.
+이것은 주 스레드에서 발생하며 텍스처 생성시 응용 프로그램이 버벅거리는 원인이 될 수 있습니다.
+이를 방지하려면 이미지 디코딩 정책 플래그를 ON_LOAD로 설정하십시오.
+이렇게하면 이미지가 로더의 백그라운드 스레드에서 직접 디코딩됩니다.
 
 [source, as3]
 ----
@@ -73,42 +74,43 @@ loaderContext.imageDecodingPolicy = ImageDecodingPolicy.ON_LOAD;
 loader.load(url, loaderContext);
 ----
 
-On the other hand, you are probably using Starling's _AssetManager_ to load your textures, aren't you?
-In that case, don't worry: it makes use of this practice, anyway.
+반면에 여러분은 아마도 Starling의 AssetManager를 사용하여 텍스쳐를 로드하고 있을 것입니다. 그렇죠?
+그래도 걱정하지 말고 이 예제를 사용하시기 바랍니다.
 
-==== Avoid "for each"
+==== "for each"를 피하세요.
 
-When working with loops that are repeated very often or are deeply nested, it's better to avoid `for each`; the classic `for i` yields a http://jacksondunstan.com/articles/358[better] performance.
-Furthermore, beware that the loop condition is executed once per loop, so it's faster to save it into an extra variable.
+매우 자주 반복되거나 깊게 중첩된 루프로 작업할 때는 'for each'를 피하는 것이 좋습니다. 고전적인 'for i'는 더 http://jacksondunstan.com/articles/358[나은] 성능을 제공합니다.
+또한 루프 조건은 루프 당 한 번씩 실행되므로 외부 변수에 저장하는 것이 더 빠릅니다.
 
 [source, as3]
 ----
-// slowish:
+// 느립니다:
 for each (var item:Object in array) { ... }
 
-// better:
+// 조금 더 낫습니다:
 for (var i:int=0; i<array.length; ++i) { ... }
 
-// fastest:
+// 빠릅니다:
 var length:int = array.length;
 for (var i:int=0; i<length; ++i) { ... }
 ----
 
-==== Avoid Allocations
+==== 배정(Allocations)을 피하세요.
 
-Avoid creating a lot of temporary objects.
-They take up memory and need to be cleaned up by the garbage collector, which might cause small hiccups when it's running.
+많은 임시 객체를 생성하지 마십시오.
+그들은 메모리를 차지하며 가비지 컬렉터에 의해 정리되어야 할 필요가 있습니다.
+실행시 작은 hiccups(딸꾹질)을 일으킬 수 있습니다.
 
 [source, as3]
 ----
-// bad:
+// 좋지 않은 예:
 for (var i:int=0; i<10; ++i)
 {
     var point:Point = new Point(i, 2*i);
     doSomethingWith(point);
 }
 
-// better:
+// 보다 나은 예:
 var point:Point = new Point();
 for (var i:int=0; i<10; ++i)
 {
@@ -117,121 +119,118 @@ for (var i:int=0; i<10; ++i)
 }
 ----
 
-Actually, Starling contains a class that helps with that: _Pool_.
-It provides a pool of objects that are often required, like _Point_, _Rectangle_ and _Matrix_.
-You can "borrow" objects from that pool and return them when you're done.
+실제로 Starling은 그것을 돕는 클래스를 포함합니다: Pool. Point Rectangle 및 Matrix와 같이 종종 필요한 개체 풀을 제공합니다.
+완료되면 풀에서 객체를 빌려 올 수 있습니다.
 
 [source, as3]
 ----
-// best:
+// 최상의 예:
 var point:Point = Pool.getPoint();
 for (var i:int=0; i<10; ++i)
 {
     point.setTo(i, 2*i);
     doSomethingWith(point);
 }
-Pool.putPoint(point); // don't forget this!
+Pool.putPoint(point); // 이걸 잊지마세요!
 ----
 
-=== Starling Specific Tips
+=== Starling 특정 팁
 
-==== Minimize State Changes
+==== 상태 변경 최소화
 
-As you know, Starling uses Stage3D to render the display list.
-This means that all drawing is done by the GPU.
+Starling은 Stage3D를 사용하여 디스플레이 리스트를 렌더링합니다.
+즉 모든 그리기는 GPU가 수행합니다.
 
-Now, Starling could send one quad after the other to the GPU, drawing one by one.
-In fact, this is how the very first Starling release worked!
-For optimal performance, though, GPUs prefer to get a huge pile of data and draw all of it at once.
+이제 Starling은 다른 쿼드를 하나씩 GPU로 전송하여 하나씩 그려볼 수 있습니다.
+사실 이것은 첫 번째 Starling 릴리스가 어떻게 작동 했는가 입니다!
+그러나 최적의 성능을 위해 GPU는 거대한 데이터 더미를 얻고 모든 데이터를 한 번에 그려내는 것을 선호합니다.
 
-That's why newer Starling versions batch as many quads together as possible before sending them to the GPU.
-However, it can only batch quads that have similar properties.
-Whenever a quad with a different "state" is encountered, a "state change" occurs, and the previously batched quads are drawn.
+그래서 새로운 Starling 버전은 GPU에 보내기 전에 가능한 많은 쿼드를 함께 배치합니다.
+그러나 비슷한 특성을 지닌 쿼드만 배치할 수 있습니다.
+다른 "state, 상태"가 있는 쿼드가 만날 때마다 "state change, 상태 변경"이 발생하고 이전에 일괄 처리된 쿼드가 그려집니다.
 
-[NOTE]
+[노트]
 ====
-I use _Quad_ and _Image_ synonymously in this section.
-Remember, _Image_ is just a subclass of _Quad_ that adds a few methods.
-Besides, _Quad_ extends _Mesh_, and what you read below is true for meshes, as well.
+이 섹션에서는 Quad와 Image를 동의어로 사용합니다. 기억하세요, 이미지는 몇 가지 메소드를 추가한 Quad의 하위 클래스입니다. 게다가 Quad는 Mesh를 확장하고 아래에서 읽은 내용은 메쉬에서도 마찬가지입니다.
 ====
 
-These are the crucial properties that make up a state:
+이것들은 상태를 구성하는 중요한 속성들입니다:
 
-* The _texture_ (different subtextures from the same atlas are fine, though)
-* The _blendMode_ of display objects
-* The _textureSmoothing_ value of meshes/quads/images
-* The _textureRepeat_ mode of meshes/quads/images
+* 텍스쳐 (같은 아틀라스와 다른 하위 텍스처는 괜찮습니다.)
+* 디스플레이 오브젝트의 blendMode
+* 메쉬 / 쿼드 / 이미지의 textureSmoothing 값
+* 메쉬 / 쿼드 / 이미지의 textureRepeat 모드
 
-If you set up your scene in a way that creates as little state changes as possible, your rendering performance will profit immensely.
+가능한 한 작은 상태 변경을 생성하는 방식으로 장면을 설정하면 렌더링 성능이 크게 향상됩니다.
 
-Again, Starling's statics display provides useful data.
-It shows exactly how many draw calls are executed per frame.
-The more state changes you have, the higher this number will be.
+Starling의 정적 디스플레이는 유용한 데이터를 제공합니다.
+프레임 당 얼마나 많은 draw call이 실행되는지를 정확하게 보여줍니다.
+상태 변화가 많을수록 이 숫자가 더 높습니다.
 
-.The statistics display includes the current number of draw calls.
+.통계 표시에는 현재 draw call 수가 나와 있습니다.
 image::stats-display.png[Statistics Display]
 
-[NOTE]
+[노트]
 ====
-The statistics display causes draw calls, as well.
-However, Starling explicitly decrements the draw count displayed to take that into account.
+통계 표시는 draw call도 발생시킵니다.
+그러나 Starling은 이를 고려하여 표시된 draw 횟수를 명시적으로 줄입니다.
 ====
 
-Your target should always be to keep it as low as possible.
-The following tips will show you how.
+목표는 항상 가능한 한 낮게 유지하는 것입니다.
+다음 팁은 방법을 보여줍니다.
 
-===== The Painter's Algorithm
+===== 페인터(Painter)의 알고리즘
 
-To know how to minimize state changes, you need to know the order in which Starling processes your objects.
+상태 변경을 최소화하는 방법을 알기 위해서는 Starling에서 개체를 처리하는 순서를 알아야합니다.
 
-Like Flash, Starling uses the _Painter's algorithm_ to process the display list.
-This means that it draws your scene like a painter would do it: starting at the object at the bottom layer (e.g. the background image) and moving upwards, drawing new objects on top of previous ones.
+Flash와 마찬가지로 Starling에서는 Painter의 알고리즘을 사용하여 디스플레이 리스트를 처리합니다.
+이는 화가가 하는 것처럼 씬을 그려야 한다는 것을 의미합니다.
+맨 아래 레이어의 오브젝트 (예 배경 이미지)에서 시작하여 위쪽으로 이동하여 이전 오브젝트 위에 새로운 오브젝트를 그립니다.
 
-.Drawing a scene with the Painter's algorithm.
+.Painter의 알고리즘으로 장면 그리기.
 image::painters-algorithm.png[Painter's algorithm]
 
-If you'd set up such a scene in Starling, you could create three sprites: one containing the mountain range in the distance, one with the ground, and one with the vegetation.
-The mountain range would be at the bottom (index 0), the vegetation at the top (index 2).
-Each sprite would contain images that contain the actual objects.
+Starling에서 이와 같은 장면을 설정하면 멀리있는 산 범위를 포함하는 스프라이트와 땅이 있는 스프라이트 및 식물이 있는 스프라이트의 세 가지 스프라이트를 만들 수 있습니다.
+산맥은 가장 아래에 위치하며(인덱스 0), 식물들은 가장 위에(인덱스 2) 위치합니다.
+각 스프라이트에는 실제 객체가 포함된 이미지가 포함됩니다.
 
-.The scene graph of the landscape from above.
+.위 풍경 이미지의 장면 그래프.
 image::landscape.png[Landscape Scene Graph]
 
-On rendering, Starling would start at the left with "Mountain 1" and continue towards the right, until it reaches "Tree 2".
-If all those objects have a different state, this would mean six draw calls.
-That's exactly what will happen if you load each object's texture from a separate Bitmap.
+렌더링시 Starling은 왼쪽에서 "Mountain 1"로 시작하여 오른쪽으로 계속 진행하여 "Tree 2"에 도달합니다.
+모든 오브젝트의 상태가 다른 경우 6회의 그리기 호출을 의미합니다.
+그것은 개별 Bitmap에서 각 객체의 텍스쳐를 로드하는 경우 정확히 일어날 것입니다.
 
 // <note tip>
 // Another tool at your disposal is the [[http://doc.starling-framework.org/core/starling/display/DisplayObjectContainer.html#sortChildren()|DisplayObjectContainer::sortChildren()]] method which can be used to sort layers, within a ''Sprite'' object for example, based on properties such as ''x'', ''y'', ''alpha'' etc. The method accepts a compare function which means you can sort objects based on any criteria you wish! :-D
 // </note>
 
-===== The Texture Atlas
+===== 텍스쳐 아틀라스
 
-That's one of the reasons why texture atlases are so important.
-If you load all those textures from one single atlas, Starling will be able to draw all objects at once!
-(At least if the other properties listed above do not change.)
+이것이 텍스처 아틀라스 레이어가 중요한 이유 중 하나입니다.
+하나의 아틀라스에서 모든 텍스처를 로드하면 Starling은 모든 오브젝트를 한 번에 그릴 수 있습니다!
+(적어도 위에 나열된 다른 속성이 변경되지 않는 경우).
 
-.The same scene graph, now using a single atlas texture.
+.하나의 아틀라스 텍스처를 사용하는 동일한 장면 그래프.
 image::landscape-2.png[Landscape Scene Graph 2]
 
-The consequence of this is that you should _always_ use an atlas for your textures.
-Here, each image uses the same atlas (depicted by all nodes having the same color).
+결과적으로 텍스쳐에 항상 아틀라스를 사용해야 합니다.
+여기서 각 이미지는 동일한 아틀라스를 사용합니다 (동일한 색상을 가진 모든 노드로 표시).
 
-Sometimes, though, not all of your textures will fit into a single atlas.
-The size of textures is limited, so you'll run out of space sooner or later.
-But this is no problem, as long as you arrange your textures in a smart way.
+때로는 모든 텍스처가 하나의 아틀라스에 들어 맞는 것은 아닙니다.
+텍스처의 크기가 제한되어 있으므로 조만간 공간이 부족할 것입니다.
+그러나 이것은 똑똑한 방식으로 텍스처를 배열하는 한 아무런 문제가 되지 않습니다.
 
-.The order of objects makes a difference.
+.개체의 순서에 차이가 있습니다.
 image::landscape-3.png[Landscape Scene Graph 3]
 
-Both those examples use two atlases (again, one color per atlas).
-But while the display list on the left will force a state change for each object, the version on the right will be able to draw all objects in just two batches.
+두 예제 모두 두 개의 아틀라스 (아틀라스 당 하나의 색상)를 사용합니다.
+그러나 왼쪽의 디스플레이 리스트는 각 객체의 상태 변경을 강제로 수행하지만 오른쪽의 버전은 모든 객체를 단 두개의 배치(batches, 일괄처리)로 그릴 수 있습니다.
 
-==== Use the MeshBatch class
+==== MeshBatch 클래스 사용하기
 
-The fastest way to draw a huge number of quads or other meshes at once is to use the _MeshBatch_ class.
-That's the same class that is used internally by Starling for all rendering, so it's heavily optimized.footnote:[If you're still using Starling 1.x, look for ''QuadBatch'' instead.]
-It works like this:
+한 번에 많은 수의 쿼드 또는 다른 메시를 그릴 수 있는 가장 빠른 방법은 MeshBatch 클래스를 사용하는 것입니다. 이것은 Starling이 모든 렌더링을 위해 내부적으로 사용하는 클래스이므로 상당히 최적화되어 있습니다.footnote:[Starling 1.x를 사용하고 있다면 'QuadBatch'를 찾아보십시오.]
+그것은 다음과 같이 작동합니다:
 
 [source, as3]
 ----
@@ -247,49 +246,49 @@ for (var i:int=0; i<100; ++i)
 addChild(meshBatch);
 ----
 
-Did you notice? You can add the same image as often as you want!
-Furthermore, adding it is a very fast operation; e.g. no event will be dispatched (which is the case when you add an object to a container).
+알아 차렸나요? 같은 이미지를 원하는만큼 추가할 수 있습니다!
+또한 추가하는 작업은 매우 빠릅니다.
+예를 들어, 어떤 이벤트도 전달되지 않습니다 (컨테이너에 객체를 추가하는 경우).
 
-As expected, this has some downsides, though:
+예상대로 여기에는 몇 가지 단점이 있습니다:
 
-* All the objects you add must have the same state (i.e. use textures from the same atlas).
-  The first image you add to the MeshBatch will decide on its state.
-  You can't change the state later, except by resetting it completely.
-* You can only add instances of the _Mesh_ class or its subclasses (that includes _Quad_, _Image_, and even _MeshBatch_).
-* Object removal is quite tricky: you can only remove meshes by trimming the number of vertices and indices of the batch.
-  However, you can overwrite meshes at a certain index.
+* 추가하는 모든 객체는 동일한 상태 (즉, 동일한 아틀라스의 텍스처 사용)여야 합니다. MeshBatch에 추가하는 첫 번째 이미지는 상태를 결정합니다. 완전히 재설정한 경우를 제외하고는 나중에 상태를 변경할 수 없습니다.
+* Mesh 클래스 또는 그 하위 클래스 (Quad Image 심지어 MeshBatch 포함)의 인스턴스만 추가 할 수 있습니다.
+* 개체 제거는 매우 까다 롭습니다: 일괄 처리의 정점 및 인덱스 수를 트리밍해야지만 메쉬를 제거할 수 있습니다. 그러나 특정 인덱스에서 메쉬를 덮어 쓸 수 있습니다.
 
-For these reasons, it's only suitable for very specific use-cases (the _BitmapFont_ class, for example, uses a mesh batch internally).
-In those cases, it's definitely the fastest option, though. You won't find a more efficient way to render a huge number of objects in Starling.
+이러한 이유로 매우 특정한 사용 사례에만 적합합니다. (예: BitmapFont 클래스는 내부적으로 메쉬 배치를 사용합니다).
+이 경우 확실히 가장 빠른 옵션입니다.
+Starling에서 많은 수의 객체를 렌더링하는보다 효율적인 방법을 찾지 못할 것입니다.
 
-==== Batch your TextFields
+==== 텍스트필드를 일괄처리하기
 
-Per default, a TextField will require one draw call, even if your glyph texture is part of your main texture atlas.
-That's because long texts require a lot of CPU time to batch; it's faster to simply draw them right away (without copying them to a _MeshBatch_).
+기본적으로 TextField는 글리프 텍스처가 기본 텍스처 맵의 일부인 경우에도 한 번의 그리기 호출을 필요로 합니다.
+긴 텍스트는 일괄 처리에 많은 CPU 시간이 필요하기 때문입니다. (MeshBatch에 복사하지 않고) 즉시 그리는 것이 더 빠릅니다.
 
-However, if your text field contains only a few letters (rule of thumb: below 16), you can enable the `batchable` property on the TextField.
-With that enabled, your texts will be batched just like other display objects.
+그러나 텍스트 필드에 몇 개의 문자만 포함된 경우 (규칙 16 자 이하) TextField에서 일괄 처리 가능한 속성을 활성화 할 수 있습니다.
+이를 사용하면 다른 표시 객체와 마찬가지로 텍스트가 일괄 처리됩니다.
 
-==== Use BlendMode.NONE
+==== BlendMode.NONE 사용하기
 
-If you've got totally opaque, rectangular textures, help the GPU by disabling blending for those textures.
-This is especially useful for large background images.
+완전히 불투명한 직사각형 텍스처를 가지고 있다면 텍스처에 블렌딩을 사용하지 않도록 설정하여 GPU를 도와주십시오.
+이것은 큰 배경 이미지에 특히 유용합니다.
 
 [source, as3]
 ----
 backgroundImage.blendMode = BlendMode.NONE;
 ----
 
-Naturally, this will also mean an additional state change, so don't overuse this technique.
-For small images, it's probably not worth the effort (except if they'd cause a state change, anyway, for some other reason).
+당연히 이것은 또한 상태 변화가 추가됨을 의미하므로 이 기술을 과도하게 사용하지는 마십시오.
+작은 이미지의 경우 아마도 그럴만 한 가치가 없을 것입니다 (어쨌든 다른 이유로 인해 상태가 변경되는 것을 제외하고는).
 
-==== Use stage.color
+==== stage.color 사용하기
 
-Oftentimes, the actual stage color is actually never seen in your game, because there are always images or meshes on top of the stage.
+스테이지의 상단에는 항상 이미지나 메시(Meshes)가 있기 때문에 실제 스테이지 색상은 게임에서 실제로 볼 수 없는 경우가 종종 있습니다.
 
-In that case, always set it to clear black (`0x0`) or white (`0xffffff`).
-There seems to be a fast hardware optimization path for a `context.clear` on some mobile hardware when it is called with either all 1's or all 0's.
-Some developers reported a full millisecond of spared rendering time per frame, which is a very nice gain for such a simple change!
+이 경우 항상 검은 색 (0x0) 또는 흰색 (0xffffff)을 지우도록 설정하십시오.
+일부 모바일 하드웨어에서는 all 1 또는 all 0으로 호출될 때 context.clear에 대해 빠른 하드웨어 최적화 경로가 있는 것으로 보입니다.
+일부 개발자는 프레임 당 렌더링 시간을 1 밀리 초로 줄였습니다.
+이는 단순한 변경에 매우 좋은 결과를 가져옵니다!
 
 [source, as3]
 ----
@@ -300,8 +299,9 @@ public class Startup extends Sprite
 }
 ----
 
-On the other hand, if the background of your game is a flat color, you can make use of that, too: just set the stage color to that value instead of displaying an image or a colored quad.
-Starling has to clear the stage once per frame, anyway -- thus, if you change the stage color, that operation won't cost anything.
+다른 한편으로는, 게임의 배경이 평면 컬러인 경우 이미지 또는 컬러 쿼드를 표시하는 대신 스테이지 색상을 해당 값으로 설정하면 됩니다.
+Starling은 프레임마다 한 번씩 스테이지를 지워야 합니다.
+따라서 스테이지 색상을 변경하면 작업에 비용이 들지 않습니다.
 
 [source, as3]
 ----
@@ -312,17 +312,17 @@ public class Startup extends Sprite
 }
 ----
 
-==== Avoid querying width and height
+==== 너비(width)와 높이(height) 쿼리하지 않기
 
-The `width` and `height` properties are more expensive than one would guess intuitively, especially on sprites.
-A matrix has to be calculated, and each vertex of each child will be multiplied with that matrix.
+width 및 height 속성은 특히 스프라이트에서 알아낼 때 시간이 많이 소요됩니다.
+행렬을 계산해야 하며 각 자식의 각 꼭지점에 해당 행렬이 곱해져야 하기 때문입니다.
 
-For that reason, avoid accessing them repeatedly, e.g. in a loop.
-In some cases, it might even make sense to use a constant value instead.
+그렇기 때문에 반복해서 액세스하지 마십시오. (루프문에서).
+경우에 따라 상수 값을 대신 사용하는 것이 좋습니다.
 
 [source, as3]
 ----
-// bad:
+// 나쁜 예:
 for (var i:int=0; i<numChildren; ++i)
 {
     var child:DisplayObject = getChildAt(i);
@@ -330,7 +330,7 @@ for (var i:int=0; i<numChildren; ++i)
         child.removeFromParent();
 }
 
-// better:
+// 좋은 예:
 var wallWidth:Number = wall.width;
 for (var i:int=0; i<numChildren; ++i)
 {
@@ -340,54 +340,56 @@ for (var i:int=0; i<numChildren; ++i)
 }
 ----
 
-==== Make containers non-touchable
+==== 콘테이너를 터치 못하게 만들기
 
-When you move the mouse/finger over the screen, Starling has to find out which object is hit.
-This can be an expensive operation, because it requires a hit-test on each and every display object (in the worst case).
+화면 위로 마우스나 손가락을 움직일 때 Starling은 어느 대상이 터치되었는지 찾아야 합니다.
+이는 각 디스플레이 개체 (최악의 경우)에 대한 적중 테스트가 필요하기 때문에 값 비싼 작업이 될 수 있습니다.
 
-Thus, it helps to make objects _untouchable_ if you don't care about them being touched, anyway.
-It's best to disable touches on complete containers: that way, Starling won't even have to iterate over their children.
+따라서 터치되지 않도록 만드는 것이 도움이 됩니다.
+컨테이너에서 터치를 비활성화하는 것이 가장 좋습니다.
+이렇게 하면 Starling은 자식 위로 반복할 필요가 없어집니다.
 
 [source, as3]
 ----
-// good:
+// 좋은 예:
 for (var i:int=0; i<container.numChildren; ++i)
     container.getChildAt(i).touchable = false;
 
-// even better:
+// 더 나은 예:
 container.touchable = false;
 ----
 
-==== Hide objects that are outside the Stage bounds
+==== 스테이지 범위 밖에 있는 개체 숨기기
 
-Starling will send any object that is part of the display list to the GPU.
-This is true even for objects that are outside the stage bounds!
+Starling은 디스플레이 리스트의 모든 객체를 GPU로 보냅니다.
+무대 바운드 밖에 있는 오브젝트의 경우에도 마찬가지입니다!
 
-You might wonder: why doesn't Starling simply ignore those invisible objects?
-The reason is that checking the visibility in a universal way is quite expensive.
-So expensive, in fact, that it's faster to send objects up to the GPU and let it do to the clipping.
-The GPU is actually very efficient with that and will abort the whole rendering pipeline very early if the object is outside the screen bounds.
+왜 Starling은 단순히 보이지 않는 객체를 무시하지 않는가?
+그 이유는 보편적인 방식으로 가시성을 확인하는 것이 비용이 많이 들기 때문입니다.
+실제로 개체를 GPU로 보내고 클리핑 작업을 수행하는 것이 더 빠릅니다.
+실제로 GPU는 매우 효율적이며 객체가 스크린 범위 밖에 있을 경우 렌더링 파이프라인 전체를 빠르게 중단합니다.
 
-However, it still takes time to upload that data, and you can avoid that.
-Within the high level game logic, it's often easier to make visibility checks (you can e.g. just check the x/y coordinates against a constant).
-If you've got lots of objects that are outside those bounds, it's worth the effort.
-Remove those elements from the stage or set their `visible` property to `false`.
+그러나 데이터를 업로드하는데 여전히 시간이 걸리므로 이를 피하는게 좋습니다.
+높은 수준의 게임 논리에서는 가시성 검사를 하는 것이 더 쉽습니다 (예: 상수와 x / y 좌표를 비교할 수 있음).
+이러한 범위를 벗어나는 많은 객체를 가지고 있다면 그만한 가치가 있습니다.
+스테이지에서 해당 요소를 제거하거나 visible 속성을 false로 설정합니다.
 
-==== Make use of Event Pooling
+==== 이벤트 풀링 사용
 
-Compared to classic Flash, Starling adds an additional method for event dispatching:
+클래식 Flash에 비해 Starling은 이벤트 전달을 위한 추가 방법을 추가합니다:
 
 [source, as3]
 ----
-// classic way:
+// 클래식한 방식:
 object.dispatchEvent(new Event("type", bubbles));
 
-// new way:
+// 새로운 방식:
 object.dispatchEventWith("type", bubbles);
 ----
 
-The new approach will dispatch an event object just like the first one, but behind the scenes, it will pool event objects for you.
-That means that you will save the garbage collector some work.
+새로운 접근 방식은 첫 번째 이벤트 객체와 마찬가지로 이벤트 객체를 전달하지만 뒷 배경에서는 이벤트 객체를 풀링합니다.
+즉 가비지 수집기를 일부만 저장하면 됩니다.
 
-In other words, it's less code to write _and_ is faster -- thus, it's the preferred way to dispatch events.
-(Except if you need to dispatch a custom subclass of `Event`; they cannot be dispatched with that method.)
+즉, 작성하는 코드가 적어지고 속도가 빨라집니다.
+따라서 이벤트를 전달하는 가장 좋은 방법입니다.
+(Event의 사용자 정의 하위 클래스를 전달해야 하는 경우를 제외하고는 해당 메소드로 디스패치 할 수 없습니다.)

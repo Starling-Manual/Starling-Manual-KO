@@ -56,7 +56,7 @@ onEnterFrame 메서드는 프레임 당 한 번 호출되며 이전 프레임 �
 기본적으로 숫자 (Number, int, uint)인 경우 모든 객체의 속성에 애니메이션을 적용할 수 있습니다.
 이러한 애니메이션은 Tween이라는 객체에 설명되어 있습니다.
 
-노트: "Tween"이라는 용어는 손으로 그려진 애니메이션에서 나옵니다. 여기에서 리드 일러스트레이터가 중요한 키 프레임을 그리는 반면 나머지 팀은 프레임 사이에 프레임을 그렸습니다.
+NOTE: "Tween"이라는 용어는 손으로 그려진 애니메이션에서 나옵니다. 여기에서 리드 일러스트레이터가 중요한 키 프레임을 그리는 반면 나머지 팀은 프레임 사이에 프레임을 그렸습니다.
 
 .트윈의 다른 프레임.
 image::soccer-tween.png[Soccer Tween]
@@ -334,7 +334,7 @@ juggler.delayCall(dispatchEventWith, 2, "gameOver");
 juggler.repeatCall(spawnEnemy, 3);
 ----
 
-[노트]
+[NOTE]
 ====
 뒤에서는 delayCall 및 repeatCall이 모두 DelayedCall 유형의 객체를 만듭니다.
 juggler.tween 메소드가 트윈을 사용하기 위한 단축키인 것과 마찬가지로 이러한 메소드는 지연 호출을 작성하기위한 단축키입니다.

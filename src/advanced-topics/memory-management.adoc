@@ -111,7 +111,7 @@ object.filter = null; // filter will *not* be disposed
 필터는 처리되지 않지만 Starling은 모든 리소스를 정리합니다.
 따라서 메모리 누출은 발생하지 않습니다.
 
-노트: 이전 Starling 버전 (<2.0)에서는 메모리 누수가 발생했습니다.
+NOTE: 이전 Starling 버전 (<2.0)에서는 메모리 누수가 발생했습니다.
 
 === 텍스쳐를 임베드 하지 마세요
 
@@ -275,7 +275,7 @@ image::mipmap.jpg[Mipmap]
 따라서 비트맵 폰트는 Starling에서 선호하는 텍스트 표시 방법이 됩니다.
 저는 가능할 때마다 그들을 사용하길 추천합니다!
 
-팁: 비트맵 폰트 텍스처는 런타임시 실제 TextField 색상으로 채워지는 순수한 흰색이기 때문에 16 비트 텍스처를 가장 많이 사용합니다.
+TIP: 비트맵 폰트 텍스처는 런타임시 실제 TextField 색상으로 채워지는 순수한 흰색이기 때문에 16 비트 텍스처를 가장 많이 사용합니다.
 
 === 텍스쳐 아틀라스를 최적화하세요.
 
@@ -302,7 +302,7 @@ ActionScript 및 Stage3D를위한 가볍지만 포괄적인 프로파일링 도�
 스카우트를 사용하면 ActionScript 코드에서 성능 병목 현상을 찾을 수 있을 뿐 아니라 시간이 지남에 따라 메모리 소비에 대한 자세한 검색을 할 수 있습니다.
 이것은 값을 매길 수 없을 정도입니다!
 
-노트: Adobe Scout는 Adobe의 Creative Cloud 멤버십 무료 버전의 일부입니다. 그것을 얻기 위해 유료 CC 구독자가 될 필요는 없습니다.
+NOTE: Adobe Scout는 Adobe의 Creative Cloud 멤버십 무료 버전의 일부입니다. 그것을 얻기 위해 유료 CC 구독자가 될 필요는 없습니다.
 
 Thibault Imbert의 훌륭한 자습서는 Adobe Scout 사용 방법을 자세히 설명합니다: http://www.adobe.com/devnet/scout/articles/adobe-scout-getting-started.html[Getting started with Adobe Scout]
 

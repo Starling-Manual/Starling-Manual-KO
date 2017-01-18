@@ -159,7 +159,7 @@ public static function fromEmbeddedAsset(assetClass:Class):Texture
 * 기존 표시 객체의 렌더링을 포함하는 비트맵의 경우 해당 표시 객체를 참조하고 콜백의 새 비트맵에 그려야 합니다.
 (그게 Starling의 TextField 클래스가 하는 일입니다.)
 
-노트: 저를 강조하겠습니다: AssetManager가 이 모든 작업을 수행하므로 그렇게하는 것이 좋습니다. 나는 그것이 어떻게 성취되었는지를 보여주고 싶었습니다.
+NOTE: 저를 강조하겠습니다: AssetManager가 이 모든 작업을 수행하므로 그렇게하는 것이 좋습니다. 나는 그것이 어떻게 성취되었는지를 보여주고 싶었습니다.
 
 === 텍스처 렌더링
 
@@ -216,4 +216,4 @@ assetManager.addEventListener(Event.TEXTURES_RESTORED, function():void
 });
 ----
 
-노트: 이번에는 onRestore의 기본 동작이므로 명확하게 호출할 필요가 없습니다. 우리는 이를 수정하지 않았습니다. 여기서 다른 콜백 (Event.TEXTURES_RESTORED)에 있으며 onRestore가 기본 구현에서 수정되지 않았음을 기억하십시오.
+NOTE: 이번에는 onRestore의 기본 동작이므로 명확하게 호출할 필요가 없습니다. 우리는 이를 수정하지 않았습니다. 여기서 다른 콜백 (Event.TEXTURES_RESTORED)에 있으며 onRestore가 기본 구현에서 수정되지 않았음을 기억하십시오.

@@ -20,7 +20,7 @@ IDE 구성 및 프로젝트 설정은 각 IDE에서 약간 다르게 수행됩�
 이를 돕기 위해 http://wiki.starling-framework.org/manual/[Starling Wiki]의 각 IDE에 대한 구체적인 방법을 만들었습니다.
 계속하기 전에 해당 자습서를 따르십시오.
 
-노트: 틀림없이 그러한 모든 설정 절차는 고통스럽습니다. 그러나 저와 함께 견뎌내봅시다: 당신은 이것을 매우 여유롭게 수행할 필요가 있습니다.
+NOTE: 틀림없이 그러한 모든 설정 절차는 고통스럽습니다. 그러나 저와 함께 견뎌내봅시다: 당신은 이것을 매우 여유롭게 수행할 필요가 있습니다.
 
 === 시작 코드
 
@@ -81,7 +81,7 @@ package
 
 위 클래스는 우리가 모든 것을 올바르게 설정했는지 확인하기 위해 간단한 빨간색 쿼드를 표시합니다.
 
-중요: Game 클래스는 flash.display.Sprite가 아닌 starling.display.Sprite를 상속 받았습니다.
+IMPORTANT: Game 클래스는 flash.display.Sprite가 아닌 starling.display.Sprite를 상속 받았습니다.
 이것은 우리가 Starling 세계에 있기 때문에 중요합니다.
 flash.display 패키지와는 완전히 별개입니다.
 
@@ -128,7 +128,7 @@ XML 노드 중 renderMode를 검색하고(주석 처리 되었을 수 있음) �
 <renderMode>direct</renderMode>
 ----
 
-노트: 여기서 우리가 하고있는 일은 런타임이 GPU에 액세스 할 수 있도록 허용하는 것입니다.
+NOTE: 여기서 우리가 하고있는 일은 런타임이 GPU에 액세스 할 수 있도록 허용하는 것입니다.
 이렇게 하지 않으면, Stage3D가 접근할 수 없습니다.
 
 === 실행이 해결됨

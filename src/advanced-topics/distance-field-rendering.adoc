@@ -36,7 +36,7 @@ image::cat-scale.png[Scaled Cat, 400]
 Starling에는 실제로 이 변환 프로세스를 처리하는 편리한 도구가 포함되어 있습니다.
 "Field Agent, 필드 에이전트"라고 하며 Starling 저장소의 util 디렉토리에서 찾을 수 있습니다.
 
-노트: 필드 에이전트를 사용하려면 Ruby와 ImageMagick이 모두 설치되어 있어야 합니다. 동봉된 README 파일을 참조하여 종속성을 설치하는 방법을 찾으십시오. 이 도구는 Windows와 macOS에서 모두 작동합니다.
+NOTE: 필드 에이전트를 사용하려면 Ruby와 ImageMagick이 모두 설치되어 있어야 합니다. 동봉된 README 파일을 참조하여 종속성을 설치하는 방법을 찾으십시오. 이 도구는 Windows와 macOS에서 모두 작동합니다.
 
 나는 고양이의 고해상도 PNG 버전으로 시작하여 현장 대리인에게 전달했습니다.
 
@@ -79,7 +79,7 @@ image::cat-scale-df.png[Scaled cat using a distance field texture, 400]
 텍스처를 만들 때 사용한 "spread, 확산"에 따라 부드러움 매개 변수를 업데이트하여 원하는 선명도 / 부드러움을 얻을 수 있습니다.
 이것이 스타일 생성자의 첫 번째 매개 변수입니다.
 
-팁: Rule of thumb(엄지손가락의 법칙, 대략적인 계산법): softness = 1.0 / spread.
+TIP: Rule of thumb(엄지손가락의 법칙, 대략적인 계산법): softness = 1.0 / spread.
 
 ==== 렌더 모드(Render Modes)
 
@@ -102,7 +102,7 @@ image::cat-modes.png[Cat rendered with different modes, 500]
 
 멋집니다, 그렇죠?
 
-노트: 유일한 제한 사항은 두 가지 모드를 결합 할 수 없다는 것입니다. 외곽선과 그림자를 모두 가질 수 있습니다.
+NOTE: 유일한 제한 사항은 두 가지 모드를 결합 할 수 없다는 것입니다. 외곽선과 그림자를 모두 가질 수 있습니다.
 그래도 조각 필터를 다시 사용할 수는 있습니다.
 
 === 거리 필드 폰트(Distance Field Fonts)
@@ -125,7 +125,7 @@ image::cat-modes.png[Cat rendered with different modes, 500]
 개인적으로는 Hiero를 사용하여 최상의 결과를 얻었지만 사용자 인터페이스가 그다지 좋지는 않습니다.
 앞으로 제품이 향상 될 수 있기를 바랍니다.
 
-팁: Hiero에 관해서는 여기에 프로세스를 설명하는 아주 좋은 소개가 있습니다. 안타깝게도 https://github.com/libgdx/libgdx/wiki/Distance-field-fonts[here]는 Starling에서 요구하는 XML 형식을 내보낼 수 없습니다. 이 작은 https://gist.github.com/tluyben/4984856[perl script, 펄 스크립트]가 도움이 될 수도 있습니다.
+TIP: Hiero에 관해서는 여기에 프로세스를 설명하는 아주 좋은 소개가 있습니다. 안타깝게도 https://github.com/libgdx/libgdx/wiki/Distance-field-fonts[here]는 Starling에서 요구하는 XML 형식을 내보낼 수 없습니다. 이 작은 https://gist.github.com/tluyben/4984856[perl script, 펄 스크립트]가 도움이 될 수도 있습니다.
 
 사용하는 도구나 프로세스는 무엇이든 간에 결국: 평소처럼 텍스처와 .fnt 파일을 갖게 됩니다.
 비트맵 폰트를 만들고 등록하는 코드는 다음과 같습니다.

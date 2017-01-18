@@ -61,4 +61,4 @@ private function updatePositions(width:int, height:int):void // <3>
 그렇다면 추가적인 노력을 고려해야 합니다.
 여러분의 사용자가 그것을 고마워할 것입니다!
 
-팁: Starling에 제공되는 Scaffold 프로젝트에는 이 기능을 구현할 수 있는 기능이 포함되어 있습니다.
+TIP: Starling에 제공되는 Scaffold 프로젝트에는 이 기능을 구현할 수 있는 기능이 포함되어 있습니다.

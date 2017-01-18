@@ -74,7 +74,7 @@ var texture:Texture = Texture.fromEmbeddedAsset(Mushroom); // <2>
 <1> 비트맵을 임베드하세요.
 <2> 임베디드 애셋을 저장하는 클래스에서 바로 텍스처를 만듭니다.
 
-[중요]
+[IMPORTANT]
 .전문가의 팁
 ====
 이것은 코드가 적을뿐만 아니라 메모리도 적게 소요됩니다!
@@ -186,7 +186,7 @@ image::penguflip-atlas.png[Texture Atlas]
 (다른 프레임 워크에서는 이 기능을 스프라이트 시트라고 부릅니다.)
 
 ifdef::backend-html5[]
-팁: "Texture Packer" 팀은 실제로 스프라이트 시트에 대한 멋진 소개 비디오를 만들었습니다. 여기에서 확인: http://www.codeandweb.com/what-is-a-sprite-sheet[스프라이트 시트란 무엇인가?]
+TIP: "Texture Packer" 팀은 실제로 스프라이트 시트에 대한 멋진 소개 비디오를 만들었습니다. 여기에서 확인: http://www.codeandweb.com/what-is-a-sprite-sheet[스프라이트 시트란 무엇인가?]
 endif::[]
 
 ==== 아틀라스 만들기
@@ -229,7 +229,7 @@ public static const AtlasTexture:Class;
 <1> 아틀라스 XML을 임베드하십시오. mimeType을 지정하는 것을 잊지 마십시오.
 <2> 아틀라스 텍스처를 삽입합니다.
 
-노트: 또는 URL이나 디스크에서 이러한 파일을 로드할 수도 있습니다 (AIR의 경우). Starling의 AssetManager에 대해 자세히 살펴보겠습니다.
+NOTE: 또는 URL이나 디스크에서 이러한 파일을 로드할 수도 있습니다 (AIR의 경우). Starling의 AssetManager에 대해 자세히 살펴보겠습니다.
 
 사용 가능한 두 객체를 사용하여 새로운 TextureAtlas 인스턴스를 만들고 getTexture() 메서드를 통해 모든 하위 텍스처에 액세스할 수 있습니다.
 게임이 초기화되고 끝까지 참조될 아틀라스 개체를 만듭니다.
@@ -308,7 +308,7 @@ renderTexture.draw(brush);
 
 깨끗하게 지우려면 clear 메소드를 사용하십시오.
 
-[주의]
+[CAUTION]
 .컨텍스트 손실
 ====
 불행히도 렌더링 텍스처는 하나의 큰 단점을 가지고 있습니다.

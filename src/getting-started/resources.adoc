@@ -13,7 +13,7 @@ Adobe는 3개월마다 한 번씩 새로운 안정 버전을 출시하므로 최
 최신 릴리스는 항상 여기에서 찾을 수 있습니다:
 https://www.adobe.com/devnet/air/air-sdk-download.html[Download Adobe AIR SDK]
 
-노트: Starling 2는 최소한 AIR 19를 필요로 합니다.
+NOTE: Starling 2는 최소한 AIR 19를 필요로 합니다.
 
 === Flash Player Projector
 
@@ -26,7 +26,7 @@ https://www.adobe.com/devnet/air/air-sdk-download.html[Download Adobe AIR SDK]
 이 페이지에는 개발자에게 적합한 모든 Flash Player 버전의 목록이 포함되어 있습니다. "projector content debugger, 프로젝터 컨텐츠 디버거"를 찾으십시오:
 https://www.adobe.com/support/flashplayer/debug_downloads.html[Adobe Flash Player Debug Downloads]
 
-노트: 다시 말하지만, IDE가 올바른 플레이어를 찾는 방법을 알아야 할 수도 있습니다. 예를 들어 IDEA는 이 설정이 디버그 구성의 일부입니다.
+NOTE: 다시 말하지만, IDE가 올바른 플레이어를 찾는 방법을 알아야 할 수도 있습니다. 예를 들어 IDEA는 이 설정이 디버그 구성의 일부입니다.
 
 다시 말하지만, IDE가 올바른 플레이어를 찾는 방법을 알아야 할 수도 있습니다.
 예를 들어 IDEA에서 이 설정은 디버그 구성 화면의 일부입니다.
@@ -45,7 +45,7 @@ b. Starling의 Git 저장소를 복제하십시오.
 그러나 항상 안정(stable) 버전만 얻을 수 있습니다.
 즉, 최신 최신 업데이트 및 수정 사항을 놓치고 있습니다! 이런 이유로 나는 오히려 Git을 사용하길 권장합니다.
 
-팁: 버그를 보고하고 며칠 후 해결한다고 가정해 봅시다. (네, 그런 일도 있습니다!)
+TIP: 버그를 보고하고 며칠 후 해결한다고 가정해 봅시다. (네, 그런 일도 있습니다!)
 표준 다운로드로 새로운 stable 릴리스를 만들 때까지 기다려야 합니다.
 하지만, Git repository를 사용하는 경우 바로 해결할 수 있습니다.
 
@@ -67,7 +67,7 @@ SWC 파일에 연결하는 것보다 더 이상 복잡하지 않습니다.
 
 브라우저를 열고 수동으로 새 버전을 다운로드하는 것보다 훨씬 간단합니다. 그렇지 않습니까?
 
-[노트]
+[NOTE]
 ====
 고급 Git 사용자를 위한 몇 가지 추가 정보:
 

@@ -17,7 +17,7 @@ ifndef::ebook-format[:leveloffset: 1]
 이 매뉴얼의 목적은 http://www.starling-framework.org[Starling Framework]에 대한 광범위한 소개를 제공하는 것입니다. Starling은 2D 게임에 중점을 둔 모든 종류의 애플리케이션에 사용할 수 있는 ActionScript 3 용 크로스플랫폼 엔진입니다.
 
 ifdef::backend-html5[]
-팁: 이 문서의 link:manual.pdf[PDF 버전]을 다운로드하십시오.
+TIP: 이 문서의 link:manual.pdf[PDF 버전]을 다운로드하십시오.
 endif::[]
 
 이 가이드에서 배울 수 있는 것들:

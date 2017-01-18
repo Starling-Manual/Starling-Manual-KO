@@ -21,7 +21,7 @@ textField.border = true; // <4>
 <3> 텍스트가 오른쪽으로 정렬됩니다.
 <4> border 속성은 개발 과정에서 주로 유용합니다 TextField의 경계를 보여줍니다.
 
-노트: 텍스트의 스타일은 starling.text.TextFormat 인스턴스를 가리키는 format 속성을 통해 설정됩니다.
+NOTE: 텍스트의 스타일은 starling.text.TextFormat 인스턴스를 가리키는 format 속성을 통해 설정됩니다.
 
 일단 만들어지면 이미지나 쿼드를 사용하는 것처럼 TextField를 사용할 수 있습니다.
 
@@ -61,9 +61,9 @@ private static const ArialJustLatin:Class; // <4>
 폰트를 포함하고 나면 해당 폰트 이름 (폰트 모음, Font family)과 가중치로 설정된 모든 TextField가 자동으로 사용됩니다.
 설정하거나 구성할 수있는 다른 방법은 없습니다.
 
-팁: 폰트의 모든 문자 모양을 포함할 때 큰 공간을 주의하십시오. 위에 표시된 "unicodeRange"는 이 문제를 완화합니다. 예를 들어 범위를 생성 할 수 있습니다. http://renaun.com/blog/2011/10/flash-embed-font-unicode-range-generator[유니 코드 범위 생성기].
+TIP: 폰트의 모든 문자 모양을 포함할 때 큰 공간을 주의하십시오. 위에 표시된 "unicodeRange"는 이 문제를 완화합니다. 예를 들어 범위를 생성 할 수 있습니다. http://renaun.com/blog/2011/10/flash-embed-font-unicode-range-generator[유니 코드 범위 생성기].
 
-팁: 텍스트가 잘리거나 올바른 위치에 나타나지 않으면 현재 스테이지를 살펴보십시오. 품질 설정. 품질 값이 낮으면 Flash / AIR에서 텍스트 범위와 관련된 잘못된 값을 보고하고 Starling은 텍스트를 그릴 때 그 값에 의존합니다.
+TIP: 텍스트가 잘리거나 올바른 위치에 나타나지 않으면 현재 스테이지를 살펴보십시오. 품질 설정. 품질 값이 낮으면 Flash / AIR에서 텍스트 범위와 관련된 잘못된 값을 보고하고 Starling은 텍스트를 그릴 때 그 값에 의존합니다.
 (여기서는 Flash 스테이지에 대해 말하고 있으며 이는 TrueType 폰트에만 적용됩니다.)
 
 === 비트맵 폰트(Bitmap Fonts)
@@ -133,7 +133,7 @@ textField.format.fontSize = BitmapFont.NATIVE_SIZE; // <2>
 반면에 폰트에 위의 샘플 이미지와 같은 색상이 포함되어 있으면 TextField의 format.color 속성을 흰색 (Color.WHITE)으로 설정해야 합니다.
 이렇게하면 TextField의 색조가 텍스처 색에 영향을 미치지 않습니다.
 
-팁: 최적의 성능을 위해 텍스쳐 아틀라스에 폰트 텍스처를 추가할 수도 있습니다!
+TIP: 최적의 성능을 위해 텍스쳐 아틀라스에 폰트 텍스처를 추가할 수도 있습니다!
 이렇게 하면 텍스트를 일반 이미지와 함께 배치하여 그리기 호출을 더 줄일 수 있습니다.
 
 ==== MINI 폰트

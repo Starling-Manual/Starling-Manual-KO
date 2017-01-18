@@ -1,36 +1,37 @@
-== Display Programming
+== 디스플레이 프로그래밍
 ifndef::imagesdir[:imagesdir: ../../img]
 
-With all the setup procedures out of the way, we can start to actually put some content onto the screen!
+모든 설정 절차가 끝나면 실제로 일부 컨텐츠를 화면에 표시할 수 있습니다!
 
-In every application you create, one of your main tasks will be to split it up into a number of logical units.
-More often than not, those units will have a visual representation.
-In other words: each unit will be a _display object_.
+생성하는 모든 응용 프로그램에서 주요 작업 중 하나는 여러 논리적 단위로 분할하는 것입니다.
+종종 그 단위는 시각적인 표현을 가질 것입니다.
+즉, 각 단위는 디스플레이 오브젝트입니다.
 
-=== Display Objects
+=== 디스플레이 오브젝트
 
-All elements that appear on screen are types of display objects.
-The `starling.display` package includes the abstract _DisplayObject_ class; it provides the basis for a number of different types of display objects, such as images, movie clips, and text fields, to name just a few.
+화면에 나타나는 모든 요소는 디스플레이 오브젝트의 유형입니다.
+starling.display 패키지에는 추상 DisplayObject 클래스가 포함됩니다.
+이미지, 무비 클립 및 텍스트 필드와 같은 다양한 유형의 디스플레이 오브젝트에 대한 기초를 제공합니다.
 
-The _DisplayObject_ class provides the methods and properties that all display objects share.
-For example, the following properties are used to configure an object's location on the screen:
+DisplayObject 클래스는 모든 디스플레이 오브젝트가 공유하는 메서드 및 속성을 제공합니다.
+예를 들어 다음 속성을 사용하여 화면에서 객체의 위치를 구성합니다:
 
-* `x`, `y`: the position in the current coordinate system.
-* `width`, `height`: the size of the object (in points).
-* `scaleX`, `scaleY`: another way to look at the object size; `1.0` means unscaled, `2.0` doubles the size, etc.
-* `rotation`: the object's rotation around its origin (in radians).
-* `skewX`, `skewY`: horizontal and vertical skew (in radians).
+* `x`, `y`: 현재 좌표계에서의 위치.
+* `width`, `height`: 오브젝트의 사이즈 (포인트 단위)
+* `scaleX`, `scaleY`: 1.0은 크기 조정되지 않음을 나타내며, 2.0은 크기를 두배로 나타냅니다.
+* `rotation`: 원점을 중심으로하는 객체의 회전각 (라디안 단위).
+* `skewX`, `skewY`: 수평 및 수직 스큐 (라디안).
 
-Other properties modify the way the pixels appear on the screen:
+다른 속성은 픽셀이 화면에 나타나는 방식을 수정합니다:
 
-* `blendMode`: determines how the object's pixels are blended with those underneath.
-* `filter`: special GPU programs (shaders) that modify the look of the object. Filters can e.g. blur the object or add a drop shadow.
-* `mask`: masks cut away all parts that are outside a certain area.
-* `alpha`: the opacity of the object, from `0` (invisible) to `1` (fully opaque).
-* `visible`: if false, the object is hidden completely.
+* `blendMode`: 객체의 픽셀이 아래의 객체와 어떻게 블렌딩되는지 결정합니다.
+* `filter`: 객체의 모양을 수정하는 특별한 GPU 프로그램 (셰이더). 필터는 예를 들어 개체를 흐리게하거나 그림자를 추가합니다.
+* `mask`: 마스크는 특정 영역 밖에있는 모든 부분을 잘라냅니다.
+* `alpha`: 객체의 불투명도, 0 (보이지 않음)에서 1 (완전히 불투명)까지.
+* `visible`: false의 경우, 객체는 보이지 않습니다.
 
-Those are the basics that every display object must support.
-Let's look at the class hierarchy around this area of Starling's API:
+모든 디스플레이 오브젝트가 지원해야 하는 기본 사항입니다.
+Starling의 API 영역에 대한 클래스 계층 구조를 살펴보겠습니다:
 
 [plantuml, class-hierarchy]
 ....
@@ -50,57 +51,61 @@ Quad <|-- Image
 Image <|-- MovieClip
 ....
 
-You'll notice that the diagram is split up in two main sub-branches.
-On the one side, there are a couple of classes that extend `Mesh`: `Quad`, `Image`, and `MovieClip`.
+다이어그램이 두 개의 주요 하위 분기로 나뉘어져 있음을 알 수 있습니다.
+한 쪽에서는 Mesh를 확장하는 두 가지 클래스가 있습니다 : Quad, Image 및 MovieClip.
 
-Meshes are a fundamental part of Starling's rendering architecture.
-Everything that is drawn to the screen is a mesh, actually!
-_Stage3D_ cannot draw anything but triangles, and a mesh is nothing else than a list of points that spawn up triangles.
+메쉬는 Starling의 렌더링 아키텍처의 기본 요소입니다.
+실제로 화면에 그려지는 모든 것은 메쉬입니다.
+Stage3D는 삼각형 이외의 것을 그릴 수 없으며 메쉬는 삼각형을 생성하는 포인트의 리스트는 아닙니다.
 
-On the other side, you'll find a couple of classes that extend _DisplayObjectContainer_.
-As its name suggests, this class acts as a container for other display objects.
-It makes it possible to organize display objects into a logical system -- the _display list_.
+다른면에서는 DisplayObjectContainer를 확장하는 몇 가지 클래스를 찾을 수 있습니다.
+이름에서 알 수 있듯이 이 클래스는 다른 디스플레이 오브젝트의 컨테이너 역할을 합니다.
+디스플레이 객체를 논리적 시스템 (즉, 디스플레이 목록)으로 구성할 수 있습니다.
 
-=== The Display List
+=== 표시 목록 (Display List)
 
-The hierarchy of all display objects that will be rendered is called the _display list_.
-The _Stage_ makes up the root of the display list.
-Think of it as the literal "stage": your users (the audience) will only see objects (actors) that have entered the stage.
-When you start Starling, the stage will be created automatically for you.
-Everything that's connected to the stage (directly or indirectly) will be rendered.
+렌더링 될 모든 디스플레이 오브젝트의 계층 구조를 표시 목록(Display Object)이라고 합니다.
+스테이지가 표시 목록의 루트를 구성합니다.
+문자 그대로 "무대(Stage)"라고 생각하십시오.
+사용자 (잠재 고객)는 무대에 들어온 물체 (배우)만 볼 수 있습니다.
+Starling을 시작하면 스테이지가 자동으로 생성됩니다.
+무대에 (직접 또는 간접적으로) 연결된 모든 것이 렌더링 됩니다.
 
-When I say "connected to", I mean that there needs to be a _parent-child_ relationship.
-To make an object appear on the screen, you make it the child of the stage, or any other _DisplayObjectContainer_ that's connected to the stage.
+내가 "connected to"라고 말하면, 부모 - 자식 관계가 필요하다는 의미입니다.
+객체를 화면에 표시하려면 스테이지의 자식 또는 무대에 연결된 다른 DisplayObjectContainer로 만듭니다.
 
-.Display objects are organized in the display list.
+.디스플레이 오브젝트는 표시 목록에 구성되어 있습니다.
 image::display-list.png[Display List, 350]
 
-The first (and, typically: only) child of the stage is the _application root_: that's the class you pass to the Starling constructor.
-Just like the stage, it's probably going to be a _DisplayObjectContainer_.
-That's where you take over!
+스테이지의 첫 번째 (일반적으로 유일한) 하위 노드는 응용 프로그램 루트입니다.
+즉, Starling 생성자에 전달한 클래스입니다.
+스테이지와 마찬가지로 DisplayObjectContainer가 될 것입니다.
+거기가 당신이 점령해야 할 곳입니다!
 
-You will create containers, which in turn will contain other containers, and meshes (e.g. images).
-In the display list, those meshes make up the _leaves_: they cannot have any child objects.
+컨테이너를 만들고 다른 컨테이너와 메쉬 (예 : 이미지)를 만듭니다.
+표시 목록에서 이러한 메쉬가 잎(leaves)을 구성합니다.
+즉, 자식 객체를 가질 수 없습니다.
 
-Since all of this sounds very abstract, let's look at a concrete example: a speech bubble.
-To create speech bubble, you will need an image (for the bubble), and some text (for its contents).
+이 모든 것이 매우 추상적으로 들리므로 구체적인 예를 들어 봅시다.
+말풍선입니다.
+말풍선을 만들려면 이미지 (풍선)와 텍스트 (내용)가 필요합니다.
 
-Those two objects should act as one: when moved, both image and text should follow along.
-The same applies for changes in size, scaling, rotation, etc.
-That can be achieved by grouping those objects inside a very lightweight _DisplayObjectContainer_: the _Sprite_.
+이 두 객체는 하나 같이 동작해야 합니다. 이미지와 텍스트가 함께 이동하면 이동해야 합니다.
+크기, 배율, 회전 등의 변경에도 동일하게 적용됩니다.
+매우 가벼운 DisplayObjectContainer 안에 이러한 객체를 그룹화할 수 있습니다 (Sprite를 통해):
 
 [NOTE]
-.DisplayObjectContainer vs. Sprite
+.DisplayObjectContainer와 Sprite
 ====
-_DisplayObjectContainer_ and _Sprite_ can be used almost synonymously.
-The only difference between those two classes is that one (_DisplayObjectContainer_) is abstract, while the other (_Sprite_) is not.
-Thus, you can use a _Sprite_ to group objects together without the need of a subclass.
-The other advantage of _Sprite_: it's just much faster to type.
-Typically, that's the main reason why I'm preferring it.
-Like most programmers, I'm a lazy person!
+DisplayObjectContainer와 Sprite는 거의 동의어로 사용할 수 있습니다.
+이 두 클래스의 유일한 차이점 중 하나 (DisplayObjectContainer)는 추상 클래스이고 다른 하나 (Sprite)는 추상 클래스가 아니라는 것입니다.
+따라서 스프라이트를 사용하여 하위 클래스가 없어도 객체를 그룹화 할 수 있습니다.
+Sprite의 다른 장점 : 더 빠른 타입입니다.
+일반적으로 이것이 제가 선호하는 이유입니다.
+대부분의 프로그래머와 마찬가지로, 나는 게으른 사람입니다!
 ====
 
-So, to group text and image together, you create a sprite and add text and image as _children_:
+따라서 텍스트와 이미지를 함께 그룹화하려면 스프라이트를 만들고 텍스트 및 이미지를 자식으로 추가합니다:
 
 [source, as3]
 ----
@@ -110,17 +115,18 @@ var textField:TextField = new TextField(200, 50, "Ay caramba!");
 sprite.addChild(image); // <2>
 sprite.addChild(textField); // <3>
 ----
-<1> Create a sprite.
-<2> Add an _Image_ to the sprite.
-<3> Add a _TextField_ to the sprite.
+<1> sprite를 생성합니다.
+<2> sprite에 이미지를 추가합니다.
+<3> sprite에 텍스트필드를 추가합니다.
 
-The order in which you add the children is important -- they are placed like layers on top of each other.
-Here, `textField` will appear in front of `image`.
+자식을 추가하는 순서는 중요합니다.
+서로의 위에 레이어처럼 배치됩니다.
+여기서 텍스트필드는 이미지 앞에 나타납니다.
 
-.A speech bubble, made up by an image and a TextField.
+.이미지와 텍스트필드로 구성된 말풍선.
 image::speech-bubble.png[Speech Bubble, 600]
 
-Now that those objects are grouped together, you can work with the sprite just as if it was just one object.
+이러한 객체가 그룹화되었으므로 마치 하나의 객체인 것처럼 스프라이트를 사용하여 작업할 수 있습니다.
 
 [source, as3]
 ----
@@ -129,12 +135,12 @@ var totalWidth:Number = sprite.width; // <2>
 sprite.x += 50; // <3>
 sprite.rotation = deg2rad(90); // <4>
 ----
-<1> Query the number of children. Here, the result will be `2`.
-<2> `width` and `height` take into account the sizes and positions of the children.
-<3> Move everything 50 points to the right.
-<4> Rotate the group by 90 degrees (Starling always uses radians).
+<1> 자식의 수를 가져옵니다. 결과는 2입니다.
+<2> 너비와 높이는 자식들의 크기와 위치를 고려합니다.
+<3> x위치를 50포인트 오른쪽으로 이동합니다.
+<4> 그룹을 90도 회전시킵니다 (Starling은 항상 라디안을 사용합니다).
 
-In fact, _DisplayObjectContainer_ defines many methods that help you manipulate its children:
+실제로 DisplayObjectContainer는 자식을 조작하는데 도움이 되는 여러 메서드를 정의합니다:
 
 [source, as3]
 ----
@@ -149,44 +155,47 @@ function swapChildren(child1:DisplayObject, child2:DisplayObject):void;
 function swapChildrenAt(index1:int, index2:int):void;
 ----
 
-=== Coordinate Systems
+=== 좌표계
 
-Every display object has its own coordinate system.
-The `x` and `y` properties, for example, are not given in screen coordinates: they are always depending on the current coordinate system.
-That coordinate system, in turn, is depending on your position within the display list hierarchy.
+모든 디스플레이 오브젝트에는 자체 좌표계가 있습니다.
+예를 들어 x 및 y 속성은 화면 좌표계에 적용되지 않습니다.
+이 속성은 항상 현재 좌표계에 따라 다릅니다.
+좌표계는 표시 목록 계층 구조 내에서의 위치에 따라 달라집니다.
 
-To visualize this, imagine pinning sheets of paper onto a pinboard.
-Each sheet represents a coordinate system with a horizontal x-axis and a vertical y-axis.
-The position you stick the pin through is the root of the coordinate system.
+이것을 시각화하려면 종이를 핀 보드에 고정시키는 것을 상상해보십시오.
+각 시트는 가로 x 축과 세로 y 축이있는 좌표계를 나타냅니다.
+핀을 고정하는 위치는 좌표계의 근원입니다.
 
-.Coordinate systems act like the sheets on a pinboard.
+.좌표 시스템은 핀 보드의 시트처럼 작동합니다.
 image::coordinate-systems.png[Coordinage Systems]
 
-Now, when you rotate the sheet of paper, everything that is drawn onto it (e.g. image and text) will rotate with it -- as do the x- and y-axes.
-However, the root of the coordinate system (the pin) stays where it is.
+이제는 용지를 회전시키면 그 위에 끌어온 모든 것 (예: 이미지 및 텍스트)이 함께 회전합니다 (x축 및 y축처럼).
+그러나 좌표계 (핀)의 루트는 그대로 유지됩니다.
 
-The position of the pin therefore represents the point the x- and y-coordinates of the sheet are pointing at, relative to the parent coordinate system (= the pin-board).
+따라서 핀의 위치는 시트의 x및 y좌표가 부모 좌표계 (= 핀 보드)를 기준으로 가리키는 점을 나타냅니다.
 
-Keep the analogy with the pin-board in mind when you create your display hierarchy.
-This is a very important concept you need to understand when working with Starling.
+디스플레이 계층을 만들 때 핀 보드를 유추하십시오.
+Starling을 사용할 때 이해해야 할 매우 중요한 개념입니다.
 
-=== Custom Display Objects
+=== 사용자 정의 디스플레이 오브젝트
 
-I mentioned this already: when you create an application, you split it up into logical parts.
-A simple game of chess might contain the board, the pieces, a pause button and a message box.
-All those elements will be displayed on the screen -- thus, each will be represented by a class derived from _DisplayObject_.
+이미 언급한 것처럼 응용 프로그램을 만들 때 논리부로 분할합니다.
+간단한 체스 게임에는 보드 조각 일시 정지 단추 및 메시지 상자가 포함될 수 있습니다.
+모든 요소가 화면에 표시됩니다.
+따라서 각 요소는 DisplayObject에서 파생 된 클래스로 나타납니다.
 
-Take a simple message box as an example.
+간단한 메시지 상자를 예로 들어 보겠습니다.
 
-.A game's message box.
+.게임의 메시지 상자.
 image::msgbox.png[Message Box]
 
-That's actually quite similar to the speech bubble we just created; in addition to the background image and text, it also contains two buttons.
+실제로 지난번에 만든 말풍선과 아주 비슷합니다.
+배경 이미지와 텍스트 외에도 두 개의 버튼이 있습니다.
 
-This time, instead of just grouping the object together in a sprite, we want to encapsulate it into a convenient class that hides any implementation details.
+이번에는 스프라이트에서 객체를 그룹으로 묶는 대신 구현 세부 사항을 숨기는 편리한 클래스로 캡슐화하려고 합니다.
 
-To achieve this, we create a new class that inherits from _DisplayObjectContainer_.
-In its constructor, we create everything that makes up the message box:
+이를 위해 DisplayObjectContainer에서 상속받은 새로운 클래스를 만듭니다.
+생성자에서 우리는 메시지 상자를 구성하는 모든 것을 만듭니다:
 
 [source, as3]
 ----
@@ -226,8 +235,8 @@ public class MessageBox extends DisplayObjectContainer
 }
 ----
 
-Now you have a simple class that contains a background image, two buttons and some text.
-To use it, just create an instance of _MessageBox_ and add it to the display tree:
+이제 배경 이미지 두 개의 버튼 및 일부 텍스트가 포함된 간단한 클래스가 있습니다.
+이것을 사용하려면 MessageBox의 인스턴스를 만들고 이를 디스플레이 트리에 추가하기만 하면 됩니다:
 
 [source, as3]
 ----
@@ -235,15 +244,15 @@ var msgBox:MessageBox = new MessageBox("Really exit?");
 addChild(msgBox);
 ----
 
-You can add additional methods to the class (like `fadeIn` and `fadeOut`), and code that is triggered when the user clicks one of those buttons.
-This is done using Starling's event mechanism, which is shown in a later chapter.
+클래스에 fadeIn 및 fadeOut과 같은 메소드를 추가하고 사용자가 해당 버튼 중 하나를 클릭할 때 트리거 되는 코드를 추가할 수 있습니다.
+이것은 Starling의 이벤트 메커니즘을 사용하여 수행됩니다.
+이 메커니즘은 다음 장에서 설명됩니다.
 
-=== Disposing Display Objects
+=== 디스플레이 오브젝트 제거(dispose)
 
-When you don't want an object to be displayed any longer, you simply remove it from its parent, e.g. by calling `removeFromParent()`.
-The object will still be around, of course, and you can add it to another display object, if you want.
-Oftentimes, however, the object has outlived its usefulness.
-In that case, it's a good practice to dispose it.
+더 이상 객체를 표시하지 않으려면 상위 객체에서 객체를 제거하면 됩니다.
+removeFromParent()를 호출하여. 개체는 물론 주위에 계속있을 수 있으며 원하는 경우 다른 표시 개체에 추가 할 수는 있습니다.
+그러나 종종 개체의 유용성이 오래되었다고 판단되면, 제거하는 것이 좋습니다:
 
 [source, as3]
 ----
@@ -251,29 +260,31 @@ msgBox.removeFromParent();
 msgBox.dispose();
 ----
 
-When you dispose display objects, they will free up all the resources that they (or any of their children) have allocated.
-That's important, because many _Stage3D_ related data is not reachable by the garbage collector.
-When you don't dispose that data, it will stay in memory, which means that the app will sooner or later run out of resources and crash.
+디스플레이 오브젝트를 제거(dispose)하면 해당 객체 (또는 자식 객체)가 할당한 모든 리소스가 해제됩니다.
+이는 매우 중요합니다.
+왜냐면 dispose 하지 않을 경우, Stage3D와 관련된 많은 데이터를 가비지 컬렉터가 가져갈 수 없기 때문입니다.
+해당 데이터를 제거하지 않으면 메모리에 남아있게 됩니다.
+즉 앱에 조만간 리소스가 고갈되고 충돌이 발생합니다.
 
-To make things easier, `removeFromParent()` optionally accepts a Boolean parameter to dispose the DisplayObject that is being removed.
-That way, the code from above can be simplified to this single line:
+일을 더 쉽게하기 위해 removeFromParent()는 부울 매개 변수를 가지고 있어서 자동으로 DisplayObject를 제거합니다.
+그렇게하면 위의 코드를 이 단일 행으로 단순화 할 수 있습니다:
 
 [source, as3]
 ----
 msgBox.removeFromParent(true);
 ----
 
-=== Pivot Points
+=== 피벗 포인트
 
-Pivot Points are a feature you won't find in the traditional display list.
-In Starling, display objects contain two additional properties: `pivotX` and `pivotY`.
-The pivot point of an object (also known as _origin_, _root_ or _anchor_) defines the root of its coordinate system.
+피벗 포인트는 기존 디스플레이 리스트에서 찾을 수 없는 기능입니다.
+Starling에서 디스플레이 오브젝트에는 pivotX와 pivotY라는 두 가지 추가 속성이 있습니다.
+객체 (원점 루트 또는 앵커라고도 함)의 피벗 점은 좌표계의 루트를 정의합니다.
 
-Per default, the pivot point is at `(0, 0)`; in an image, that is the top left position.
-Most of the time, this is just fine.
-Sometimes, however, you want to have it at a different position -- e.g. when you want to rotate an image around its center.
+기본적으로 피벗 포인트는 (0, 0)입니다.
+이미지에서 왼쪽 상단 위치입니다.
+대부분의 경우 이것은 문제없지만, 때로는 다른 위치 (예: 그 중심을 가운데로)로 옮기고 싶을 때가 있을 것입니다.
 
-Without a pivot point, you'd have to wrap the object inside a container sprite in order to do that:
+피벗 포인트가 없으면 컨테이너 스프라이트 안에 객체를 래핑하여 이를 수행해야 합니다:
 
 [source, as3]
 ----
@@ -286,13 +297,14 @@ sprite.addChild(image); // <2>
 
 sprite.rotation = deg2rad(45); // <3>
 ----
-<1> Create a sprite.
-<2> Add an image so that its center is exactly on top of the sprite's origin.
-<3> Rotating the sprite will rotate the image around its center.
+<1> 스프라이트를 생성합니다.
+<2> 이미지의 중심이 스프라이트의 원점 위에 정확히 오도록 이미지를 추가합니다.
+<3> 스프라이트를 회전하면 이미지가 가운데로 회전합니다.
 
-Most long-time Flash developers will know this trick; it was needed quite regularly.
-One might argue, however, that it's a lot of code for such a simple thing.
-With the pivot point, the code is reduced to the following:
+대부분의 오랜 플래시 개발자는 이 트릭을 알게 될 것입니다.
+그것은 꽤 규칙적으로 필요했습니다.
+그러나 그와 같은 간단한 일에 대해서는 많은 코드가 있다고 주장할 수도 있습니다.
+피벗 포인트를 사용하면 코드가 다음과 같이 줄어 듭니다:
 
 [source, as3]
 ----
@@ -301,19 +313,19 @@ image.pivotX = image.width  / 2.0; // <1>
 image.pivotY = image.height / 2.0; // <2>
 image.rotation = deg2rad(45); // <3>
 ----
-<1> Move `pivotX` to the horizontal center of the image.
-<2> Move `pivotY` to the vertical center of the image.
-<3> Rotate around the center.
+<1> pivotX를 이미지의 수평 중앙으로 이동합니다.
+<2> 피벗을 이미지의 수직 중앙으로 이동합니다.
+<3> 중심을 중심으로 회전하십시오.
 
-No more container sprite is needed!
-To stick with the analogy used in previous chapters: the pivot point defines the position where you stab the pin through the object when you attach it to its parent.
-The code above moves the pivot point to the center of the object.
+더 이상 컨테이너 스프라이트가 필요하지 않습니다!
+이전 챕터에서 사용한 비유를 사용하여 피봇 포인트는 부모에게 객체를 부착할 때 객체를 통해 핀을 찔러 넣는 위치를 정의합니다.
+위의 코드는 피벗 점을 객체의 중심으로 이동합니다:
 
-.Note how moving the pivot point changes how the object rotates.
+.피벗 점의 이동에 따라 객체가 어떻게 회전하는지 알아보십시오.
 image::pivot-point.png[Pivot Point]
 
-Now that you have learned how to control the pivot point coordinates individually, let's take a look at the method `alignPivot()`.
-It allows us to move the pivot point to the center of the object with just one line of code:
+피벗 포인트 좌표를 개별적으로 제어하는 방법을 배웠으니 이제 alignPivot() 메서드를 살펴 보겠습니다.
+이를 통해 피벗 점을 한 줄의 코드만으로 객체 중심으로 이동할 수 있습니다:
 
 [source, as3]
 ----
@@ -322,9 +334,9 @@ image.alignPivot();
 image.rotation = deg2rad(45);
 ----
 
-Handy huh?
+편리하죠?
 
-Furthermore, if we want the pivot point somewhere else (say, at the bottom right), we can optionally pass alignment arguments to the method:
+또한, 피벗 점을 다른 곳 (예: 오른쪽 하단)에서 원한다면 선택적으로 메서드에 정렬 인수를 전달할 수 있습니다:
 
 [source, as3]
 ----
@@ -333,25 +345,28 @@ image.alignPivot(Align.RIGHT, Align.BOTTOM);
 image.rotation = deg2rad(45);
 ----
 
-That code rotates the object around the bottom right corner of the image.
+이 코드는 객체를 이미지의 오른쪽 하단 모퉁이를 중심으로 회전시킵니다.
 
-==== Gotchas
+==== 더 알아보기
 
-Be careful: the pivot point is always given in the _local_ coordinate system of the object.
-That's unlike the `width` and `height` properties, which are actually relative to the _parent_ coordinate system.
-That leads to surprising results when the object is e.g. scaled or rotated.
+주의하십시오.
+피벗 점은 항상 객체의 로컬 좌표계에서 제공됩니다.
+실제로는 부모 좌표계와 관련된 width 및 height 속성과 다릅니다.
+이는 물체가 예를 들어 예기치 않은 경우 놀라운 결과를 가져옵니다.
+크기 조정 또는 회전.
 
-For example, think of an image that's 100 pixels wide and scaled to 200% (`image.scaleX = 2.0`).
-That image will now return a `width` of 200 pixels (twice its original width).
-However, to center the pivot point horizontally, you'd still set `pivotX` to `50`, not `100`!
-In the _local_ coordinate system, the image is still 100 pixels wide -- it just appears wider in the _parent_ coordinate system.
+예를 들어 너비가 100픽셀이고 200%로 축소된 이미지를 생각해 보십시오 (image.scaleX = 2.0).
+이제 해당 이미지는 너비가 200픽셀 (원래 너비의 두 배)가 됩니다.
+그러나 피벗 점을 수평 중심에 배치하려면 pivotX를 100이 아닌 50으로 설정하십시오!
+로컬 좌표계에서 이미지는 여전히 100픽셀 넓이입니다.
+상위 좌표계에서는 더 넓게 나타납니다.
 
-It might be easier to understand when you look back the code from the beginning of this section, where we centered the image within a parent sprite.
-What would happen if you changed the `scale` of the sprite?
-Would this mean that you have to update the position of the image to keep it centered?
-Of course not.
-The scale does not affect what's happening _inside_ the sprite, just how it looks from the _outside_.
-And it's just the same with the pivot point property.
+이 섹션의 시작 부분에서 부모 스프라이트 내에 이미지의 중심을 두어 코드를 되돌아 볼 때 이해하는 것이 더 쉬울 수도 있습니다.
+스프라이트의 크기를 변경하면 어떻게 될까요?
+이것은 이미지의 위치를 중앙에 유지하기 위해 이미지의 위치를 업데이트해야 한다는 것을 의미합니까?
+당연히 아니죠.
+스케일은 스프라이트 내부에서 일어나는 일에는 영향을 미치지 않습니다.
+피벗 포인트 속성과 동일합니다.
 
-TIP: If you still get a headache picturing that (as it happens to me, actually), just remember to set the pivot point _before_ changing the scale or rotation of the object.
-That will avoid any problems.
+팁: 여전히 두통이 생겼다면 (실제로 나에게 일어난 것처럼), 객체의 크기나 회전을 변경하기 전에 피벗 점을 설정하는 것을 잊었을 수 있습니다.
+기억하세요. 그것은 많은 문제를 피할 수 있게 도와줍니다.

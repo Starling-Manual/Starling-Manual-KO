@@ -1,4 +1,4 @@
-= The Starling Manual
+= Starling 매뉴얼
 Daniel Sperl <http://www.gamua.com[Gamua]>
 :doctype: book
 :toc: left
@@ -14,36 +14,34 @@ ifndef::ebook-format[:leveloffset: 1]
 
 // introduction
 
-The goal of this manual is to provide an extensive introduction to the http://www.starling-framework.org[Starling Framework].
-Starling is a cross-platform engine for _ActionScript 3_ that can be used for all kinds of applications, with a special focus on 2D games.
+이 매뉴얼의 목적은 http://www.starling-framework.org[Starling Framework]에 대한 광범위한 소개를 제공하는 것입니다. Starling은 2D 게임에 중점을 둔 모든 종류의 애플리케이션에 사용할 수 있는 ActionScript 3 용 크로스플랫폼 엔진입니다.
 
 ifdef::backend-html5[]
-TIP: Feel free to download a link:manual.pdf[PDF version] of this document.
+팁: 이 문서의 link:manual.pdf[PDF 버전]을 다운로드하십시오.
 endif::[]
 
-In this guide, you will learn:
+이 가이드에서 배울 수 있는 것들:
 
-* The technologies Starling was built upon and the principles it follows.
-* How to pick an IDE and set it up for your first project.
-* The basic concepts like the display list, events and the animation system.
-* Advanced techniques, like how to tap into the potential of fragment and vertex programs.
-* How to get the best performance out of the framework.
-* What's required to get your game to run on mobile phones and tablets.
+* Starling의 기반 기술과 그것이 따르는 원칙들.
+* IDE를 선택하고 첫 번째 프로젝트에 맞게 설정하는 방법.
+* 디스플레이 리스트 이벤트 및 애니메이션 시스템과 같은 기본 개념.
+* 프래그먼트 및 버텍스 프로그램의 잠재력을 활용하는 방법과 같은 고급 기법.
+* 프레임 워크에서 최상의 성능을 얻는 방법.
+* 휴대 전화와 태블릿에서 게임을 실행하려면 무엇이 필요한지.
 
-Keep on reading to dive right into it!
+숨을 깊게 들이쉬고, 읽기를 멈추지 마세요!
 
 [NOTE]
-.The Starling Handbook
+.Starling 핸드북
 ====
 [.right]
-image::handbook-mockup.jpg[The Starling Handbook, 250]
+image::handbook-mockup.jpg[Starling 핸드북, 250]
 
-I'm also working on a book that contains not only the complete contents of this manual, but adds lots of additional HOW-TOs and guides.
-A step-by-step tutorial will lead you through the development of a *complete game*.
+이 설명서의 전체 내용을 포함 할 뿐만 아니라 많은 추가 내용 및 지침을 추가한 책을 작업 중입니다. 단계별 자습서를 통해 *완벽한 게임*을 개발할 수 있습니다.
 
-* Find out more about it on the http://gamua.com/blog/2016/09/the-starling-handbook/[Gamua Blog].
-* Or download a http://bit.ly/2dfNIQF[Book Preview] right away.
-* http://eepurl.com/chQGpD[Sign up] to get notified when it launches!
+* http://gamua.com/blog/2016/09/the-starling-handbook/[Gamua Blog] 에서 더 많은 정보를 얻으실 수 있습니다.
+* 아니면 http://bit.ly/2dfNIQF[책 미리보기] 를 다운로드하십시오.
+* 출시될 때 알림을 받으려면 http://eepurl.com/chQGpD[등록] 하세요!
 ====
 
 // include main chapters

@@ -1,27 +1,32 @@
-== Context Loss
+== 컨텍스트 손실(Context Loss)
 
-All Stage3D rendering happens through a so called "render context" (an instance of the _Context3D_ class).
-It stores all current settings of the GPU, like the list of active textures, pointers to the vertex data, etc.
-The render context is your connection to the GPU -- without it, you can't do any Stage3D rendering.
+모든 Stage3D 렌더링은 "렌더링 컨텍스트"(Context3D 클래스의 인스턴스)를 통해 발생합니다.
+액티브 텍스처 목록 버텍스 데이터에 대한 포인터 등과 같이 GPU의 모든 현재 설정을 저장합니다.
+렌더링 컨텍스트는 GPU에 대한 연결이므로 Stage3D 렌더링을 수행할 수 없습니다.
 
-And here comes the problem: that context can sometimes get lost.
-This means that you lose references to all data that was stored in graphics memory; most notably: textures.
+그리고 문제는 여기에 있습니다.
+그 맥락은 때때로 잃어 버릴 수 있습니다.
+즉 그래픽 메모리에 저장된 모든 데이터에 대한 참조가 손실된다는 의미입니다.
+가장 주목할 만한건 텍스쳐입니다.
 
-Such a context loss doesn't happen equally frequently on all systems; it's rare on _iOS_ and _macOS_, happens from time to time on _Windows_ and very often on _Android_ (rotating the screen? Bam!).
-So there's no way around it: we need to expect the worst and prepare for a context loss.
+이러한 컨텍스트 손실은 모든 시스템에서 똑같이 자주 발생하지는 않습니다.
+그것은 iOS와 macOS에서 드문 일이며 때로는 Windows에서 발생하며 매우 자주 Android에서 발생합니다 (화면 회전? 빵야!).
+그러므로 주위를 둘러 볼 방법이 없습니다.
+최악의 상황을 예상하고 상황에 대비할 준비를 해야 합니다.
 
-=== Default Behavior
+=== 기본 동작
 
-When Starling recognizes that the current render context has been lost, it initiates the following procedures:
+Starling은 현재 렌더링 컨텍스트가 손실되었음을 인식하면 다음 절차를 시작합니다:
 
-* Starling will automatically create a new context and initialize it with the same settings as before.
-* All vertex- and index buffers will be restored.
-* All vertex- and fragment programs (shaders) will be recompiled.
-* Textures will be restored by whatever means possible (from memory/disk/etc.)
+* Starling은 자동으로 새 컨텍스트를 만들고 이전과 같은 설정으로 초기화합니다.
+* 모든 정점(Vertex-) 버퍼와 인덱스 버퍼가 복원됩니다.
+* 모든 정점 및 조각 프로그램 (셰이더)은 다시 컴파일됩니다.
+* 텍스처는 가능한 모든 수단으로 복원됩니다 (메모리 / 디스크 / 등에서).
 
-Restoring buffers and programs is not problematic; Starling has all data that's required and it doesn't take much time.
-Textures, however, are a headache.
-To illustrate that, let's look at the worst case example: a texture created from an embedded bitmap.
+버퍼와 프로그램을 복원하는 것은 문제가 되지 않습니다.
+Starling에는 필요한 모든 데이터가 있으며 시간이 많이 걸리지 않습니다.
+그러나 텍스처는 두통을 야기합니다.
+이를 설명하기 위해 최악의 경우인 임베디드 비트맵에서 생성된 텍스처를 살펴 보겠습니다:
 
 [source, as3]
 ----
@@ -32,25 +37,27 @@ var bitmap:Bitmap = new Hero();
 var texture:Texture = Texture.fromBitmap(bitmap);
 ----
 
-The moment you call `Texture.fromBitmap`, the bitmap is uploaded to GPU memory, which means it's now part of the context.
-If we could rely on the context staying alive forever, we'd be done now.
+Texture.fromBitmap을 호출하면 비트맵이 GPU 메모리에 업로드됩니다.
+즉, 이제는 비트맵이 컨텍스트의 일부가 되었다는 것입니다.
+우리가 영원히 살아있는 컨텍스트에 의존할 수 있다면, 게임은 끝났습니다.
 
-However, we _cannot_ rely on that: the texture data could be lost anytime.
-That's why Starling will keep a copy of the original bitmap.
-When the worst happens, it will use it to recreate the texture.
-All of that happens behind the scenes.
+그러나 우리는 그것에 의존할 수 없습니다.
+텍스처 데이터가 언제든지 손실될 수 있습니다.
+이것이 Starling이 원본 비트맵의 사본을 보관하는 이유입니다.
+최악의 상황이 발생하면 텍스처를 다시 생성하는 데 사용됩니다.
+그 모든 일은 씬(Scenes) 뒤에서 발생합니다.
 
-Lo and behold!
-That means that the texture is in memory three times.
+보고 또 보세요!
+이는 텍스처가 메모리에 세 번 있음을 의미합니다.
 
-* The "Hero" class (conventional memory)
-* The backup bitmap (conventional memory)
-* The texture (graphics memory)
+* "Hero"클래스 (기본 메모리)
+* 백업 비트맵 (기본 메모리)
+* 텍스처 (그래픽 메모리)
 
-Given the tight memory constraints we're facing on mobile, this is a catastrophe.
-You don't want this to happen!
+우리가 모바일에서 직면하고 있는 엄중한 메모리 제약 조건을 감안할 때 이것은 재앙입니다.
+이 일이 일어나기를 원하지 않습니다!
 
-It becomes a little better if you change your code slightly:
+코드를 약간 변경하면 조금 더 좋아집니다:
 
 [source, as3]
 ----
@@ -58,28 +65,32 @@ It becomes a little better if you change your code slightly:
 var texture:Texture = Texture.fromEmbeddedAsset(Hero);
 ----
 
-That way, Starling can recreate the texture directly from the embedded class (calling `new Hero()`), which means that the texture is in memory only two times.
-For embedded assets, that's your best bet.
+그런 식으로 Starling은 내장된 클래스에서 직접 텍스처를 다시 만들 수 있습니다 (new Hero() 호출).
+이는 텍스처가 메모리에 두 번만 있음을 의미합니다.
+임베디드 애셋의 경우 최상의 선택입니다.
 
-Ideally, though, we want to have the texture in memory only once.
-For this to happen, you must not embed the asset; instead, you need to load it from an URL that points to a local or remote file.
-That way, only the URL needs to be stored; the actual data can then be reloaded from the original location.
+그러나 이상적으로는 텍스처를 한 번만 메모리에 저장하려고 할 것입니다.
+이렇게 하려면 애셋을 포함시키지 말아야 합니다.
+대신 로컬 또는 원격 파일을 가리키는 URL에서 로드해야 합니다.
+그렇게 하면 URL만 저장하면 됩니다.
+실제 데이터를 원래 위치에서 다시 로드할 수 있습니다.
 
-There are two ways to make this happen:
+이 일을 가능하게 하는 두 가지 방법이 있습니다:
 
-* Use the _AssetManager_ to load your textures.
-* Restore the texture manually.
+* AssetManager를 사용하여 텍스처를 로드하십시오.
+* 텍스처를 수동으로 복원하십시오.
 
-My recommendation is to use the _AssetManager_ whenever possible.
-It will handle a context loss without wasting any memory; you don't have to add any special restoration logic whatsoever.
+가능한 경우 AssetManager를 사용하는 것이 좋습니다.
+메모리를 낭비하지 않고 컨텍스트 손실을 처리합니다.
+특별한 복원 논리를 추가할 필요가 없습니다.
 
-Nevertheless, it's good to know what's happening behind the scenes.
-Who knows -- you might run into a situation where a manual restoration is your only choice.
+그럼에도 불구하고 무엇이 일어나고 있는지 알면 좋습니다. 누가 알겠습니까?
+수작업으로 복원하는 것이 유일한 선택이 될 수 있습니다.
 
-=== Manual Restoration
+=== 수동 복원
 
-You might wonder how `Texture.fromEmbeddedAsset()` works internally.
-Let's look at a possible implementation of that method:
+Texture.fromEmbeddedAsset()이 내부적으로 어떻게 작동하는지 궁금할 것입니다.
+이 메소드의 가능한 구현을 살펴 보겠습니다:
 
 [source, as3]
 ----
@@ -94,23 +105,23 @@ public static function fromEmbeddedAsset(assetClass:Class):Texture
 }
 ----
 
-You can see that the magic is happening in the `root.onRestore` callback.
-Wait a minute: what's `root`?
+당신은 root.onRestore 콜백에서 마법이 일어나고 있음을 알 수 있습니다.
+잠깐 root는 무엇입니까?
 
-You might not know it, but when you've got a _Texture_ instance, that's actually often not a concrete texture at all.
-In reality, it might be just a pointer to a part of another texture (a _SubTexture_).
-Even the `fromBitmap` call could return such a texture!
-(Explaining the reasoning behind that would be beyond the scope of this chapter, though.)
+당신은 그것을 알지 못할 수도 있지만 Texture 인스턴스를 가지고 있을 때 그것은 사실 구체적인 텍스처가 아닙니다.
+실제로는 다른 텍스처 (SubTexture)의 일부에 대한 포인터일 수 있습니다.
+fromBitmap 호출조차 그런 텍스처를 반환할 수 있습니다!
+(그 뒤에 있는 추론을 설명하는 것은 이 장의 범위를 벗어날 것입니다.)
 
-In any case, `texture.root` will always return the _ConcreteTexture_ object, and that's where the `onRestore` callback is found.
-This callback will be executed directly after a context loss, and it gives you the chance of recreating your texture.
+어쨌든 texture.root는 항상 ConcreteTexture 객체를 반환할 것이고 이것이 onRestore 콜백이 있는 곳입니다.
+이 콜백은 컨텍스트 손실 직후에 실행되며 텍스처를 다시 생성할 기회를 제공합니다.
 
-In our case, that callback simply instantiates the bitmap once again and uploads it to the root texture.
-Voilà, the texture is restored!
+우리의 경우 콜백은 비트맵을 다시 한번 인스턴스화하여 루트 텍스처에 업로드 합니다.
+여기! (Voilà), 텍스쳐가 복원되었습니다!
 
-The devil lies in the details, though.
-You have to construct your `onRestore`-callback very carefully to be sure not to store another bitmap copy without knowing it.
-Here's one innocent looking example that's actually totally useless:
+그러나 악마는 세부 사항에 있습니다.
+onRestore 콜백을 잘 모르는 상태에서 다른 비트맵 복사본을 저장하지 않도록 주의 깊게 작성해야 합니다.
+실제로 완전히 쓸모없는 한 가지 무고한 예가 있습니다:
 
 [source, as3]
 ----
@@ -128,38 +139,40 @@ public static function fromEmbeddedAsset(assetClass:Class):Texture
 }
 ----
 
-Can you spot the error?
+오류를 발견 할 수 있습니까?
 
-The problem is that the method creates a _Bitmap_ object and uses it in the callback.
-That callback is actually a so-called _closure_; that's an inline function that will be stored together with some of the variables that accompany it.
-In other words, you've got a function object that stays in memory, ready to be called when the context is lost.
-And the bitmap instance is stored inside it, even though you never explicitly said so.
-(Well, in fact you did, by using `bitmap` inside the callback.)
+문제는 메서드가 Bitmap 객체를 만들어 콜백에서 사용한다는 것입니다.
+그 콜백은 실제로 소위 폐쇄적입니다.
+인라인 함수는 이 변수에 수반되는 변수 중 일부와 함께 저장됩니다.
+즉 메모리에 남아 있는 함수 객체가 있어 컨텍스트를 잃을 때 호출 할 준비가 되었습니다.
+그리고 명시적으로 말한 적이 없더라도 비트맵 인스턴스는 그 안에 저장됩니다.
+(사실 콜백 내부에서 비트맵을 사용했습니다.)
 
-In the original code, the bitmap is not referenced, but _created_ inside the callback.
-Thus, there is no `bitmap` instance to be stored with the closure.
-Only the `assetClass` object is referenced in the callback -- and that is in memory, anyway.
+원래 코드에서 비트맵은 참조되지 않지만 콜백 내부에서 작성됩니다.
+따라서 클로저에 저장할 비트맵 인스턴스가 없습니다.
+어쨌든 assetClass 객체만 콜백에서 참조되며 메모리에 있습니다.
 
-That technique works in all kinds of scenarios:
+이 기술은 모든 종류의 시나리오에서 작동합니다:
 
-* If your texture originates from an URL, you pass only that URL to the callback and reload it from there.
-* For ATF textures, the process is just the same, except that you need to upload the data with `root.uploadATFData` instead.
-* For a bitmap containing a rendering of a conventional display object, just reference that display object and draw it into a new bitmap in the callback.
-  (That's just what Starling's _TextField_ class does.)
+* URL에서 텍스처가 생성 된 경우 해당 URL 만 콜백에 전달하고 거기에서 다시로드하십시오.
+* ATF 텍스처의 경우 프로세스는 root.uploadATFData를 사용하여 데이터를 업로드해야 한다는 점을 제외하면 동일합니다.
+* 기존 표시 객체의 렌더링을 포함하는 비트맵의 경우 해당 표시 객체를 참조하고 콜백의 새 비트맵에 그려야 합니다.
+(그게 Starling의 TextField 클래스가 하는 일입니다.)
 
-NOTE: Let me emphasize: the _AssetManager_ does all this for you, so that's the way to go. I just wanted to show you how that is achieved.
+노트: 저를 강조하겠습니다: AssetManager가 이 모든 작업을 수행하므로 그렇게하는 것이 좋습니다. 나는 그것이 어떻게 성취되었는지를 보여주고 싶었습니다.
 
-=== Render Textures
+=== 텍스처 렌더링
 
-Another area where a context loss is especially nasty: render textures.
-Just like other textures, they will lose all their contents -- but there's no easy way to restore them.
-After all, their contents is the result of any number of dynamic draw operations.
+컨텍스트 상실이 특히 심한 또 다른 영역: 텍스처를 렌더링할 때.
+다른 텍스처와 마찬가지로 모든 내용을 잃어 버릴 수 있지만 쉽게 복원 할 수는 없습니다.
+결국 그 내용은 임의의 수의 동적 그리기 작업의 결과입니다.
 
-If the _RenderTexture_ is just used for eye candy (say, footprints in the snow), you might be able to just live with it getting cleared.
-If its contents is crucial, on the other hand, you need a solution for this problem.
+RenderTexture가 단지 아이-캔디 (예: 눈 속의 풋 프린트(발자국))에 사용되는 경우 그와 함께 살 수 있습니다.
+반면에 그 내용이 중요하다면이 문제에 대한 해결책이 필요합니다.
 
-There's no way around it: you will need to manually redraw the texture's complete contents.
-Again, the `onRestore` callback could come to the rescue:
+그 주위에는 방법이 없습니다.
+텍스처의 전체 내용을 수동으로 다시 그려야합니다.
+다시 구조하기 위해 onRestore 콜백이 올 수 있습니다:
 
 [source, as3]
 ----
@@ -171,22 +184,25 @@ renderTexture.root.onRestore = function():void
 });
 ----
 
-I hear you: it's probably more than just one object, but a bunch of draw calls executed over a longer period.
-For example, a drawing app with a _RenderTexture_-canvas, containing dozens of brush strokes.
+나는 당신의 말을 들었습니다.
+그것은 단지 하나의 객체 이상이었을 것입니다.
+그러나 더 오랜 기간 동안 실행된 많은 draw call이 있습니다.
+예를 들어 RenderTexture-canvas가 있는 드로잉 응용 프로그램에는 수십 가지 브러시 획이 들어 있을 것입니다.
 
-In such a case, you need to store sufficient information about all draw commands to be able to reproduce them.
+이 경우 모든 그리기 명령에 대한 충분한 정보를 저장하여 재현할 수 있어야 합니다.
 
-If we stick with the drawing app scenario, you might want to add support for an _undo/redo_ system, anyway.
-Such a system is typically implemented by storing a list of objects that encapsulate individual commands.
-You can re-use that system in case of a context loss to restore all draw operations.
+그리기 앱 시나리오를 고수하면 실행 취소 / 다시 실행 시스템에 대한 지원을 추가할 수 있습니다.
+이러한 시스템은 일반적으로 개별 명령을 캡슐화하는 객체 목록을 저장하여 구현됩니다.
+컨텍스트가 손실된 경우 해당 시스템을 다시 사용하여 모든 그리기 작업을 복원할 수 있습니다.
 
-Now, before you start implementing this system, there is one more gotcha you need to be aware of.
-When the `root.onRestore` callback is executed, it's very likely that not all of your textures are already available.
-After all, they need to be restored, too, and that might take a while!
+이제 이 시스템을 구현하기 전에 알아야 할 점이 하나 더 있습니다.
+root.onRestore 콜백이 실행된다고 해서 모든 텍스처가 이미 사용 가능한 것은 아닙니다.
+결국 그들은 복원되어야 합니다.
+그리고 그것은 시간이 좀 걸릴 것입니다!
 
-If you loaded your textures with the _AssetManager_, however, it has got you covered.
-In that case, you can listen to its `TEXTURES_RESTORED` event instead.
-Also, make sure to use `drawBundled` for optimal performance.
+그러나 AssetManager로 텍스처를 로드한 경우에는 텍스처가 덮여 있습니다.
+이 경우 대신 TEXTURES_RESTORED 이벤트를 수신 할 수 있습니다.
+또한 최적의 성능을 위해 drawBundled를 사용해야 합니다:
 
 [source, as3]
 ----
@@ -200,5 +216,4 @@ assetManager.addEventListener(Event.TEXTURES_RESTORED, function():void
 });
 ----
 
-NOTE: This time, there is no need to call clear, because that's the default behavior of `onRestore`, anyway -- and we did not modify that.
-Remember, we are in a different callback here (`Event.TEXTURES_RESTORED`), and `onRestore` has not been modified from its default implementation.
+노트: 이번에는 onRestore의 기본 동작이므로 명확하게 호출할 필요가 없습니다. 우리는 이를 수정하지 않았습니다. 여기서 다른 콜백 (Event.TEXTURES_RESTORED)에 있으며 onRestore가 기본 구현에서 수정되지 않았음을 기억하십시오.

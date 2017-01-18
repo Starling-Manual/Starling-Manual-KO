@@ -1,12 +1,12 @@
-== Meshes
+== 메쉬(Meshes)
 
-_Mesh_ is the basic building block of all tangible display objects.
-With "tangible", I mean a "leaf" object in the display list: an object that is not a container but is rendered directly to the back buffer.
-Since it is so important, I want to look at this class in a little more detail.
+메쉬는 모든 유형의 표시 객체의 기본 구성 요소입니다.
+"tangible" 을 사용하면 표시 목록의 "leaf" 객체 즉, 컨테이너가 아니지만 백 버퍼에 직접 렌더링되는 객체를 의미합니다.
+그것이 매우 중요하기 때문에 나는 이 클래스를 좀 더 자세하게 보고 싶다.
 
-In a nutshell, a _Mesh_ represents a list of triangles to be rendered via _Stage3D_.
-It was mentioned a few times already, since it's the base class of _Quad_ and _Image_.
-As a reminder, here is the class hierarchy we are talking about:
+요컨대 Mesh는 Stage3D를 통해 렌더링될 삼각형 목록을 나타냅니다.
+Quad와 Image의 기본 클래스이기 때문에 이미 몇 번 언급되었습니다.
+여기에 우리가 이야기하고 있는 클래스 계층 구조가 있습니다.
 
 [plantuml, mesh-classes-from-display-object]
 ....
@@ -17,8 +17,9 @@ Mesh <|-- Quad
 Quad <|-- Image
 ....
 
-_Mesh_ is not an abstract class; nothing prevents you from instantiating it directly.
-Here's how:
+메쉬는 추상 클래스가 아닙니다.
+직접 인스턴스화 할 수 있습니다.
+방법은 다음과 같습니다.
 
 [source, as3]
 ----
@@ -34,32 +35,33 @@ var mesh:Mesh = new Mesh(vertexData, indexData);
 addChild(mesh);
 ----
 
-As you can see, we first needed to instantiate two more classes: _VertexData_ and _IndexData_.
-They represent collections of vertices and indices, respectively.
+보시다시피 두 개의 클래스를 인스턴스화 해야했습니다: VertexData 및 IndexData.
+그들은 각각 정점과 인덱스의 집합을 나타냅니다.
 
-* _VertexData_ efficiently stores the attributes of each vertex, e.g. its position and color.
-* _IndexData_ stores indices to those vertices. Every three indices will make up a triangle.
+* VertexData는 각 꼭지점의 속성을 효율적으로 저장합니다. 그것의 위치와 색깔.
+* IndexData는 이러한 정점에 인덱스를 저장합니다. 세 개의 인덱스가 삼각형을 구성합니다.
 
-That way, the code above created the most basic drawing primitive: a triangle.
-We did this by defining three vertices and referencing them clockwise.
-After all, that's what a GPU can do best: drawing triangles -- lots of them.
+위의 코드는 가장 기본적인 드로잉 프리미티브인 삼각형을 만들었습니다.
+우리는 세 개의 꼭지점을 정의하고 시계 방향으로 그것을 참조함으로써 이것을 했습니다.
+결국 GPU가 가장 잘 할 수 있는 것입니다.
+삼각형 그리기 - 아주 많은.
 
-.The triangle we just created.
+.방금 만든 삼각형.
 image::triangle.png[Triangle, 180]
 
-=== Extending Mesh
+=== Mesh 확장하기
 
-Working directly with _VertexData_ and _IndexData_ would be quite bothersome over time.
-It makes sense to encapsulate the code in a class that takes care of setting everything up.
+VertexData 및 IndexData를 직접 사용하면 시간이 지남에 따라 상당히 번거로울 수 있습니다.
+모든 것을 설정하는 클래스에서 코드를 캡슐화하는 것이 합리적입니다.
 
-To illustrate how to create custom meshes, we will now write a simple class called _NGon_.
-Its task: to render a regular n-sided polygon with a custom color.
+커스텀 메쉬를 생성하는 방법을 설명하기 위해 우리는 이제 NGon이라는 간단한 클래스를 작성합니다.
+그것의 임무는 사용자 정의 색으로 정규 n다각형을 렌더링하는 것입니다.
 
-.These are the kinds of regular polygons we want to draw.
+.이것들은 우리가 그리기 원하는 정다각형의 종류입니다.
 image::polygons.png[Polygons]
 
-We want the class to act just like a built-in display object.
-You instantiate it, move it to a certain position and then add it to the display list.
+클래스는 내장된 표시 객체처럼 작동해야 합니다.
+이를 인스턴스화하고 특정 위치로 이동한 다음 표시 목록에 추가합니다.
 
 [source, as3]
 ----
@@ -68,33 +70,33 @@ ngon.x = 60;
 ngon.y = 60;
 addChild(ngon);
 ----
-<1> The constructor arguments define radius, number of edges, and color.
+<1> 생성자의 인수는 반경 모서리 수 및 색상을 정의합니다.
 
-Let's look at how we can achieve this feat.
+이런걸 어떻게 할 수 있는지 살펴 보겠습니다.
 
-=== Vertex Setup
+=== 정점(Vertex) 설정
 
-Like all other shapes, our regular polygon can be built from just a few triangles.
-Here's how we could set up the triangles of a pentagon (an n-gon with `n=5`).
+다른 모든 모양과 마찬가지로 우리의 규칙적인 다각형은 단지 몇 개의 삼각형으로 만들 수 있습니다.
+다음은 우리가 어떻게 5 각형 (n = 5인 n-gon)의 삼각형을 만들 수 있는지를 보여줍니다.
 
-.A pentagon and its vertices.
+.오각형과 정점.
 image::pentagon.png[Pentagon, 200]
 
-The pentagon is made up of six vertices spanning up five triangles.
-We give each vertex a number between 0 and 5, with 5 being in the center.
+5각형은 5개의 삼각형에 걸쳐있는 6개의 꼭지점으로 구성됩니다.
+우리는 각 꼭지점에 0과 5 사이의 숫자를 주고 5는 가운데에 있습니다.
 
-As mentioned, the vertices are stored in a _VertexData_ instance.
-_VertexData_ defines a set of named attributes for each vertex.
-In this sample, we need two standard attributes:
+앞서 언급했듯이 Vertex는 VertexData 인스턴스에 저장됩니다.
+VertexData는 각 정점에 대해 명명된 속성 집합을 정의합니다.
+이 샘플에서는 두 가지 표준 속성이 필요합니다:
 
-* `position` stores a two-dimensional point (x, y).
-* `color` stores an RGBA color value.
+* position은 2차원 점 (x, y)을 저장합니다.
+* color는 RGBA 색상 값을 저장합니다.
 
-The _VertexData_ class defines a couple of methods referencing those attributes.
-That allows us to set up the vertices of our polygon.
+VertexData 클래스는 이러한 속성을 참조하는 몇 가지 메소드를 정의합니다.
+그것은 우리가 다각형의 꼭지점을 설정할 수 있게 해줍니다.
 
-Create a new class called _NGon_ that extends _Mesh_.
-Then add the following instance method:
+메쉬를 확장하는 NGon이라는 새 클래스를 만듭니다.
+그런 다음 다음 인스턴스 메소드를 추가하십시오.
 
 [source, as3]
 ----
@@ -116,25 +118,26 @@ private function createVertexData(
     return vertexData;
 }
 ----
-<1> Set up center vertex (last index).
-<2> Set up edge vertices.
+<1> 중앙 정점 (마지막 색인)을 설정하십시오.
+<2> 가장자리 정점을 설정합니다.
 
-Since our mesh has a uniform color, we assign the the same color to each vertex.
-The positions of the edge vertices (the corners) are distributed along a circle with the given radius.
+우리 메쉬는 색이 균일하기 때문에 각 꼭지점에 같은 색을 할당합니다.
+가장자리 꼭짓점 (모서리)의 위치는 주어진 반경을 가진 원을 따라 분포됩니다.
 
-=== Index Setup
+=== 인덱스 설정(Index Setup)
 
-So much for the vertices.
-Now we need to define the triangles that make up the polygon.
+정점(Vertex)이 아주 많은 것.
+이제 다각형을 구성하는 삼각형을 정의해야 합니다.
 
-_Stage3D_ wants a simple list if indices, with each three successive indices referencing one triangle.
-It's a good practice to reference the indices clockwise; that convention indicates that we are looking at the front side of the triangle.
-Our pentagon's list would look like this:
+Stage3D는 하나의 삼각형을 참조하는 세 개의 연속적인 인덱스가 있는 인덱스인 경우 간단한 목록을 원합니다.
+인덱스를 시계 방향으로 참조하는 것이 좋습니다.
+그 대회는 우리가 삼각형의 앞면을 보고 있음을 나타냅니다.
+우리의 5각형 목록은 다음과 같을 것입니다.
 
     5, 0, 1,   5, 1, 2,   5, 2, 3,   5, 3, 4,   5, 4, 0
 
-In Starling, the _IndexData_ class is used to set up such a list.
-The following method will fill an _IndexData_ instance with the appropriate indices.
+Starling에서는 IndexData 클래스를 사용하여 이러한 목록을 설정합니다.
+다음 메서드는 적절한 인덱스로 IndexData 인스턴스를 채웁니다.
 
 [source, as3]
 ----
@@ -149,11 +152,11 @@ private function createIndexData(numEdges:int):IndexData
 }
 ----
 
-=== NGon constructor
+=== NGon 생성자
 
-This is actually all we need for our _NGon_ class!
-Now we just need to make use of the above methods in the constructor.
-All the other responsibilities of a display object (hit testing, rendering, bounds calculations, etc.) are handled by the superclass.
+이것은 실제로 NGon 클래스에 필요한 모든 것입니다!
+이제 우리는 위의 메소드를 생성자에서 사용할 필요가 있습니다.
+표시 객체의 다른 모든 책임 (히트 테스트, 렌더링, 경계 계산 등)은 수퍼 클래스에서 처리합니다.
 
 [source, as3]
 ----
@@ -172,29 +175,28 @@ public class NGon extends Mesh
 }
 ----
 
-That's rather straight-forward, isn't it?
-This approach works for any shape you can think of.
+간단하네요. 그렇죠?
+이 접근 방식은 생각할 수 있는 모든 모양에 적용됩니다.
 
-[TIP]
+[팁]
 ====
-When working with custom meshes, also look at the _Polygon_ class (in the `starling.geom` package).
-It helps with converting an arbitrary, closed shape (defined by a number of vertices) into triangles.
-We look at it in more detail in the <<Masks>> section.
+커스텀 메쉬로 작업할 때 (starling.geom 패키지에있는) Polygon 클래스도 보십시오. 임의의 닫힌 모양 (여러 정점으로 정의 됨)을 삼각형으로 변환하는 데 도움이됩니다. '<<Masks>>, 마스크' 섹션에서 좀 더 자세히 살펴 보겠습니다.
 ====
 
-=== Adding a Texture
+=== 텍스처 추가하기
 
-Wouldn't it be nice if we were able to map a texture onto this polygon, as well?
-The base class, _Mesh_, already defines a `texture` property; we're only lacking the required _texture coordinates_.
+텍스처를 이 폴리곤에 매핑할 수 있다면 좋지 않을까요?
+기본 클래스인 Mesh는 이미 텍스처 속성을 정의합니다.
+우리는 필요한 텍스처 좌표가 부족합니다.
 
-Through texture coordinates, you define which part of a texture gets mapped to a vertex.
-They are often called _UV-coordinates_, which is a reference to the names that are typically used for their coordinate axes (_u_ and _v_).
-Note that the UV range is defined to be within _0_ and _1_, regardless of the actual texture dimensions.
+텍스처 좌표를 통해 텍스처의 어느 부분이 정점에 매핑되는지 정의합니다.
+일반적으로 좌표축 (u 및 v)에 사용되는 이름에 대한 참조인 UV 좌표라고도 합니다.
+UV 범위는 실제 텍스처 크기에 관계없이 0과 1 사이로 정의됩니다.
 
-.The texture coordinates of the polygon are in the range 0-1.
+.다각형의 텍스처 좌표는 0-1 범위입니다.
 image::pentagon-texcoords.png[Pentagon Texture Coordinates, 250]
 
-With this information, we can update the `createVertexData` method accordingly.
+이 정보를 사용하여 createVertexData 메소드를 적절하게 업데이트 할 수 있습니다.
 
 [source, as3]
 ----
@@ -220,11 +222,10 @@ function createVertexData(
     return vertexData;
 }
 ----
-<1> The texture coordinates of the center vertex: `0.5, 0.5`.
-<2> The origin of the n-gon is in the center, but the texture coordinates must be all positive.
-    So we move the vertex coordinates to the right (by `radius`) and divide them by `2 * radius` to end up in the range `0-1`.
+<1> 중심 정점의 텍스처 좌표: 0.5, 0.5.
+<2> n-gon의 원점은 중심이지만 텍스처 좌표는 모두 양수여야 합니다. 그래서 우리는 정점 좌표를 (반지름으로) 오른쪽으로 이동시키고 2 * 반지름으로 나누어 0-1의 범위에서 정합니다.
 
-When a texture is assigned, the rendering code will automatically pick up those values.
+텍스처가 지정되면 렌더링 코드가 자동으로 해당 값을 선택합니다.
 
 [source, as3]
 ----
@@ -233,64 +234,64 @@ ngon.texture = assets.getTexture("brick-wall");
 addChild(ngon);
 ----
 
-.Our textured pentagon.
+.텍스쳐를 입힌 오각형.
 image::pentagon-textured.png[Textured Pentagon, 230]
 
-=== Anti-Aliasing
+=== 안티 앨리어싱(Anti-Aliasing)
 
-If you look closely at the edges of our n-gon, you will see that the edges are quite jagged.
-That's because the GPU treats a pixel either within the n-gon, or outside -- there are no in-betweens.
-To fix that, you can enabled anti-aliasing: there's a property with that name on the _Starling_ class.
+우리 n-gon의 가장자리를 자세히 보면 가장자리가 아주 들쭉날쭉하게 보인다는 것을 알 수 있습니다.
+이는 GPU가 n-gon 또는 외부의 픽셀을 처리하기 때문입니다.
+즉 내부 픽셀이 없기 때문입니다.
+이를 수정하기 위해 앤티 앨리어싱을 활성화 할 수 있습니다.
+Starling 클래스에 해당 이름의 속성이 있습니다.
 
 [source, as3]
 ----
 starling.antiAliasing = 4;
 ----
 
-The value correlates to the number of subsamples _Stage3D_ uses on rendering.
-Using more subsamples requires more calculations to be performed, making anti-aliasing a potentially very expensive option.
-Furthermore, _Stage3D_ doesn't support anti-aliasing on all platforms.
+이 값은 Stage3D에서 렌더링시 사용하는 하위 샘플 수와 관련이 있습니다.
+더 많은 하위 샘플을 사용하려면 계산을 더 많이 수행해야하므로 앤티 앨리어스가 잠재적으로 매우 비싼 옵션입니다.
+또한 Stage3D는 모든 플랫폼에서 앤티 앨리어싱을 지원하지 않습니다.
 
-NOTE: On mobile, anti-aliasing currently only works within _RenderTextures_.
+노트: 모바일에서 앤티 앨리어싱은 현재 RenderTexture 내에서만 작동합니다.
 
-Thus, it's not an ideal solution.
-The only consolation I can offer: the typical pixel-density of screens is constantly on the rise.
-On modern, high end mobile phones, the pixels are now so small that aliasing is rarely an issue any longer.
+따라서 그것은 이상적인 솔루션이 아닙니다.
+내가 제공할 수있는 유일한 위로: 스크린의 전형적인 픽셀 밀도는 끊임없이 증가하고 있습니다.
+현대의 하이엔드 휴대 전화에서는 픽셀이 매우 작아서 앨리어싱이 더 이상 문제가 되지 않습니다.
 
-.Anti-Aliasing can smooth pixelated edges.
+.앤티 앨리어싱은 픽셀화된 가장자리를 매끄럽게 할 수 있습니다.
 image::anti-aliasing.png[Anti-Aliasing, 380]
 
-// TODO: describe RenderTexture-workaround in "Pro-Tips" chapter and link to it here.
+// TODO: "Pro-Tips" 장에서 RenderTexture-workaround에 대해 설명하고 여기에 링크해야 합니다.
 
-=== Mesh Styles
+=== 메쉬 스타일(Mesh Styles)
 
-You now know how to create textured meshes with arbitrary shapes.
-For this, you are using the standard rendering mechanics built into Starling.
+이제 임의의 모양을 가진 텍스쳐 메쉬를 만드는 법을 알게 되었습니다.
+이를 위해 Starling에 내장된 표준 렌더링 메커니즘을 사용하고 있습니다.
 
-However, what if you want to customize the rendering process itself?
-The properties and methods of the _Mesh_ class provide a solid foundation -- but sooner or later, you will want more than that.
+그러나 렌더링 프로세스 자체를 사용자 정의하려면 어떻게해야 합니까?
+Mesh 클래스의 속성과 메서드는 탄탄한 토대를 제공하지만 머지 않아 그 이상의 것을 원할 것입니다.
 
-Coming to the rescue: Starling's _mesh styles_.
+구출하기 위한 방법: Starling의 메쉬 스타일.
 
-Styles are a brand new addition to Starling (introduced in version 2.0) and are the recommended way to create custom, high performance rendering code.
-In fact, all rendering in Starling is now done via mesh styles.
+스타일은 Starling에 새로 추가된 것으로 (버전 2.0에서 도입) 맞춤형 고성능 렌더링 코드를 만드는 데 권장되는 방법입니다.
+사실 Starling의 모든 렌더링은 이제 메쉬 스타일을 통해 수행됩니다.
 
-* A style can be assigned to any mesh (instances of the _Mesh_ class or its subclasses).
-* Per default, the style of each mesh is an instance of the base _MeshStyle_ class.
-* The latter provides the standard rendering capabilities of Starling: drawing colored and textured triangles.
+* 스타일은 임의의 메시 (Mesh 클래스 또는 그 서브 클래스의 인스턴스)에 할당될 수 있습니다.
+* 기본적으로 각 메쉬의 스타일은 기본 MeshStyle 클래스의 인스턴스입니다.
+* 후자는 Starling의 표준 렌더링 기능을 제공합니다. 색칠하고 질감이 있는 삼각형을 그립니다.
 
-To teach your meshes new tricks, you can extend _MeshStyle_.
-This allows you to create custom shader programs for all kinds of interesting effects.
-For example, you could implement fast color transformations or multi-texturing.
+메시에 새로운 트릭을 가르치기 위해 MeshStyle을 확장할 수 있습니다.
+이를 통해 모든 종류의 재미있는 효과를 위한 맞춤 셰이더 프로그램을 만들 수 있습니다.
+예를 들어 빠른 색상 변환 또는 멀티 텍스처링을 구현할 수 있습니다.
 
-[TIP]
+[팁]
 ====
-One of the most impressive samples of a style is the http://wiki.starling-framework.org/extensions/dynamic_lighting[Dynamic Lighting extension].
-With the help of a normal map (a texture encoding surface normals), it can provide realistic real-time lighting effects.
-Be sure to check out this extension in the Starling Wiki to see it in action!
+스타일의 가장 인상적인 샘플 중 하나는 http://wiki.starling-framework.org/extensions/dynamic_lighting[Dynamic Lighting extension, 동적 조명 확장]입니다. 노멀 맵 (텍스쳐 서페이스 법선)을 사용하여 현실적인 실시간 조명 효과를 제공 할 수 있습니다. Starling Wiki에서 이 확장 기능을 확인해보십시오!
 ====
 
-To use a style, instantiate it and assign it to the `style` property of the mesh:
+스타일을 사용하려면 그것을 인스턴스화하고 메쉬의 스타일 속성에 지정하십시오
 
 [source, as3]
 ----
@@ -299,25 +300,22 @@ var lightStyle:LightStyle = new LightStyle(normalTexture);
 image.style = lightStyle;
 ----
 
-.The Dynamic Lighting extension in action.
+.Dynamic Lighting 확장 기능.
 image::dynamic-lighting.png[Dynamic Lighting]
 
-Styles are extremely versatile; their possible applications are almost without limit.
-And since meshes with the same style can be batched together, you do not sacrifice performance in any way.
-In this respect, they are much more efficient than _fragment filters_ (which serve a similar purpose).
+스타일은 매우 다양합니다; 가능한 응용 프로그램은 거의 제한이 없습니다.
+그리고 같은 스타일의 메쉬가 함께 일괄 처리될 수 있으므로 어떤 방식으로든 성능을 희생하지 않아도 됩니다.
+이 점에서 이들은 조각 필터 (비슷한 목적을 수행함)보다 훨씬 효율적입니다.
 
-The main downsides of styles are simply that they can only be assigned to a mesh (not, say, a sprite), and that they can only act within the actual mesh area (making things like a blur impossible).
-Furthermore, it's not possible to combine several styles on one mesh.
+스타일의 주된 단점은 단지 메시 (스프라이트가 아닌)에만 할당할 수 있고, 실제 메시 영역 내에서만 작동할 수 있으므로 (블러 같은 것을 불가능하게 만든다는 것).
+또한 하나의 메쉬에 여러 스타일을 결합할 수 없습니다.
 
-Still: styles are a powerful tool that any Starling developer should be familiar with.
-Stay tuned: in a <<Custom Styles, later section>>, I'll show you how to create your own mesh style from scratch, shaders and all!
+스타일은 Starling 개발자가 익숙해야 할 강력한 도구입니다.
+계속 지켜봐 주십시오: 나중의 섹션에서는 처음부터 자신의 메쉬 스타일을 만드는 법을 보여드리겠습니다.
 
-[NOTE]
+[노트]
 ====
-If you're still a little confused about the differences between a _Mesh_ and a _MeshStyle_, think of it like this:
-the _Mesh_ is nothing more than a list of vertices, and how those vertices spawn up triangles.
+Mesh와 MeshStyle의 차이점에 대해 아직도 혼란스럽다면 Mesh는 꼭지점 목록일 뿐이며, 그 꼭지점이 어떻게 삼각형을 생성하는지에 대한 것을 알면 됩니다.
 
-A style may add additional data to each vertex and use it on rendering.
-The standard _MeshStyle_ provides color and texture coordinates; a _MultiTextureStyle_ might add an additional set of texture coordinates, etc.
-But a style should never modify the original shape of the object; it won't add or remove vertices or change their positions.
+스타일은 각 정점에 추가 데이터를 추가하여 렌더링시 사용할 수 있습니다. 표준 MeshStyle은 색상 및 텍스처 좌표를 제공합니다. MultiTextureStyle은 텍스처 좌표의 추가 세트를 추가할 수 있습니다. 그러나 스타일은 결코 객체의 원래 모양을 수정해서는 안됩니다. 정점을 추가하거나 제거하거나 위치를 변경하지 않습니다.
 ====

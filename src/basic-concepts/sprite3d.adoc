@@ -1,25 +1,26 @@
-== Sprite3D
+== 스프라이트 3D(Sprite3D)
 ifndef::imagesdir[:imagesdir: ../../img]
 
-All display objects that we looked at in the previous sections represent pure two-dimensional objects.
-That's to be expected -- Starling is a 2D engine, after all.
-However, even in a 2D game, it's sometimes nice to add a simple 3D effect, e.g. for transitioning between two screens or to show the backside of a playing card.
+이전 섹션에서 살펴본 모든 표시 객체는 순수한 2차원 객체를 나타냅니다.
+Starling은 2D 엔진입니다.
+그러나 2D 게임에서도 간단한 3D 효과를 추가하면 더 나을 것입니다.
+두 화면 사이를 전환하거나 게임 카드의 뒷면을 표시하는 등의 작업 말이죠.
 
-For this reason, Starling contains a class that makes it easy to add basic 3D capabilities: _Sprite3D_.
-It allows you to move your 2D objects around in a three dimensional space.
+이러한 이유 때문에 Starling에는 기본 3D 기능인 Sprite3D를 쉽게 추가할 수있는 클래스가 포함되어 있습니다.
+그것은 여러분이 3차원 공간에서 2D 객체를 움직일 수 있게 합니다.
 
-=== Basics
+=== 기본
 
-Just like a conventional _Sprite_, you can add and remove children to this container, which allows you to group several display objects together.
-In addition to that, however, _Sprite3D_ offers several interesting properties:
+기존의 Sprite와 마찬가지로 이 컨테이너에 자식을 추가 및 제거할 수 있으므로 여러 표시 객체를 그룹화 할 수 있습니다.
+그러나 Sprite3D는 여러 가지 흥미로운 속성을 제공합니다:
 
-  * *z* -- Moves the sprite along the z-axis (which points away from the camera).
-  * *rotationX* -- Rotates the sprite around the x-axis.
-  * *rotationY* -- Rotates the sprite around the y-axis.
-  * *scaleZ* -- Scales the sprite along the z-axis.
-  * *pivotZ* -- Moves the pivot point along the z-axis.
+  * *z* -- Z 축을 따라 스프라이트를 이동합니다 (카메라에서 멀어지는 방향).
+  * *rotationX* -- 스프라이트를 x축을 중심으로 회전합니다.
+  * *rotationY* -- 스프라이트를 y축을 중심으로 회전합니다.
+  * *scaleZ* -- Z축을 따라 스프라이트의 크기를 조절합니다.
+  * *pivotZ* -- 피벗 점을 z축을 따라 이동합니다.
 
-With the help of these properties, you can place the sprite and all its children in the 3D world.
+이러한 속성 덕분에 스프라이트와 모든 자식을 3D 세계에 배치할 수 있습니다.
 
 [source, as3]
 ----
@@ -35,58 +36,64 @@ sprite.rotationX = Math.PI / 4.0;
 
 addChild(sprite); // <4>
 ----
-<1> Create an instance of _Sprite3D_.
-<2> Add a few conventional 2D objects to the sprite.
-<3> Set up position and orientation of the object in 3D space.
-<4> As usual, add it to the display list.
+<1> Sprite3D의 인스턴스를 만듭니다.
+<2> 몇 가지 일반적인 2D 객체를 스프라이트에 추가합니다.
+<3> 3D 공간에서 물체의 위치와 방향을 설정합니다.
+<4> 평상시처럼 디스플레이 목록에 추가하십시오.
 
-As you can see, it's not difficult to use a Sprite3D: you simply have a few new properties to explore.
-Hit-testing, animations, custom rendering -- everything works just like you're used to from other display objects.
+보시다시피 Sprite3D를 사용하는 것은 어렵지 않습니다.
+탐색할 몇 가지 새로운 속성이 있습니다.
+히트-테스트, 애니메이션, 사용자 정의 렌더링 - 다른 모든 표시 객체에서 익숙해진 것처럼 모든 것이 작동합니다.
 
-=== Camera Setup
+=== 카메라 설정(Camera Setup)
 
-Of course, if you're displaying 3D objects, you also want to be able to configure the perspective with which you're looking at those objects.
-That's possible by setting up the camera; and in Starling, the camera settings are found on the stage.
+물론 3D 오브젝트를 표시하는 경우 해당 오브젝트를 보는 퍼스펙티브를 구성할 수 있기를 원합니다.
+카메라를 설치하면 가능합니다.
+Starling에서는 카메라 설정이 무대에서 발견됩니다.
 
-The following stage properties set up the camera:
+다음 스테이지 속성은 카메라를 설정합니다:
 
-* *fieldOfView* -- Specifies an angle (radian, between zero and PI) for the field of view (FOV).
-* *focalLength* -- The distance between the stage and the camera.
-* *projectionOffset* -- A vector that moves the camera away from its default position, which is right in front of the center of the stage.
+* *fieldOfView* -- 시야 (FOV)의 각도 (라디안 0과 PI[파이] 사이)를 지정합니다.
+* *focalLength* -- 스테이지와 카메라 사이의 거리.
+* *projectionOffset* -- 카메라를 기본 위치에서 멀리 이동시키는 벡터로 무대 중앙 바로 앞에 있습니다.
 
-.Those are the properties that set up the camera.
+.이들은 카메라를 설정하는 속성입니다.
 image::camera-diagram.png[Camera Diagram, 450]
 
-Starling will always make sure that the stage will fill the entire viewport.
-If you change the field of view, the focal length will be modified to adhere to this constraint, and the other way round.
-In other words: _fieldOfView_ and _focalLength_ are just different representations of the same property.
+Starling은 스테이지가 전체 뷰포트를 채울 수 있는지 항상 확인합니다.
+시야를 변경하면 초점 길이가 이 제약 조건을 준수하도록 수정되고 다른 방법은 반올림 됩니다.
+다른 말로 하면 fieldOfView와 focalLength는 동일한 속성의 다른 표현입니다.
 
-Here's an example of how different _fieldOfView_ values influence the look of the cube from the Starling demo:
+다음은 서로 다른 fieldOfView 값이 Starling 데모에서 큐브의 모양에 어떻게 영향을 미치는지 보여주는 예입니다:
 
-.Different values for _fieldOfView_ (in degrees).
+.fieldOfView의 다른 값 (도).
 image::fov.png[Field-of-View, 550]
 
-Per default, the camera will always be aligned so that it points towards the center of the stage. The _projectionOffset_ allows you to change the perspective away from this point; use it if you want to look at your objects from another direction, e.g. from the top or bottom.
-Here's the cube again, this time using different settings for `projectionOffset.y`:
+기본적으로 카메라는 항상 스테이지 중앙을 향하도록 정렬됩니다.
+projectionOffset을 사용하면 이 시점에서 원근감을 변경할 수 있습니다.
+다른 방향에서 물건을 보려고 할 때 사용하십시오. 위 또는 아래에서.
+이번에는 projectionOffset.y에 대해 다른 설정을 사용하여 다시 큐브를 만듭니다:
 
-.Different values for _projectionOffset.y_.
+.projectionOffset.y의 다른 값.
 image::proj-offset.png[Projection Offset, 550]
 
-=== Limitations
+=== 제한 사항
 
-Starling is still a 2D engine at its heart, and this means that there are a few limitations you should be aware of:
+Starling은 여전히 2D 엔진이므로 몇 가지 제한 사항이 있습니다:
 
-* Starling does not make any depth tests. Visibility is determined solely by the order of children.
-* You need to be careful about the performance. Each _Sprite3D_ instance interrupts batching.
+* Starling은 깊이 테스트를 하지 않습니다. 시정은 아동의 순서에 의해서만 결정됩니다.
+* 성능에 주의해야 합니다. 각 Sprite3D 인스턴스는 일괄 처리를 중단합니다.
 
-However, there's a trick that mitigates the latter problem in many cases: when the object is not actually 3D transformed, i.e. you're doing nothing that a 2D sprite couldn't do just as well, then Starling treats it just like a 2D object -- with the same performance and batching behavior.
+그러나 많은 경우에 후자의 문제를 완화하는 속임수가 있습니다.
+객체가 실제로 3D로 변환되지 않을 때 즉 2D 스프라이트도 마찬가지로 수행할 수없는 경우 Starling은 이것을 2D 객체처럼 취급합니다 - 동일한 성능 및 배치 동작.
 
-This means that you don't have to avoid having a huge number of Sprite3D instances; you just have to avoid that too many of them are 3D-transformed at the same time.
+즉 많은 수의 Sprite3D 인스턴스가 있는 것을 피할 필요가 없습니다.
+당신은 너무 많은 것들이 동시에 3D 변환된다는 것을 피하기만 하면 됩니다.
 
-=== Sample Project
+=== 샘플 프로젝트
 
-I created a video tutorial that demonstrates how this feature can be used in a real-life project.
-It shows you how to move a 2D game of concentration into the third dimension.
+이 기능을 실제 프로젝트에서 사용하는 방법을 보여주는 비디오 자습서를 만들었습니다.
+그것은 2D 게임을 3차원으로 옮기는 방법을 보여줍니다.
 
-* Watch the video on https://vimeo.com/109564325[Vimeo].
-* Get the complete source code from https://github.com/PrimaryFeather/Memory3D[GitHub].
+* https://vimeo.com/109564325[Vimeo] 에서 비디오를 시청하세요.
+* https://github.com/PrimaryFeather/Memory3D[GitHub] 에서 소스를 다운로드 하세요.

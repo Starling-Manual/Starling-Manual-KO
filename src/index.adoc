@@ -58,29 +58,27 @@ include::mobile-development/index.adoc[]
 
 :leveloffset: 0
 
-== Final Words
+== 마지막 드리는 말씀
 
-=== Achievement Unlocked!
+=== 업적이 잠금 해제되었습니다!
 
-You have successfully finished working through the _Starling Manual_.
-We covered a lot of ground, didn't we?
-Pat yourself on the back and shave off that beard you've grown during the last hours.
+Starling Manual을 통해 작업을 완료했습니다.
+우리가 정말 많은 근거를 다뤘죠?
+마지막 시간 동안은 자란 수염을 좀 깍으세요.
 
-Congratulations!
+축하합니다!
 
 image::impressive.jpg[Impressive]
 
-=== Getting Help
+=== 도움 얻기
 
-Want to share the knowledge you have just acquired?
-Or do you have any questions that haven't been answered yet?
-The Starling community is eager to help you!
-Pay us a visit at the official http://forum.starling-framework.org[Starling Forum].
+방금 얻은 지식을 공유하고 싶습니까?
+아니면 아직 답변되지 않은 질문이 있습니까?
+Starling 커뮤니티는 여러분을 돕기 위해 열심입니다!
+공식 http://forum.starling-framework.org[Starling Forum]을 방문하십시오.
 
-=== Want more?
+=== 더 원하나요?
 
-If you just can't get enough of Starling, don't forget to http://eepurl.com/chQGpD[sign up] for the launch of the http://gamua.com/blog/2016/09/the-starling-handbook/[Starling Handbook]!
-In addition to all the contents of this manual, it goes above and beyond to provide you with easy to follow recipes you can put to use in your own projects.
-And you're supporting the continuing development of Starling at the same time!
+Starling에 대해 충분히 알지 못했다면, http://gamua.com/blog/2016/09/the-starling-handbook/[Starling Handbook] 의 출시를 잊지 마시기 바랍니다! http://eepurl.com/chQGpD[sign up] 이 설명서의 모든 내용 외에도 자신의 프로젝트에서 사용할 수 있는 레시피를 쉽게 따라할 수 있습니다. 동시에 Starling의 지속적인 개발을 지원하고 있습니다!
 
 image::handbook-mockup.jpg[The Starling Handbook]

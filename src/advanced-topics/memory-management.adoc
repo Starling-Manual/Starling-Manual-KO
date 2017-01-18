@@ -1,33 +1,34 @@
-== Memory Management
+== 메모리 관리
 
-Many Starling developers use the framework to create apps and games for mobile devices.
-And almost all of those developers will sooner or later find out (the hard way) that mobile devices are notoriously low on memory.
-Why is that?
+많은 Starling 개발자는 이 프레임워크를 사용하여 모바일 장치 용 앱 및 게임을 만듭니다.
+그리고 거의 모든 개발자가 조만간 모바일 장치가 메모리 부족으로 악명이 높다는 것을 알게 될 것입니다.
+왜 그런가요?
 
-* Most mobile devices have screens with extremely high resolutions.
-* 2D games for such devices require equally high resolution textures.
-* The available RAM is too small to hold all that texture data.
+* 대부분의 휴대 기기에는 매우 높은 해상도의 화면을 사용합니다.
+* 이러한 장치 용 2D 게임은 고해상도 텍스처를 필요로 합니다.
+* 사용 가능한 RAM이 너무 작아서 모든 텍스처 데이터를 저장할 수 없습니다.
 
-In other words, a really vicious combination.
+즉, 정말 악조건인 조합입니다.
 
-What happens if you _do_ run out of memory?
-Most of the time, you will get the famous error 3691 ("Resource limit for this resource type exceeded") and your app will crash.
-The following hints will show you ways to avoid this nasty error!
+메모리가 부족하면 어떻게 됩니까?
+대부분의 경우, 유명한 오류 3691 ("이 리소스 유형에 대한 리소스 제한을 초과했습니다")이 표시되고 응용 프로그램이 중단됩니다.
+다음과 같은 힌트는 이 심한 오류를 피하는 방법을 보여줍니다!
 
-=== Dispose your Waste
+=== 폐기물 처리(Dispose your Waste)
 
-When you don't need an object any longer, don't forget to call `dispose` on it.
-Different to conventional Flash objects, the garbage collector will not clean up any Stage3D resources!
-You are responsible for that memory yourself.
+더 이상 객체가 필요하지 않을 때 객체를 폐기하는 것을 잊지 마십시오.
+기존의 Flash 객체와 달리 가비지 수집기는 Stage3D 리소스를 정리하지 않습니다!
+당신은 그 기억에 대한 책임이 있습니다.
 
-==== Textures
+==== 텍스쳐(Textures)
 
-Those are the most important objects you need to take care of.
-Textures will always take up the biggest share of your memory.
+그것들은 당신이 돌봐야 할 가장 중요한 물건입니다.
+텍스처는 항상 메모리의 가장 큰 부분을 차지합니다.
 
-Starling tries to help you with this, of course.
-For example, when you load your textures from an atlas, you only need to dispose the atlas, not the actual SubTextures.
-Only the atlas requires GPU memory, the "offspring" textures will just reference the atlas texture.
+Starling은 물론 당신을 도와줍니다.
+예를 들어, 아틀라스에서 텍스처를 로드하면 실제 서브 텍스처가 아닌 아틀라스만 처리하면 됩니다.
+아틀라스만 GPU 메모리가 필요합니다.
+"offspring" 텍스처는 아틀라스 텍스처를 참조합니다.
 
 [source, as3]
 ----
@@ -37,13 +38,13 @@ var hero:Texture = atlas.getTexture("hero");
 atlas.dispose(); // will invalidate "hero" as well.
 ----
 
-==== Display Objects
+==== 디스플레이 오브젝트(Display Objects)
 
-While display objects themselves do not require a lot of graphics memory (some do not require any at all), it's a good practice to dispose them, too.
-Be especially careful with "heavy" objects like TextFields.
+디스플레이 오브젝트 자체는 많은 그래픽 메모리 (일부는 전혀 필요하지 않음)를 필요로하지 않지만, 디스플레이 오브젝트는 무효화(dispose)하는 것이 좋습니다.
+TextField와 같은 "heavy, 무거운" 객체는 특히 조심하십시오.
 
-Display object containers will take care of all their children, as is to be expected.
-When you dispose a container, all children will be disposed automatically.
+디스플레이 오브젝트 컨테이너는 예상대로 모든 하위 항목을 처리합니다.
+컨테이너를 처분하면 모든 자식 객체가 자동으로 무효화됩니다.
 
 [source, as3]
 ----
@@ -57,12 +58,12 @@ parent.addChild(child2);
 parent.dispose(); // will dispose the children, too
 ----
 
-All in all, though, recent Starling versions have become more forgiving when it comes to disposing display objects.
-Most display objects do not store Stage3D resources any longer, so it's not a catastrophe if you forget to dispose one.
+그러나 최근 Starling 버전은 디스플레이 객체를 폐기할 때 더욱 관대해졌습니다.
+대부분의 디스플레이 오브젝트는 더 이상 Stage3D 자원을 저장하지 않으므로 처분하는 것을 잊어 버려도 괜찮긴 합니다.
 
-==== Images
+==== 이미지(Images)
 
-Here's the first pitfall: disposing an image will _not_ dispose its texture.
+여기에 첫 번째 함정이 있습니다: 이미지를 삭제해도 텍스처는 삭제되지 않습니다.
 
 [source, as3]
 ----
@@ -72,10 +73,10 @@ var image:Image = new Image(texture);
 image.dispose(); // will NOT dispose texture!
 ----
 
-That's because Starling can't know if you're using this texture anywhere else!
-After all, you could have other images that use the same texture.
+Starling은 이 텍스쳐를 다른 곳에서 사용하고 있는지 알 수 없기 때문입니다!
+결국, 당신은 같은 질감을 사용하는 다른 이미지를 가질 수 있습니다.
 
-On the other hand, if you know that the texture is not used anywhere else, get rid of it.
+반면에 텍스처가 다른 곳에서 사용되지 않는다는 것을 알고 있다면 제거하십시오.
 
 [source, as3]
 ----
@@ -83,10 +84,10 @@ image.texture.dispose();
 image.dispose();
 ----
 
-==== Filters
+==== 필터(Filters)
 
-Fragment filters are a little delicate, too.
-When you dispose an object, the filter will be disposed, as well:
+단편(Fragment) 필터도 약간 섬세합니다.
+개체를 처분하면 필터도 처분됩니다:
 
 [source, as3]
 ----
@@ -95,7 +96,7 @@ object.filter = new BlurFilter();
 object.dispose(); // will dispose filter
 ----
 
-But watch out: the following similar code will not dispose the filter:
+그러나 조심하세요: 다음의 유사한 코드는 필터를 처리하지 않을 것입니다:
 
 [source, as3]
 ----
@@ -104,21 +105,21 @@ object.filter = new BlurFilter();
 object.filter = null; // filter will *not* be disposed
 ----
 
-Again, the reason is that Starling can't know if you want to use the filter elsewhere.
+다시 말해, Starling은 다른 곳에서 필터를 사용할지 여부를 알 수 없기 때문입니다.
 
-However, in practice, this is not a problem.
-The filter is not disposed, but Starling will still clean up all its resources.
-So you won't create a memory leak.
+그러나 실제로 이것은 문제가 되지 않습니다.
+필터는 처리되지 않지만 Starling은 모든 리소스를 정리합니다.
+따라서 메모리 누출은 발생하지 않습니다.
 
-NOTE: In previous Starling versions (< 2.0), this _did_ create a memory leak.
+노트: 이전 Starling 버전 (<2.0)에서는 메모리 누수가 발생했습니다.
 
-=== Do not Embed Textures
+=== 텍스쳐를 임베드 하지 마세요
 
-ActionScript developers have always been used to embedding their bitmaps directly into the SWF file, using `Embed` metadata.
-This is great for the web, because it allows you to combine all your game's data into one file.
+ActionScript 개발자는 항상 Embed 메타 데이터를 사용하여 비트맵을 SWF 파일에 직접 포함시키는 데 익숙합니다.
+모든 웹 게임 데이터를 하나의 파일로 결합할 수 있기 때문에 웹용으로 좋습니다.
 
-We already saw in the <<Context Loss>> section that this approach has some serious downsides in Starling (or Stage3D in general).
-It comes down to this: the texture will be in memory at least two times: once in conventional memory, once in graphics memory.
+문맥 상실 (Context Loss) 섹션에서 Starling (또는 Stage3D)에 심각한 단점이 있다는 것을 이미 알았습니다.
+텍스처는 메모리에 적어도 두 번: 기본 메모리에서 한 번, 그래픽 메모리에서 한 번입니다.
 
 [source, as3]
 ----
@@ -127,14 +128,14 @@ private static var Hero:Class; // <1>
 
 var texture:Texture = Texture.fromEmbeddedAsset(Hero); // <2>
 ----
-<1> The class is stored in conventional memory.
-<2> The texture is stored in graphics memory.
+<1> 클래스는 기본 메모리에 저장됩니다.
+<2> 텍스처는 그래픽 메모리에 저장됩니다.
 
-Note that this sample uses `Texture.fromEmbeddedAsset` to load the texture.
-For reasons discussed in <<Context Loss>>, the alternative (`Texture.fromBitmap`) uses even more memory.
+이샘플은 Texture.from Embedded Asset을 사용하여 텍스처를 로드합니다.
+Context Loss에서 논의된 이유 때문에 대안 (Texture.fromBitmap)은 더 많은 메모리를 사용합니다.
 
-The only way to guarantee that the texture is really only stored in graphics memory is by loading it from an URL.
-If you use the _AssetManager_ for this task, that's not even a lot of work.
+텍스처가 실제로 그래픽 메모리에만 저장되도록 하는 유일한 방법은 URL에서 로드하는 것입니다.
+이 작업을 위해 AssetManager를 사용하면 많은 일이 발생하지 않습니다.
 
 [source, as3]
 ----
@@ -147,81 +148,83 @@ assets.loadQueue(...);
 var texture:Texture = assets.getTexture("hero");
 ----
 
-=== Use RectangleTextures
+=== RectangleTexture를 사용하세요.
 
-Starling's _Texture_ class is actually just a wrapper for two Stage3D classes:
+Starling의 Texture 클래스는 실제로 두 개의 Stage3D 클래스에 대한 래퍼입니다:
 
-`flash.display3D.textures.Texture`:: Available in all profiles. Supports mipmaps and wrapping, but requires side-lengths that are powers of two.
-`flash.display3D.textures.RectangleTexture`:: Available beginning with `BASELINE` profile. No mipmaps, no wrapping, but supports arbitrary side-lengths.
+`flash.display3D.textures.Texture`:: 모든 프로파일에서 사용할 수 있습니다. 밉맵 및 줄 바꿈을 지원하지만 두 배의 길이를 필요로 합니다.
+`flash.display3D.textures.RectangleTexture`:: BASELINE 프로파일부터 사용할 수 있습니다. 밉맵이 없고 랩핑이 없지만 임의의 길이를 지원합니다.
 
-The former (`Texture`) has a strange and little-known side effect: it will always allocate memory for mipmaps, whether you need them or not.
-That means that you will waste about one third of texture memory!
+이전의 (Texture)에는 이상하고 거의 알려지지 않은 부작용이 있습니다.
+필요로하든 그렇지 않든, 항상 밉맵에 메모리를 할당합니다.
+이는 텍스처 메모리의 약 1/3을 낭비한다는 것을 의미합니다!
 
-Thus, it's preferred to use the alternative (`RectangleTexture`).
-Starling will use this texture type whenever possible.
+따라서, 대체 (RectangleTexture)를 사용하는 것이 좋습니다.
+Starling은 가능할 때마다 이 텍스처 유형을 사용합니다.
 
-However, it can only do that if you run at least in `BASELINE` profile, and if you disable mipmaps.
-The first requirement can be fulfilled by picking the best available Context3D profile.
-That happens automatically if you use Starling's default constructor.
+그러나 적어도 BASELINE 프로파일에서 실행하고 밉맵을 비활성화한 경우에만 수행할 수 있습니다.
+첫 번째 요구 사항은 사용 가능한 최상의 Context3D 프로파일을 선택하여 수행할 수 있습니다.
+Starling의 기본 생성자를 사용하면 자동으로 발생합니다.
 
 [source, as3]
 ----
-// init Starling like this:
+// 이렇게 Starling을 초기화 하세요:
 ... = new Starling(Game, stage);
 
-// that's equivalent to this:
+// 위 코드는 아래와 같습니다:
 ... = new Starling(Game, stage, null, null, "auto", "auto");
 ----
 
-The last parameter (`auto`) will tell Starling to use the best available profile.
-This means that if the device supports RectangleTextures, Starling will use them.
+마지막 매개 변수 (자동)는 Starling에게 사용 가능한 최상의 프로파일을 사용하도록 지시합니다.
+즉, 장치가 RectangleTextures를 지원하면 Starling에서 이를 사용합니다.
 
-As for mipmaps: they will only be created if you explicitly ask for them.
-Some of the `Texture.from...` factory methods contain such a parameter, and the _AssetManager_ features a `useMipMaps` property.
-Per default, they are always disabled.
+밉맵의 경우 : 명시적으로 요청하면 생성됩니다.
+Texture.from... 팩토리 메소드 중 일부는 그러한 매개 변수를 포함하고 AssetManager는 useMipMaps 속성을 특징으로 합니다.
+기본적으로 항상 비활성화되어 있습니다.
 
-=== Use ATF Textures
+=== ATF 텍스쳐를 사용하세요.
 
-We already talked about <<ATF Textures>> previously, but it makes sense to mention them again in this section.
-Remember, the GPU cannot make use of JPG or PNG compression; those files will always be decompressed and uploaded to graphics memory in their uncompressed form.
+이전에 ATF 텍스처에 대해 이미 이야기했지만 이 섹션에서 다시 언급하는 것이 좋겠습니다.
+GPU는 JPG 또는 PNG 압축을 사용할 수 없음을 기억하십시오.
+이러한 파일은 항상 압축 해제된 후 압축되지 않은 형태로 그래픽 메모리에 업로드됩니다.
 
-Not so with ATF textures: they can be rendered directly from their compressed form, which saves a lot of memory.
-So if you skipped the ATF section, I recommend you take another look!
+하지만 ATF 텍스처는 그렇지 않습니다.
+압축된 폼에서 직접 렌더링 할 수 있기 때문에 많은 메모리를 절약할 수 있습니다.
+따라서 ATF 섹션을 건너 뛰었다면 다시 한 번 살펴볼 것을 권장합니다!
 
-The downside of ATF textures is the reduced image quality, of course.
-But while it's not feasible for all types of games, you can try out the following trick:
+물론 ATF 텍스처의 단점은 이미지 품질이 떨어지는 것입니다.
+그러나 모든 유형의 게임에서 실행 가능한 것은 아니지만 다음과 같은 트릭을 시도해 볼 수 있습니다.
 
-. Create your textures a little bigger than what's actually needed.
-. Now compress them with the ATF tools.
-. At runtime, scale them down to their original size.
+. 실제로 필요한 것보다 약간 큰 텍스처를 만듭니다.
+. ATF 도구로 압축하십시오.
+. 런타임에는 크기를 원래 크기로 축소합니다.
 
-You'll still save a quite a bit of memory, and the compression artifacts will become less apparent.
+상당한 메모리가 절약될 것이며, 압축 아티팩트가 없어집니다.
 
-=== Use 16 bit Textures
+=== 16 비트 텍스쳐를 사용하세요.
 
-If ATF textures don't work for you, chances are that your application uses a comic-style with a limited color palette.
-I've got good news for you: for these kinds of textures, there's a different solution!
+ATF 텍스처가 작동하지 않는다면, 응용 프로그램이 제한된 색상 표와 함께 만화 스타일을 사용할 가능성이 있습니다. 나는 여러분을 위한 좋은 소식이 있습니다: 이러한 종류의 텍스처에 대한 다른 해결책이 있습니다!
 
-* The default texture format (`Context3DTextureFormat.BGRA`) uses 32 bits per pixel (8 bits for each channel).
-* There is an alternative format (`Context3DTextureFormat.BGRA_PACKED`) that uses only half of that: 16 bits per pixel (4 bits for each channel).
+* 기본 텍스쳐 포맷 (Context3DTextureFormat.BGRA)은 32 비트를 사용합니다. (각 채널당 8 비트).
+* 그 중 절반만 사용하는 다른 형식(Context3DTextureFormat.BGRA_PACKED)이 있습니다. 픽셀 당 16 비트 (각 채널 당 4 비트)입니다.
 
-You can use this format in Starling via the `format` argument of the `Texture.from...` methods, or via the AssetManager's `textureFormat` property.
-This will save you 50% of memory!
+Starling에서 이 포맷을 Texture.from... 메소드의 인수로 사용하거나 AssetManager의 textureFormat 속성을 통해 사용할 수 있습니다.
+이렇게하면 50%의 메모리가 절약됩니다!
 
-Naturally, this comes at the price of a reduced image quality.
-Especially if you're making use of gradients, 16 bit textures might become rather ugly.
-However, there's a solution for this: dithering!
+당연히 이는 이미지 품질이 떨어지게 만듭니다.
+특히 그라데이션을 사용하는 경우 16비트 텍스쳐가 다소 엉망이 될 수 있습니다.
+그러나, 이것을 위한 해결책이 있습니다: 디더링!
 
-.Dithering can conceal a reduced color depth.
+.디더링은 색 농도를 줄일 수 있는 방법입니다.
 image::dithering.png[Dithering]
 
-To make it more apparent, the gradient in this sample was reduced to just 16 colors (4 bits).
-Even with this low number of colors, dithering manages to deliver an acceptable image quality.
+보다 명확하게 하기위해 이 예제의 그라데이션은 그냥 16색(4 비트)으로 축소시켰습니다.
+이처럼 적은 수의 색상으로도 디더링은 허용할만한 이미지 품질을 제공합니다.
 
-Most image processing programs will use dithering automatically when you reduce the color depth.
-_TexturePacker_ has you covered, as well.
+대부분의 이미지 처리 프로그램은 색상 수를 줄이면 자동으로 디더링을 사용합니다.
+TexturePacker처럼 말이죠.
 
-The _AssetManager_ can be configured to select a suitable color depth on a per-file basis.
+AssetManager는 파일 단위로 적절한 색상 수를 선택하도록 구성할 수 있습니다.
 
 [source, as3]
 ----
@@ -239,90 +242,93 @@ assets.enqueue(/* ... */);
 assets.loadQueue(/* ... */);
 ----
 
-=== Avoid Mipmaps
+=== 밉맵(Mipmaps)을 피하세요.
 
-Mipmaps are downsampled versions of your textures, intended to increase rendering speed and reduce aliasing effects.
+밉맵은 렌더링 속도를 높이고 앨리어싱 효과를 줄이기 위해 텍스처를 다운샘플링 시킵니다.
 
-.Sample of a texture with mipmaps.
+.밉맵을 적용한 텍스쳐 샘플.
 image::mipmap.jpg[Mipmap]
 
-Since version 2.0, Starling doesn't create any mipmaps by default.
-That turned out to be the preferable default, because without mipmaps:
+버전 2.0부터 Starling은 기본적으로 밉맵을 만들지 않으며, 이는 바람직한 것으로 판명되었습니다:
 
-* Textures load faster.
-* Textures require less texture memory (just the original pixels, no mipmaps).
-* Blurry images are avoided (mipmaps sometimes become fuzzy).
+* 텍스처가 더 빨리 로드됩니다.
+* 텍스처의 경우 텍스처 메모리가 더 적게 필요합니다 (원본 픽셀만 있고, 밉맵 없음).
+* 흐릿한 이미지를 피할 수 있습니다 (밉맵이 때때로 흐려짐).
 
-On the other hand, activating them will yield a slightly faster rendering speed when the object is scaled down significantly, and you avoid aliasing effects (i.e. the effect contrary to blurring).
-To enable mipmaps, use the corresponding parameter in the `Texture.from...` methods.
+반면에 객체 크기를 크게 줄이면 렌더링 속도가 약간 빨라지고 앨리어싱 효과 (예 : 흐리게 처리되는 효과)를 피할 수 있습니다.
+밉맵을 사용하려면 Texture.from... 메서드에서 해당 매개 변수를 사용하십시오.
 
-=== Use Bitmap Fonts
+=== 비트맵 폰트를 사용하세요.
 
-As already discussed, TextFields support two different kinds of fonts: TrueType fonts and Bitmap Fonts.
+이미 설명했듯이, TextFields는 트루타입 글꼴과 비트맵 폰트, 두 가지 종류의 글꼴을 지원합니다.
 
-While TrueType fonts are very easy to use, they have a few downsides.
+트루 타입 글꼴은 사용하기가 쉽지만 몇 가지 단점이 있습니다.
 
-* Whenever you change the text, a new texture has to be created and uploaded to graphics memory. This is slow.
-* If you've got many TextFields or big ones, this will require a lot of texture memory.
+* 텍스트를 변경할 때마다 새로운 텍스처를 만들어 그래픽 메모리에 업로드해야 합니다. 이것은 느립니다.
+* 텍스트 필드가 많거나 큰 텍스트 필드가 있는 경우 텍스처 메모리가 많이 필요합니다.
 
-Bitmap Fonts, on the other hand, are
+다른 한편으로 비트맵 폰트는:
 
-* updated very quickly and
-* require only a _constant_ amount of memory (just the glyph texture).
+* 매우 빠르게 업데이트되고
+* 일정한 양의 메모리만 사용합니다 (글리프 텍스처인 경우).
 
-That makes them the preferred way of displaying text in Starling.
-My recommendation is to use them whenever possible!
+따라서 비트맵 폰트는 Starling에서 선호하는 텍스트 표시 방법이 됩니다.
+저는 가능할 때마다 그들을 사용하길 추천합니다!
 
-TIP: Bitmap Font textures are a great candidate for 16 bit textures, because they are often just pure white that's tinted to the actual TextField color at runtime.
+팁: 비트맵 폰트 텍스처는 런타임시 실제 TextField 색상으로 채워지는 순수한 흰색이기 때문에 16 비트 텍스처를 가장 많이 사용합니다.
 
-=== Optimize your Texture Atlas
+=== 텍스쳐 아틀라스를 최적화하세요.
 
-It should be your top priority to pack your texture atlases as tightly as possible. Tools like https://www.codeandweb.com/texturepacker/starling?source=gamua[TexturePacker] have several options that will help with that:
+가능한 한 타이트하게 텍스쳐 아틀라스를 만드는 것이 가장 중요합니다.
+TexturePacker와 같은 도구에는 여러 가지 옵션이 있습니다:
 
-* Trim transparent borders away.
-* Rotate textures by 90 degrees if it leads to more effective packing.
-* Reduce the color depth (see above).
-* Remove duplicate textures.
-* etc.
+* 투명 테두리를 잘라내기.
+* 더 효과적이라고 판단되는 경우 텍스쳐를 90도 돌리기.
+* 컬러 뎁스 감소시키기. (위에서 설명한 것을 보세요)
+* 중복된 텍스쳐 제거하기.
+* 기타 등등.
 
-Make use of this!
-Packing more textures into one atlas not only reduces your overall memory consumption, but also the number of draw calls (more on that in the next chapter).
+이걸 사용하세요!
+하나의 아틀라스에 더 많은 텍스처를 패킹하면 전반적인 메모리 사용량이 줄어들뿐만 아니라 그리기 호출 수가 줄어 듭니다.
+(다음 장에서 자세한 내용 참조)
 
 [[memory_management_scout]]
-=== Use Adobe Scout
+=== 어도비 스카우트(Scout)를 사용하세요.
 
-https://www.adobe.com/products/scout.html[Adobe Scout] is a lightweight but comprehensive profiling tool for ActionScript and Stage3D.
-Any Flash or AIR application, regardless of whether it runs on mobile devices or in browsers, can be quickly profiled with no change to the code -- and Adobe Scout quickly and efficiently detects problems that could affect performance.
+https://www.adobe.com/products/scout.html[Adobe Scout] 는
+ActionScript 및 Stage3D를위한 가볍지만 포괄적인 프로파일링 도구입니다.
+모바일 장치 또는 브라우저에서 실행되는지 여부에 관계없이 모든 Flash 또는 AIR 응용 프로그램은 코드를 변경하지 않고도 빠르게 프로파일링 할 수 있으며 Adobe Scout는 성능에 영향을 줄 수 있는 문제를 빠르고 효율적으로 감지합니다.
 
-With Scout, you can not only find performance bottlenecks in your ActionScript code, but you'll also find a detailed roundup of your memory consumption over time, both for conventional and graphics memory.
-This is priceless!
+스카우트를 사용하면 ActionScript 코드에서 성능 병목 현상을 찾을 수 있을 뿐 아니라 시간이 지남에 따라 메모리 소비에 대한 자세한 검색을 할 수 있습니다.
+이것은 값을 매길 수 없을 정도입니다!
 
-NOTE: Adobe Scout is part of the _free_ version of Adobe's Creative Cloud membership. You don't have to become a paying subscriber of CC to get it.
+노트: Adobe Scout는 Adobe의 Creative Cloud 멤버십 무료 버전의 일부입니다. 그것을 얻기 위해 유료 CC 구독자가 될 필요는 없습니다.
 
-Here is a great tutorial from Thibault Imbert that explains in detail how to work with Adobe Scout: http://www.adobe.com/devnet/scout/articles/adobe-scout-getting-started.html[Getting started with Adobe Scout]
+Thibault Imbert의 훌륭한 자습서는 Adobe Scout 사용 방법을 자세히 설명합니다: http://www.adobe.com/devnet/scout/articles/adobe-scout-getting-started.html[Getting started with Adobe Scout]
 
 .Adobe Scout
 image::scout-screenshot.png[Adobe Scout]
 
-=== Keep an Eye on the Statistics Display
+=== 통계 표시창에서 눈을 떼지 마세요.
 
-The statistics display (available via `starling.showStats`) includes information about both conventional memory and graphics memory.
-It pays off to keep an eye on these values during development.
+통계 표시 (starling.showStats를 통해 사용 가능)에는 기본 메모리 및 그래픽 메모리에 대한 정보가 포함됩니다.
+개발 중에 이러한 가치에 주목할 필요가 있습니다.
 
-Granted, the conventional memory value is often misleading -- you never know when the garbage collector will run.
-The graphics memory value, on the other hand, is extremely accurate.
-When you create a texture, the value will rise; when you dispose a texture, it will decrease -- immediately.
+물론 가비지 수집기가 언제 실행되는지는 알 수 없으므로 기존 메모리 값은 오보된 경우가 많습니다.
+반면 그래픽 메모리 값은 매우 정확합니다.
+텍스처를 만들면 값이 올라갑니다.
+텍스처를 처리하면 즉시 감소합니다.
 
-Actually, when I added this feature to Starling, it took about five minutes and I had already found the first memory leak -- in Starling's demo app.
-I used the following approach:
+실제로 제가 Starling에 이 기능을 추가했을 때 약 5분이 걸렸으며, 이를 이용하자마자 Starling의 데모 응용 프로그램에서 이미 첫 번째 메모리 누수가 발견되었습니다.
+나는 다음 접근법을 사용했습니다.
 
-* In the main menu, I noted down the used GPU memory.
-* Then I entered the demos scenes, one after another.
-* Each time I returned to the main menu, I checked if the GPU memory had returned to the original value.
-* After returning from one of the scenes, that value was not restored, and indeed: a code review showed that I had forgotten to dispose one of the textures.
+* 메인 메뉴에서, 사용된 GPU 메모리를 기록했습니다.
+* 그런 다음 데모 장면을 차례로 입력했습니다.
+* 주 메뉴로 돌아올 때마다 GPU 메모리가 원래 값으로 돌아 왔는지 확인했습니다.
+* 장면 중 하나에서 돌아온 후에는 그 값이 복원되지 않았고 코드 검토에서 텍스처 중 하나를 처리하는 것을 잊어 버린 것으로 나타났습니다.
 
-.The statistics display shows the current memory usage.
+.통계 화면에 현재 메모리 사용량이 표시됩니다.
 image::stats-display.png[The statistics display]
 
-Needless to say: Scout offers far more details on memory usage.
-But the simple fact that the statistics display is always available makes it possible to find things that would otherwise be easily overlooked.
+말할 필요도없이: 스카우트는 메모리 사용에 대한 훨씬 더 자세한 정보를 제공합니다.
+그러나 통계 표시가 항상 사용 가능하다는 단순한 사실은 쉽게 간과될 수있는 것을 발견하는 것을 가능하게 합니다.

@@ -1,135 +1,147 @@
-== ATF Textures
+== ATF 텍스쳐
 
-In conventional Flash, most developers use the _PNG_ format for their images, or _JPG_ if they don't need transparency.
-Those are very popular in Starling, too.
-However, _Stage3D_ offers an alternative that has several unique advantages: the _Adobe Texture Format_, which can store _compressed_ textures.
+기존 플래시에서는 대부분의 개발자가 이미지에 PNG 형식을 사용하고 투명성이 필요하지 않은 경우 JPG 형식을 사용합니다.
+그것들은 Starling에서도 매우 인기가 있습니다.
+그러나 Stage3D는 압축 텍스처를 저장할 수있는 Adobe Texture Format과 같은 몇 가지 고유한 장점을 가진 대안을 제공합니다.
 
-* Compressed textures require just a fraction of their conventional counterparts.
-* Decompression is done directly on the GPU.
-* Uploading to graphics memory is faster.
-* Uploading can be done asynchronously: you can load new textures without interrupting gameplay.footnote:[Beginning with AIR 24 and Starling 2.2, this is possible with conventional textures, as well.]
+* 압축된 텍스처는 기존의 일부 텍스처만 필요합니다.
+* 압축 풀기는 GPU에서 직접 수행됩니다.
+* 그래픽 메모리에 업로드하는 것이 더 빠릅니다.
+* 업로드는 비동기적으로 수행할 수 있습니다: 게임 플레이를 중단하지 않고 새로운 텍스처를 로드할 수 있습니다.footnote:[Beginning with AIR 24 and Starling 2.2, this is possible with conventional textures, as well.]
 
-=== Graphics Memory
+=== 그래픽 메모리
 
-Before we go on, it might be interesting to know how much memory is required by a texture, anyway.
+우리가 계속하기 전에 어쨌든 텍스쳐가 얼마나 많은 메모리를 필요로 하는지 아는 것은 흥미로울 것입니다.
 
-A _PNG_ image stores 4 channels for every pixel: _red_, _green_, _blue_, and _alpha_, each with 8 bit (that makes 256 values per channel).
-It's easy to calculate how much space a 512 × 512 pixel texture takes up:
+PNG 이미지는 모든 픽셀에 대해 4개의 채널을 저장합니다.
+빨강 초록 파랑 및 알파 각 8 비트 (채널당 256 개의 값을 가짐). 512 x 512 픽셀 텍스처가 차지하는 공간을 계산하는 것은 쉽습니다:
 
 ====
-Memory footprint of a 512 × 512 RGBA texture: +
+512 × 512 RGBA 텍스처의 메모리 풋 프린트(footprint): +
 512 × 512 pixels × 4 bytes = 1,048,576 bytes ≈ 1 MB
 ====
 
-When you've got a _JPG_ image, it's similar; you just spare the alpha channel.
+JPG 이미지도 계산은 비슷합니다; 알파 채널만 제외하면 됩니다.
 
 ====
-Memory footprint of a 512 × 512 RGB texture: +
+512 × 512 RGB 텍스처의 메모리 풋 프린트(footprint): +
 512 × 512 pixels × 3 bytes = 786,432 bytes ≈ 768 kB
 ====
 
-Quite a lot for such a small texture, right?
-Beware that the built-in file compression of _PNG_ and _JPG_ does not help: the image has to be decompressed before _Stage3D_ can handle it.
-In other words: the file size does not matter; the memory consumption is always calculated with the above formula.
+작은 텍스처에 비하면 상당히 많은 양입니다. 그렇죠?
+PNG와 JPG의 기본 제공 파일 압축은 도움이 되지 않습니다.
+Stage3D에서 이미지를 처리하려면 이미지의 압축을 풀어야 합니다.
+즉 파일 크기는 중요하지 않습니다.
+메모리 소비는 항상 위 공식을 사용하여 계산됩니다.
 
-Nevertheless: if your textures easily fit into graphics memory that way -- go ahead and use them!
-Those formats are very easy to work with and will be fine in many situations, especially if your application is targeting desktop hardware.
+그럼에도 불구하고 텍스처가 그래픽 메모리에 쉽게 들어 맞으면 바로 사용할 수 있습니다.
+이러한 형식은 작업하기 매우 쉽습니다.
+특히 응용 프로그램이 데스크탑 하드웨어를 대상으로 하는 경우에는 여러 가지 상황에서 문제가 되지 않습니다.
 
-However, there might come a moment in the development phase where your memory consumption is higher than what is available on the device.
-This is the right time to look at the ATF format.
+그러나 메모리 소비가 장치에서 사용 가능한 것보다 높은 개발 단계가 있을 수 있습니다.
+ATF 형식을 살펴볼 적절한 시간이 되었네요.
 
-=== Compressed Textures
+=== 압축 텍스처
 
-Above, we learned that the file size of a conventional texture has nothing to do with how much graphics memory it uses; a massively compressed _JPG_ will take up just as much space as the same image in pure _BMP_ format.
+위에서 우리는 전통적인 텍스처의 파일 크기가 얼마나 많은 그래픽 메모리와 관련이 있는지를 배웠습니다.
+엄청나게 압축된 JPG라도 순수한 BMP 형식의 동일한 이미지 만큼의 공간을 차지합니다.
 
-This is not true for compressed textures: they can be processed directly on the GPU.
-This means that, depending on the compression settings, you can load up to ten times as many textures.
-Quite impressive, right?
+하지만 이것은 압축된 텍스처에서는 그렇지 않습니다.
+그것은 GPU에서 직접 처리 할 수 있게 됩니다.
+즉, 압축 설정에 따라 같은 공간에 최대 10배의 텍스처를 로드할 수 있습니다.
+아주 인상적이네요. 그렇죠?
 
-Unfortunately, each GPU vendor thought he could do better than the others, and so there are several different formats for compressed textures.
-In other words: depending on where your game is running, it will need a different kind of texture.
-How should you know beforehand which file to include?
+불행한 것은 각 GPU 공급 업체가 각각 다른 회사들보다 잘 할 수 있다고 생각했기 때문에 압축된 텍스쳐를 위한 몇 가지 다른 포맷을 만들었습니다.
+즉 게임이 실행되는 환경에 따라 다른 종류의 텍스처가 필요합니다.
+그럼 파일이 어디에서 사용될지 미리 어떻게 알 수 있을까요?
 
-This where ATF comes to the rescue.
-It is a format that Adobe created especially for _Stage3D_; actually, it is a container file that can include up to four different versions of a texture.
+구출을 위해 ATF가 왔습니다.
+이는 Adobe가 Stage3D에서 특별히 만든 형식입니다.
+사실 이것은 텍스처의 최대 네 가지 버전을 포함할 수 있는 컨테이너 파일입니다.
 
-* *PVRTC* (PowerVR Texture Compression) is used in PowerVR GPUs. It is supported by all generations of the iPhone, iPod Touch, and iPad.
-* *DXT1/5* (S3 Texture Compression) was originally developed by S3 Graphics. It is now supported by both Nvidia and AMD GPUs, and is thus available on most desktop computers, as well as some Android phones.
-* *ETC* (Ericsson Texture Compression) is used on many mobile phones, most notably on Android.
-* *ETC2* provides higher quality RGB and RGBA compression. It is supported by all Android and iOS devices that also support OpenGL ES 3.
+* *PVRTC* (PowerVR 텍스처 압축) 는 PowerVR GPU에서 사용됩니다. 모든 세대의 iPhone, iPod Touch 및 iPad에서 지원됩니다.
+* *DXT1/5* (S3 텍스처 압축) 는 원래 S3 Graphics에서 개발했습니다. Nvidia와 AMD GPU에서 모두 지원되므로 대부분의 데스크탑 컴퓨터와 일부 안드로이드 폰에서 사용할 수 있습니다.
+* *ETC* (Ericsson 텍스처 압축) 는 대부분의 Android, 특히, 많은 휴대 전화에서 사용됩니다.
+* *ETC2* 는 고품질 RGB 및 RGBA 압축을 제공합니다. OpenGL ES 3을 지원하는 모든 Android 및 iOS 기기에서 지원됩니다.
 
-I wrote before that ATF is a _container_ format. That means that it can include any combination of the the above formats.
+저는 ATF가 컨테이너 형식이라는 것을 위에서 알려드렸습니다. 이는 위 형식의 모든 조합을 포함할 수 있음을 의미합니다.
 
-.An ATF file is actually a container for other formats.
+.ATF 파일은 실제로 다른 형식의 컨테이너입니다.
 image::atf-container.png[ATF container]
 
-When you include all formats (which is the default), the texture can be loaded on any Stage3D-supporting device, no matter if your application is running on iOS, Android, or on the Desktop.
-You don't have to care about the internals!
+모든 형식 (기본값)을 포함 시키면 응용 프로그램이 iOS, Android 또는 데스크탑에서 실행 중인지 관계없이 모든 Stage3D 지원 장치에 텍스처를 로드할 수 있습니다.
+아무것도 신경 쓸 필요가 없습니다!
 
-However, if you know that your game will only be deployed to, say, iOS devices, you can omit all formats except PVRTC.
-Or if you're only targeting high end mobile devices (with at least _OpenGL ES 3_), include only ETC2; that works on both Android and iOS.
-That way, you can optimize the download size of your game.
+그러나 게임이 iOS 기기에만 포된다는 것을 알고 있다면 PVRTC를 제외한 모든 형식을 생략할 수 있습니다.
+또는 고급 휴대 기기 (OpenGL ES 3 이상) 만 타겟팅하는 경우 ETC2 만 포함하십시오.
+Android와 iOS에서 모두 작동합니다.
+그렇게하면 게임의 다운로드 크기를 최적화 할 수 있습니다.
 
-[NOTE]
+[노트]
 ====
-The difference between DXT1 and DXT5 is just that the latter supports an alpha channel.
-Don't worry about this, though: the ATF tools will choose the right format automatically.
+DXT1과 DXT5의 차이는 후자가 알파 채널을 지원한다는 것입니다.
+ATF 도구가 자동으로 올바른 형식을 선택합니다.
 
-ETC1 actually does not support an alpha channel, but Stage3D works around this by using two textures internally. Again, this happens completely behind the scenes.
+ETC1은 실제로 알파 채널을 지원하지 않지만 Stage3D는 내부적으로 두 개의 텍스처를 사용하여 이 문제를 해결합니다.
+다시 말하지만 이것은 완전히 씬(Scenes) 뒤에서 발생합니다.
 ====
 
-=== Creating an ATF texture
+=== ATF 텍스처 만들기
 
-Adobe provides a set of command line tools to convert to and from ATF and to preview the generated files.
-They are part of the AIR SDK (look for the `atftools` folder).
+Adobe는 ATF로 변환하거나 ATF에서 변환하고 생성된 파일을 미리 볼 수 있는 일련의 명령행 도구를 제공합니다.
+것들은 AIR SDK의 일부입니다 (atftools 폴더 찾기).
 
-Probably the most important tool is `png2atf`.
-Here is a basic usage example; it will compress the texture with the standard settings in all available formats.
+아마도 가장 중요한 도구는 png2atf일 것입니다.
+다음은 기본적인 사용 예입니다.
+사용 가능한 모든 형식의 표준 설정으로 텍스처를 압축합니다.
 
 ----
 png2atf -c -i texture.png -o texture.atf
 ----
 
-If you tried that out right away, you probably received the following error message, though:
+지금 당장 사용을 시도했다면 다음과 같은 오류 메시지가 표시될 것입니다:
 
 ----
 Dimensions not a power of 2!
 ----
 
-That's a limitation I have not mentioned yet: ATF textures are required to always have side-lengths that are powers of two.
-While this is a little annoying, it's actually rarely a problem, since you will almost always use them for atlas textures.
+이것이 아직 언급하지 않은 한계입니다.
+ATF 텍스처는 항상 2의 배수인 사이드 길이를 가져야 합니다.
+약간 짜증나지만 실제로는 거의 문제가 되지 않습니다.
+거의 항상 아트라스 텍스처로 사용하기 때문입니다.
 
-TIP: Most atlas generators can be configured so that they create power-of-two textures.
+팁: 대부분의 아틀라스 생성기는 2의 2승 텍스처를 생성하도록 구성할 수 있습니다.
 
-When the call succeeds, you can review the output in the _ATFViewer_.
+호출이 성공하면 ATFViewer에서 출력을 검토할 수 있습니다:
 
-.The _ATFViewer_ tool.
+.ATFViewer 도구.
 image::atf-viewer.png[ATFViewer]
 
-In the list on the left, you can choose which internal format you want to view.
-Furthermore, you see that, per default, all mipmap variants have been created.
+왼쪽의 목록에서 보려는 내부 형식을 선택할 수 있습니다.
+또한 기본적으로 모든 밉맵 변형이 만들어 졌음을 알 수 있습니다.
 
-NOTE: We will discuss mipmaps in the <<Memory Management>> chapter.
+노트: '<<Memory Management>>, 메모리 관리' 장에서 밉맵을 논의할 것입니다.
 
-You will probably also notice that the image quality has suffered a bit from the compression.
-This is because all those compression formats are _lossy_: the smaller memory footprint comes at the prize of a reduced quality.
-How much the quality suffers is depending on the type of image: while organic, photo-like textures work well, comic-like images with hard edges can suffer quite heavily.
+압축으로 인해 화질이 약간 떨어지는 것을 알 수 있습니다.
+이는 모든 압축 형식이 손실이 크기 때문입니다.
+메모리 크기가 작아질수록 품질이 떨어집니다.
+이미지의 종류에 따라 품질이 얼마나 달라지는가 유기적인 사진 같은 질감은 잘 작동하지만 딱딱한 가장자리가 있는 만화 같은 이미지는 상당히 심하게 손상 될 수 있습니다.
 
-The tool provides a lot of different options, of course.
-E.g. you can let it package only the PVRTC format, perfect for iOS:
+물론이 도구는 다양한 옵션을 제공합니다.
+물론 여러분은 iOS에만 적용가능한 PVRTC 형식만 패키지로 만들 수 있습니다:
 
 ----
 png2atf -c p -i texture.png -o texture.atf
 ----
 
-Or you can tell it to omit mipmaps in order to save memory:
+또는 메모리를 절약하기 위해 밉맵을 생략하도록 할 수 있습니다:
 
 ----
 png2atf -c -n 0,0 -i texture.png -o texture.atf
 ----
 
-Another useful utility is called `atfinfo`.
-It displays details about the data that's stored in a specific ATF file, like the included texture formats, the number of mipmaps, etc.
+또 다른 유용한 유틸리티는 atfinfo입니다.
+포함된 텍스처 형식 밉맵 수 등과 같이 특정 ATF 파일에 저장된 데이터에 대한 세부 정보를 표시합니다:
 
 ----
 > atfinfo -i texture.atf
@@ -146,10 +158,10 @@ AS3 Texture Class  : Texture (flash.display3D.Texture)
 AS3 Texture Format : Context3DTextureFormat.COMPRESSED_ALPHA
 ----
 
-=== Using ATF Textures
+=== ATF 텍스처 사용
 
-Using a compressed texture in Starling is just as simple as any other texture.
-Pass the byte array with the file contents to the factory method `Texture.fromAtfData()`.
+Starling에서 압축된 텍스처를 사용하는 것은 다른 텍스처와 마찬가지로 간단합니다.
+파일 내용이 있는 바이트 배열을 팩토리 메서드 Texture.fromAtfData()에 전달합니다.
 
 [source, as3]
 ----
@@ -157,15 +169,17 @@ var atfData:ByteArray = getATFBytes(); // <1>
 var texture:Texture = Texture.fromATFData(atfData); // <2>
 var image:Image = new Image(texture); // <3>
 ----
-<1> Get the raw data e.g. from a file.
-<2> Create the ATF texture.
-<3> Use it like any other texture.
+<1> 원시 데이터를 파일에서 가져옵니다.
+<2> ATF 텍스처를 만듭니다.
+<3> 다른 텍스쳐와 같이 사용하십시오.
 
-That's it! This texture can be used like any other texture in Starling.
-It's also a perfectly suitable candidate for your atlas texture.
+그게 다입니다!
+이 텍스처는 Starling의 다른 텍스처와 마찬가지로 사용할 수 있습니다.
+또한 아틀라스 텍스처에 가장 적합한 후보입니다.
 
-However, the code above will upload the texture synchronously, i.e. AS3 execution will pause until that's done.
-To load the texture asynchronously instead, pass a callback to the method:
+그러나 위 코드는 텍스처를 동기적으로 업로드합니다.
+즉 AS3 실행은 완료될 때까지 일시 중지됩니다.
+대신 비동기적으로 텍스처를 로드하려면 메서드에 콜백을 전달합니다.
 
 [source, as3]
 ----
@@ -176,11 +190,12 @@ Texture.fromATFData(atfData, 1, true,
     });
 ----
 
-Parameters two and three control the scale factor and if mipmaps should be used, respectively.
-The fourth one, if passed a callback, will trigger asynchronous loading: Starling will be able to continue rendering undisturbed while that happens.
-As soon as the callback has been executed (but not any sooner!), the texture will be usable.
+매개 변수 2와 3은 배율 인수와 밉맵을 각각 사용해야 하는지 여부를 제어합니다.
+네 번째는 콜백을 전달하면 비동기 적재가 시작됩니다.
+Starling은 그동안 아무렇지도 않게 렌더링을 계속할 수 있습니다.
+콜백이 실행 되자마자 (더 빨리!) 텍스쳐를 사용할 수 있습니다.
 
-Of course, you can also embed the ATF file directly in the AS3 source.
+물론 AS3 소스에 ATF 파일을 직접 포함시킬 수도 있습니다.
 
 [source, as3]
 ----
@@ -190,12 +205,12 @@ public static const CompressedData:Class;
 var texture:Texture = Texture.fromEmbeddedAsset(CompressedData);
 ----
 
-Note, however, that asynchronous upload is not available in this case.
+그러나, 이 경우 비동기 업로드를 사용할 수 없습니다.
 
-=== Other Resources
+=== 기타 리소스
 
-You can find out more about this topic in the following sources:
+다음 소스에서 이 주제에 대한 자세한 내용을 볼 수 있습니다:
 
-* http://www.adobe.com/devnet/flashruntimes/articles/introducing-compressed-textures.html[Introducing Compressed Textures]
-* http://www.adobe.com/devnet/flashruntimes/articles/atf-users-guide.html[ATF Tools User's Guide]
+* http://www.adobe.com/devnet/flashruntimes/articles/introducing-compressed-textures.html[압축된 텍스쳐에 대한 소개]
+* http://www.adobe.com/devnet/flashruntimes/articles/atf-users-guide.html[ATF 툴 유저 가이드]
 

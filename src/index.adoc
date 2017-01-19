@@ -1,5 +1,6 @@
 = Starling 매뉴얼
 Daniel Sperl <http://www.gamua.com[Gamua]>
+:revremark: Translated by 원강민 <https://blog.wonhada.com[원하다닷컴]>
 :doctype: book
 :toc: left
 :sectnums:

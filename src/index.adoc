@@ -15,7 +15,7 @@ ifndef::ebook-format[:leveloffset: 1]
 
 // introduction
 
-이 매뉴얼의 목적은 http://www.starling-framework.org[Starling Framework]에 대한 광범위한 소개를 제공하는 것입니다. Starling은 2D 게임에 중점을 둔 모든 종류의 애플리케이션에 사용할 수 있는 ActionScript 3 용 크로스플랫폼 엔진입니다.
+이 매뉴얼의 목적은 광범위한 http://www.starling-framework.org[Starling Framework]에 대해 최대한 자세하게 소개하는 것입니다. Starling은 2D 게임에 중점을 둔, 모든 종류의 애플리케이션에 사용할 수 있는 ActionScript 3 용 크로스플랫폼 엔진입니다.
 
 ifdef::backend-html5[]
 TIP: 이 문서의 link:manual.pdf[PDF 버전]을 다운로드하십시오.
@@ -38,7 +38,7 @@ endif::[]
 [.right]
 image::handbook-mockup.jpg[Starling 핸드북, 250]
 
-이 설명서의 전체 내용을 포함 할 뿐만 아니라 많은 추가 내용 및 지침을 추가한 책을 작업 중입니다. 단계별 자습서를 통해 *완벽한 게임*을 개발할 수 있습니다.
+이 설명서의 전체 내용을 포함할 뿐만 아니라 많은 내용 및 지침을 추가한 책을 작업 중입니다. 단계별 자습서를 통해 *완벽한 게임*을 개발할 수 있습니다.
 
 * http://gamua.com/blog/2016/09/the-starling-handbook/[Gamua Blog] 에서 더 많은 정보를 얻으실 수 있습니다.
 * 아니면 http://bit.ly/2dfNIQF[책 미리보기] 를 다운로드하십시오.

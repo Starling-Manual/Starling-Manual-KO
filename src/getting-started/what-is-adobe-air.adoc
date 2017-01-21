@@ -1,4 +1,4 @@
-== Adobe AIR는 무엇입니까?
+== Adobe AIR가 뭐죠?
 ifndef::imagesdir[:imagesdir: ../../img]
 
 불과 몇 년 전만 해도, Adobe의 Flash Player는 웹을 이용할 때 어디에나 있었습니다.

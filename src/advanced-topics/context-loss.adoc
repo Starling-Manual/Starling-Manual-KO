@@ -179,8 +179,8 @@ RenderTexture가 단지 아이-캔디 (예: 눈 속의 풋 프린트(발자국))
 renderTexture.root.onRestore = function():void
 {
     var contents:Sprite = getContents();
-    renderTexture.clear(); // required on texture restoration
-    renderTexture.draw(contents);
+    renderTexture.clear(); // 텍스처 복원에 필요합니다.
+    renderTexture.draw(contents);
 });
 ----
 
@@ -211,7 +211,7 @@ assetManager.addEventListener(Event.TEXTURES_RESTORED, function():void
     renderTexture.drawBundled(function():void
     {
         for each (var command:DrawCommand in listOfCommands)
-            command.redraw(); // executes `renderTexture.draw()`
+            command.redraw(); // `renderTexture.draw()`를 실행합니다.
     });
 });
 ----

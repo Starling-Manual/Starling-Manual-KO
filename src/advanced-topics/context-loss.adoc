@@ -61,7 +61,7 @@ Texture.fromBitmap을 호출하면 비트맵이 GPU 메모리에 업로드됩니
 
 [source, as3]
 ----
-// use the 'fromEmbeddedAsset' method instead
+// 대신 'fromEmbeddedAsset' 메소드를 사용하세요.
 var texture:Texture = Texture.fromEmbeddedAsset(Hero);
 ----
 
@@ -127,8 +127,8 @@ onRestore 콜백을 잘 모르는 상태에서 다른 비트맵 복사본을 저
 ----
 public static function fromEmbeddedAsset(assetClass:Class):Texture
 {
-    // DO NOT use this code! BAD example.
-
+    // 이 코드를 사용하지 마십시오! 나쁜 예제.
+    
     var bitmap:Bitmap = new assetClass();
     var texture:Texture = Texture.fromBitmap(bitmap);
     texture.root.onRestore = function():void

@@ -35,7 +35,7 @@ Starling은 물론 당신을 도와줍니다.
 var atlas:TextureAtlas = ...;
 var hero:Texture = atlas.getTexture("hero");
 
-atlas.dispose(); // will invalidate "hero" as well.
+atlas.dispose(); // "hero"도 무효화됩니다.
 ----
 
 ==== 디스플레이 오브젝트(Display Objects)
@@ -55,7 +55,7 @@ var child2:Quad = new Quad(100, 100, Color.GREEN);
 parent.addChild(child1);
 parent.addChild(child2);
 
-parent.dispose(); // will dispose the children, too
+parent.dispose(); // 자식 객체도 함께 무효화됩니다.
 ----
 
 그러나 최근 Starling 버전은 디스플레이 객체를 폐기할 때 더욱 관대해졌습니다.
@@ -70,7 +70,7 @@ parent.dispose(); // will dispose the children, too
 var texture:Texture = Texture.fromBitmap(/* ... */);
 var image:Image = new Image(texture);
 
-image.dispose(); // will NOT dispose texture!
+image.dispose(); // 텍스쳐는 사라지지 않습니다.
 ----
 
 Starling은 이 텍스쳐를 다른 곳에서 사용하고 있는지 알 수 없기 때문입니다!
@@ -93,7 +93,7 @@ image.dispose();
 ----
 var object:Sprite = createCoolSprite();
 object.filter = new BlurFilter();
-object.dispose(); // will dispose filter
+object.dispose(); // 필터가 무효화됩니다.
 ----
 
 그러나 조심하세요: 다음의 유사한 코드는 필터를 처리하지 않을 것입니다:
@@ -102,7 +102,7 @@ object.dispose(); // will dispose filter
 ----
 var object:Sprite = createCoolSprite();
 object.filter = new BlurFilter();
-object.filter = null; // filter will *not* be disposed
+object.filter = null; // 필터가 무효화되지 않습니다.
 ----
 
 다시 말해, Starling은 다른 곳에서 필터를 사용할지 여부를 알 수 없기 때문입니다.
@@ -238,7 +238,7 @@ assets.enqueue(/* ... */);
 assets.textureFormat = Context3DTextureFormat.BGRA;
 assets.enqueue(/* ... */);
 
-// now start the loading process
+// 이제 로드 프로세스를 시작합니.
 assets.loadQueue(/* ... */);
 ----
 

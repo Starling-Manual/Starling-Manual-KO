@@ -13,7 +13,7 @@
 var sprite:Sprite = createSprite();
 var mask:Quad = new Quad(100, 100);
 mask.x = mask.y = 50;
-sprite.mask = mask; // ← use the quad as a mask
+sprite.mask = mask; // ← 쿼드를 마스크로 사용
 ----
 
 그러면 다음과 같은 결과가 나타납니다:

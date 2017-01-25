@@ -230,15 +230,15 @@ AssetManager는 파일 단위로 적절한 색상 수를 선택하도록 구성�
 ----
 var assets:AssetManager = new AssetManager();
 
-// enqueue 16 bit textures
+// 16 비트 텍스처를 대기열에 넣기
 assets.textureFormat = Context3DTextureFormat.BGRA_PACKED;
 assets.enqueue(/* ... */);
 
-// enqueue 32 bit textures
+// 32 비트 텍스처를 대기열에 넣기
 assets.textureFormat = Context3DTextureFormat.BGRA;
 assets.enqueue(/* ... */);
 
-// 이제 로드 프로세스를 시작합니.
+// 이제 로딩 프로세스를 시작합니다.
 assets.loadQueue(/* ... */);
 ----
 

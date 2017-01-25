@@ -71,10 +71,10 @@ SystemUtil에는 해당 작업을 돕는 몇 가지 메소드와 속성이 있�
 
 [source, as3]
 ----
-SystemUtil.isAIR; // AIR or Flash?
-SystemUtil.isDesktop; // desktop or mobile?
-SystemUtil.isApplicationActive; // in use or minimized?
-SystemUtil.platform; // WIN, MAC, LNX, IOS, AND
+SystemUtil.isAIR; // AIR 또는 플래시?
+SystemUtil.isDesktop; // 데스크탑 또는 모바일?
+SystemUtil.isApplicationActive; // 사용 중이거나 최소화 되었습니까?
+SystemUtil.platform; // WIN, MAC, LNX, IOS, ...
 ----
 
 === 수학 유틸(MathUtil)
